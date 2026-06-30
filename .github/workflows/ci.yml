@@ -41,6 +41,8 @@ jobs:
         env:
           Python3_EXECUTABLE: ${{ steps.setup-python.outputs.python-path }}
         run: |
+          Remove-Item Env:PYTHONHOME -ErrorAction SilentlyContinue
+          Remove-Item Env:PYTHONPATH -ErrorAction SilentlyContinue
           Write-Host "Python: $env:Python3_EXECUTABLE"
           & "${{ github.workspace }}/scripts/build/build_msvc.ps1" `
             -RepoRoot "${{ github.workspace }}" `
@@ -51,7 +53,10 @@ jobs:
 
       - name: Matrix codegen check
         shell: pwsh
+        env:
+          Python3_EXECUTABLE: ${{ steps.setup-python.outputs.python-path }}
         run: |
+          Remove-Item Env:PYTHONHOME -ErrorAction SilentlyContinue
           & "${{ github.workspace }}/scripts/test/check_matrix_codegen.ps1" `
             -RepoRoot "${{ github.workspace }}"
 

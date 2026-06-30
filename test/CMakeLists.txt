@@ -175,14 +175,9 @@ if(EBTREE_BUILD_SQL)
   set(SQL_MATRIX_DATA_DIR "${CMAKE_SOURCE_DIR}/test/data/sql")
   set(SQL_MATRIX_INC "${EBTEST_GENERATED_INC_DIR}/sql_matrix_inc.h")
   file(GLOB SQL_MATRIX_FILES "${SQL_MATRIX_DATA_DIR}/*.matrix")
-  set(_SQL_MATRIX_PY_ENV "")
-  if(EBTREE_PYTHON3_ROOT)
-    list(APPEND _SQL_MATRIX_PY_ENV "PYTHONHOME=${EBTREE_PYTHON3_ROOT}")
-  endif()
   add_custom_command(
     OUTPUT "${SQL_MATRIX_INC}"
-    COMMAND ${CMAKE_COMMAND} -E env ${_SQL_MATRIX_PY_ENV}
-      ${Python3_EXECUTABLE}
+    COMMAND ${Python3_EXECUTABLE}
       "${CMAKE_SOURCE_DIR}/scripts/test/gen_sql_matrix_inc.py"
       --data-dir "${SQL_MATRIX_DATA_DIR}"
       --out "${SQL_MATRIX_INC}"

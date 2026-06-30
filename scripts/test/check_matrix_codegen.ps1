@@ -27,6 +27,7 @@ function Invoke-MatrixGen([string]$PythonExe) {
 
 $ranGen = $false
 $pythonCandidates = @()
+if ($env:Python3_EXECUTABLE) { $pythonCandidates += $env:Python3_EXECUTABLE }
 if ($env:CONDA_PREFIX) { $pythonCandidates += (Join-Path $env:CONDA_PREFIX "python.exe") }
 $pythonCandidates += "d:\anaconda3\python.exe"
 $pythonCandidates += "python"

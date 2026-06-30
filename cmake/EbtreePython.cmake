@@ -1,6 +1,6 @@
 # Resolve Python3 for test codegen (gen_sql_matrix_inc.py).
-set(EBTREE_PYTHON3_ROOT "d:/anaconda3" CACHE PATH
-    "Root directory for Python 3 (Anaconda); used when find_package fails")
+set(EBTREE_PYTHON3_ROOT "" CACHE PATH
+    "Optional Python 3 root (e.g. d:/anaconda3); used when find_package fails")
 
 if(NOT Python3_EXECUTABLE AND EBTREE_PYTHON3_ROOT)
   if(WIN32)
