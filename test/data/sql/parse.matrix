@@ -1,0 +1,223 @@
+case: create_table_basic
+parse: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+expect_kind: kCreateTable
+---
+case: select_point
+parse: "SELECT key, value FROM t WHERE key = 'a'"
+expect_kind: kSelect
+---
+case: three_table_join
+parse: "SELECT a.k FROM a JOIN b ON a.k=b.k JOIN c ON b.k=c.k"
+expect_kind: kSelect
+expect_joins: 2
+---
+case: exists_parse
+parse: "SELECT key FROM t WHERE EXISTS (SELECT key FROM s)"
+expect_kind: kSelect
+expect_subquery: 1
+---
+case: in_literals
+parse: "SELECT key FROM t WHERE key IN ('a', 'b')"
+expect_kind: kSelect
+expect_subquery: 1
+---
+case: cte_00
+parse: "WITH cte AS (SELECT key FROM t) SELECT key FROM cte"
+expect_kind: kWithCte
+---
+case: cte_01
+parse: "WITH a AS (SELECT k FROM t1) SELECT k FROM a"
+expect_kind: kWithCte
+---
+case: cte_02
+parse: "WITH x AS (SELECT key FROM t) SELECT key FROM x WHERE key = 'a'"
+expect_kind: kWithCte
+---
+case: cte_03
+parse: "WITH c1 AS (SELECT k FROM a), c2 AS (SELECT k FROM b) SELECT c1.k FROM c1"
+expect_kind: kWithCte
+---
+case: cte_04
+parse: "WITH r AS (SELECT key, value FROM t) SELECT value FROM r"
+expect_kind: kWithCte
+---
+case: cte_05
+parse: "WITH w AS (SELECT key FROM t WHERE key > 'a') SELECT key FROM w"
+expect_kind: kWithCte
+---
+case: cte_06
+parse: "WITH cte AS (SELECT key FROM t) SELECT key FROM cte WHERE key = 'k1'"
+expect_kind: kWithCte
+---
+case: cte_07
+parse: "WITH inner AS (SELECT key FROM s) SELECT key FROM inner"
+expect_kind: kWithCte
+---
+case: cte_08
+parse: "WITH z AS (SELECT a FROM t1) SELECT a FROM z"
+expect_kind: kWithCte
+---
+case: cte_09
+parse: "WITH p AS (SELECT key FROM t) SELECT COUNT(key) FROM p"
+expect_kind: kWithCte
+---
+case: cte_10
+parse: "WITH q AS (SELECT key FROM t) SELECT key FROM q ORDER BY key"
+expect_kind: kWithCte
+---
+case: cte_11
+parse: "WITH m AS (SELECT key FROM t) SELECT key FROM m LIMIT 1"
+expect_kind: kWithCte
+---
+case: cte_12
+parse: "WITH n AS (SELECT key FROM t) SELECT key FROM n OFFSET 0"
+expect_kind: kWithCte
+---
+case: cte_13
+parse: "WITH o AS (SELECT key FROM t) SELECT DISTINCT key FROM o"
+expect_kind: kWithCte
+---
+case: cte_14
+parse: "WITH u AS (SELECT key FROM t) SELECT key FROM u UNION SELECT key FROM t"
+expect_kind: kWithCte
+---
+case: setop_00_union
+parse: "SELECT a FROM t1 UNION SELECT b FROM t2"
+expect_kind: kSetOp
+---
+case: setop_01_union_all
+parse: "SELECT a FROM t3 UNION ALL SELECT b FROM t4"
+expect_kind: kSetOp
+---
+case: setop_02_intersect
+parse: "SELECT a FROM t5 INTERSECT SELECT b FROM t6"
+expect_kind: kSetOp
+---
+case: setop_03_except
+parse: "SELECT a FROM t7 EXCEPT SELECT b FROM t8"
+expect_kind: kSetOp
+---
+case: setop_04_union
+parse: "SELECT a FROM t9 UNION SELECT b FROM t10"
+expect_kind: kSetOp
+---
+case: setop_05_union_all
+parse: "SELECT a FROM t11 UNION ALL SELECT b FROM t12"
+expect_kind: kSetOp
+---
+case: setop_06_intersect
+parse: "SELECT a FROM t13 INTERSECT SELECT b FROM t14"
+expect_kind: kSetOp
+---
+case: setop_07_except
+parse: "SELECT a FROM t15 EXCEPT SELECT b FROM t16"
+expect_kind: kSetOp
+---
+case: setop_08_union
+parse: "SELECT a FROM t17 UNION SELECT b FROM t18"
+expect_kind: kSetOp
+---
+case: setop_09_union_all
+parse: "SELECT a FROM t19 UNION ALL SELECT b FROM t20"
+expect_kind: kSetOp
+---
+case: setop_10_intersect
+parse: "SELECT a FROM t21 INTERSECT SELECT b FROM t22"
+expect_kind: kSetOp
+---
+case: setop_11_except
+parse: "SELECT a FROM t23 EXCEPT SELECT b FROM t24"
+expect_kind: kSetOp
+---
+case: setop_12_union
+parse: "SELECT a FROM t25 UNION SELECT b FROM t26"
+expect_kind: kSetOp
+---
+case: setop_13_union_all
+parse: "SELECT a FROM t27 UNION ALL SELECT b FROM t28"
+expect_kind: kSetOp
+---
+case: setop_14_intersect
+parse: "SELECT a FROM t29 INTERSECT SELECT b FROM t30"
+expect_kind: kSetOp
+---
+case: window_00
+parse: "SELECT ROW_NUMBER() OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_01
+parse: "SELECT RANK() OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_02
+parse: "SELECT DENSE_RANK() OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_03
+parse: "SELECT SUM(a) OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_04
+parse: "SELECT AVG(a) OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_05
+parse: "SELECT COUNT(a) OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_06
+parse: "SELECT MIN(a) OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_07
+parse: "SELECT MAX(a) OVER (ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_08
+parse: "SELECT ROW_NUMBER() OVER (PARTITION BY b ORDER BY a) FROM t"
+expect_kind: kWindowSelect
+---
+case: window_09
+parse: "SELECT ROW_NUMBER() OVER (ORDER BY a DESC) FROM t"
+expect_kind: kWindowSelect
+---
+case: adv_begin
+parse: "BEGIN"
+expect_kind: kBeginTxn
+---
+case: adv_begin_txn
+parse: "BEGIN TRANSACTION"
+expect_kind: kBeginTxn
+---
+case: adv_commit
+parse: "COMMIT"
+expect_kind: kCommit
+---
+case: adv_rollback
+parse: "ROLLBACK"
+expect_kind: kRollback
+---
+case: adv_savepoint
+parse: "SAVEPOINT sp1"
+expect_kind: kSavepoint
+---
+case: adv_show_tables
+parse: "SHOW TABLES"
+expect_kind: kShow
+---
+case: adv_set_var
+parse: "SET autocommit = 1"
+expect_kind: kSet
+---
+case: adv_grant
+parse: "GRANT SELECT ON t TO user1"
+expect_kind: kGrant
+---
+case: adv_explain
+parse: "EXPLAIN SELECT * FROM t"
+expect_kind: kExplain
+---
+case: adv_nested_exists
+parse: "SELECT a.key FROM a WHERE EXISTS (SELECT b.key FROM b WHERE b.key = a.key AND EXISTS (SELECT a.key FROM a WHERE a.key = b.key))"
+expect_kind: kSelect
+expect_subquery: 1

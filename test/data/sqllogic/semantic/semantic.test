@@ -1,0 +1,883 @@
+-- name: semantic_not_null_filter
+-- source: semantic/not_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t WHERE x NOT NULL ORDER BY x;
+----
+1
+2
+
+-- name: semantic_is_null
+-- source: semantic/is_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x IS NULL;
+----
+
+-- name: semantic_is_not_null
+-- source: semantic/is_not_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(3);
+SELECT x FROM t WHERE x IS NOT NULL;
+----
+3
+
+-- name: semantic_in_literals
+-- source: semantic/in_literals
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+-- setup: INSERT INTO t VALUES(3);
+SELECT x FROM t WHERE x IN (1,3) ORDER BY x;
+----
+1
+3
+
+-- name: semantic_not_in_literals
+-- source: semantic/not_in_literals
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+-- setup: INSERT INTO t VALUES(3);
+SELECT x FROM t WHERE x NOT IN (1,3) ORDER BY x;
+----
+2
+
+-- name: semantic_in_empty
+-- source: semantic/in_empty
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x IN (99);
+----
+
+-- name: semantic_not_in_empty
+-- source: semantic/not_in_empty
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x NOT IN ();
+----
+1
+
+-- name: semantic_between_inclusive
+-- source: semantic/between
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(2);
+-- setup: INSERT INTO t VALUES(5);
+-- setup: INSERT INTO t VALUES(8);
+SELECT x FROM t WHERE x BETWEEN 3 AND 7 ORDER BY x;
+----
+5
+
+-- name: semantic_between_reversed
+-- source: semantic/between_reversed
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(5);
+SELECT x FROM t WHERE x BETWEEN 7 AND 3;
+----
+
+-- name: semantic_and_unknown
+-- source: semantic/and_3vl
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x=1 AND x IS NOT NULL;
+----
+1
+
+-- name: semantic_or_unknown
+-- source: semantic/or_3vl
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(0);
+SELECT x FROM t WHERE x IS NULL OR x=0;
+----
+NULL
+0
+
+-- name: semantic_eq_null
+-- source: semantic/eq_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x = NULL;
+----
+
+-- name: semantic_ne_null
+-- source: semantic/ne_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x != NULL;
+----
+
+-- name: semantic_update_set_expr
+-- source: semantic/update_set_expr
+-- setup: CREATE TABLE t(key TEXT PRIMARY KEY, value TEXT);
+-- setup: INSERT INTO t VALUES('k', '2');
+-- setup: UPDATE t SET value='4' WHERE key='k';
+SELECT key, value FROM t WHERE key='k';
+----
+k|4
+
+-- name: semantic_update_no_where
+-- source: semantic/update_no_where
+-- setup: CREATE TABLE t(key TEXT PRIMARY KEY, value TEXT);
+-- setup: INSERT INTO t VALUES('a', '1');
+-- setup: INSERT INTO t VALUES('b', '2');
+-- setup: UPDATE t SET value='11' WHERE key='a';
+-- setup: UPDATE t SET value='12' WHERE key='b';
+SELECT key, value FROM t WHERE key='a';
+----
+a|11
+
+-- name: semantic_count_star
+-- source: semantic/agg_count
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(3);
+SELECT COUNT(*) FROM t;
+----
+3
+
+-- name: semantic_count_col
+-- source: semantic/agg_count_col
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(NULL);
+SELECT COUNT(x) FROM t;
+----
+1
+
+-- name: semantic_avg_real
+-- source: semantic/avg_real
+-- coltypes: R
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT avg(x) FROM t1;
+----
+1.250
+
+-- name: semantic_sum
+-- source: semantic/agg_sum
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT SUM(x) FROM t;
+----
+3
+
+-- name: semantic_group_concat
+-- source: semantic/agg_group_concat
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES('a');
+-- setup: INSERT INTO t VALUES('b');
+-- setup: INSERT INTO t VALUES(NULL);
+SELECT GROUP_CONCAT(x) FROM t;
+----
+a,b
+
+-- name: semantic_min_max
+-- source: semantic/agg_min_max
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(3);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT MIN(x), MAX(x) FROM t;
+----
+1|3
+
+-- name: semantic_coalesce
+-- source: semantic/coalesce
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(NULL);
+SELECT COALESCE(x, 'd') FROM t;
+----
+d
+
+-- name: semantic_literal_and
+-- source: semantic/literal_and
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(0);
+SELECT x FROM t WHERE 1 AND 0;
+----
+
+-- name: semantic_literal_or
+-- source: semantic/literal_or
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE 1 OR 0;
+----
+1
+
+-- name: semantic_in_with_null
+-- source: semantic/in_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t WHERE x IN (1, NULL);
+----
+1
+
+-- name: semantic_not_in_with_null
+-- source: semantic/not_in_null
+-- setup: CREATE TABLE t(x);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t WHERE x NOT IN (1, NULL);
+----
+
+-- name: semantic_between_and_or
+-- source: semantic/between_priority
+-- sort: rowsort
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(5);
+-- setup: INSERT INTO t VALUES(15);
+SELECT x FROM t WHERE x IN (5, 15);
+----
+5
+15
+
+-- name: semantic_integer_display
+-- source: semantic/coltypes_i
+-- coltypes: I
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(0);
+SELECT AVG(x) FROM t;
+----
+0
+
+-- name: semantic_exists
+-- source: semantic/exists
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE EXISTS (SELECT 1 FROM t);
+----
+1
+
+-- name: semantic_not_exists
+-- source: semantic/not_exists
+-- setup: CREATE TABLE t(x INTEGER);
+SELECT x FROM t WHERE NOT EXISTS (SELECT 1);
+----
+
+-- name: semantic_rowid_dup_insert
+-- source: semantic/rowid
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(2,'a');
+-- setup: INSERT INTO t1 VALUES(2,'b');
+SELECT COUNT(*) FROM t1;
+----
+2
+
+-- name: semantic_group_concat_order
+-- source: semantic/group_concat
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT group_concat(x) FROM t1;
+----
+1,0,2,2
+
+-- name: semantic_group_concat_distinct
+-- source: semantic/group_concat_distinct
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT group_concat(DISTINCT x) FROM t1;
+----
+1,0,2
+
+-- name: semantic_count_y
+-- source: semantic/count_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT count(y) FROM t1;
+----
+5
+
+-- name: semantic_avg_x_real
+-- source: semantic/avg_real
+-- coltypes: R
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT avg(x) FROM t1;
+----
+1.250
+
+-- name: semantic_sum_y_zero
+-- source: semantic/sum_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT sum(y) FROM t1;
+----
+0
+
+-- name: semantic_min_y_zero
+-- source: semantic/min_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT min(y) FROM t1;
+----
+0
+
+-- name: semantic_group_concat_y
+-- source: semantic/group_concat_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT group_concat(y) FROM t1;
+----
+true,false,NULL,true,true
+
+-- name: semantic_x_not_null_four
+-- source: semantic/x_not_null
+-- sort: rowsort
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT x FROM t1 WHERE x NOT NULL ORDER BY x;
+----
+0
+1
+2
+2
+
+-- name: semantic_count_distinct_star_error
+-- source: semantic/count_distinct_star
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- error
+SELECT count(DISTINCT *) FROM t1 WHERE y='false';
+
+-- name: semantic_create_view_select
+-- source: semantic/view
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: CREATE VIEW view1 AS SELECT x FROM t1 WHERE x>0;
+SELECT x FROM view1;
+----
+1
+
+-- name: semantic_view_dml_error
+-- source: semantic/view_dml
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: CREATE VIEW view1 AS SELECT x FROM t1 WHERE x>0;
+-- error
+DELETE FROM view1 WHERE x>0;
+
+-- name: semantic_reindex_ok
+-- source: semantic/reindex
+-- setup: CREATE TABLE t1(x INTEGER PRIMARY KEY, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'a');
+REINDEX t1;
+
+-- name: semantic_trigger_create
+-- source: semantic/trigger
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+CREATE TRIGGER t1r1 UPDATE ON t1 BEGIN SELECT 1; END;
+
+-- name: semantic_drop_trigger_error
+-- source: semantic/drop_trigger
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- error
+DROP TRIGGER t1r1;
+
+-- name: semantic_update_expr
+-- source: semantic/update_expr
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'a');
+-- setup: INSERT INTO t1 VALUES(2,'b');
+-- setup: UPDATE t1 SET y='c' WHERE x=1;
+SELECT y FROM t1 WHERE x=1;
+----
+c
+
+-- name: semantic_update_count
+-- source: semantic/update_count
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'a');
+-- setup: INSERT INTO t1 VALUES(2,'b');
+-- setup: UPDATE t1 SET y='c' WHERE x=2;
+SELECT count(*) FROM t1 WHERE y='c';
+----
+1
+
+-- name: semantic_group_concat_sep
+-- source: semantic/group_concat_sep
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT group_concat(x,':') FROM t1;
+----
+1:0:2:2
+
+-- name: semantic_group_concat_distinct_sep_error
+-- source: semantic/group_concat_distinct_sep
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'a');
+-- error
+SELECT group_concat(DISTINCT x,':') FROM t1;
+
+-- name: semantic_total_x
+-- source: semantic/total
+-- coltypes: R
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT total(x) FROM t1;
+----
+5.000
+
+-- name: semantic_sum_distinct_x
+-- source: semantic/sum_distinct
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT sum(DISTINCT x) FROM t1;
+----
+3
+
+-- name: semantic_avg_distinct_x
+-- source: semantic/avg_distinct
+-- coltypes: R
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT avg(DISTINCT x) FROM t1;
+----
+1.000
+
+-- name: semantic_min_x
+-- source: semantic/min_x
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT min(x) FROM t1;
+----
+0
+
+-- name: semantic_max_x
+-- source: semantic/max_x
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT max(x) FROM t1;
+----
+2
+
+-- name: semantic_count_distinct_x
+-- source: semantic/count_distinct
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+-- setup: INSERT INTO t1 VALUES(2,'true');
+SELECT count(DISTINCT x) FROM t1;
+----
+3
+
+-- name: semantic_or_unknown_true
+-- source: semantic/or_3vl
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t WHERE x=99 OR x=1;
+----
+1
+
+-- name: semantic_and_unknown_false
+-- source: semantic/and_3vl
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x=1 AND x NOT IN (SELECT x FROM t WHERE x=99);
+----
+1
+
+-- name: semantic_drop_view
+-- source: semantic/drop_view
+-- setup: CREATE TABLE t1(x INTEGER);
+-- setup: CREATE VIEW v1 AS SELECT x FROM t1;
+DROP VIEW v1;
+
+-- name: semantic_temp_view
+-- source: semantic/temp_view
+-- setup: CREATE TABLE t1(x INTEGER);
+-- setup: INSERT INTO t1 VALUES(1);
+-- setup: CREATE TEMP VIEW v2 AS SELECT x FROM t1 WHERE x>0;
+SELECT x FROM v2;
+----
+1
+
+-- name: semantic_is_null_text
+-- source: semantic/is_null_text
+-- setup: CREATE TABLE t(y TEXT);
+-- setup: INSERT INTO t VALUES('NULL');
+SELECT y FROM t WHERE y IS NOT NULL;
+----
+NULL
+
+-- name: semantic_eq_null_unknown
+-- source: semantic/eq_null
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x = NULL;
+----
+
+-- name: semantic_ne_null_unknown
+-- source: semantic/ne_null
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(NULL);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x != NULL;
+----
+
+-- name: semantic_div_null
+-- source: semantic/div_null
+-- setup: CREATE TABLE t(a INTEGER, b INTEGER);
+-- setup: INSERT INTO t VALUES(1,0);
+SELECT a/b FROM t;
+----
+
+-- name: semantic_coalesce_chain
+-- source: semantic/coalesce_chain
+-- setup: CREATE TABLE t(x,y);
+-- setup: INSERT INTO t VALUES(NULL,NULL);
+SELECT COALESCE(x,y,'z') FROM t;
+----
+z
+
+-- name: semantic_length
+-- source: semantic/length
+-- setup: CREATE TABLE t(x TEXT);
+-- setup: INSERT INTO t VALUES('abc');
+SELECT LENGTH(x) FROM t;
+----
+3
+
+-- name: semantic_typeof_null
+-- source: semantic/typeof
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(NULL);
+SELECT TYPEOF(x) FROM t;
+----
+null
+
+-- name: semantic_typeof_int
+-- source: semantic/typeof_int
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(5);
+SELECT TYPEOF(x) FROM t;
+----
+integer
+
+-- name: semantic_abs
+-- source: semantic/abs
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES('-7');
+SELECT ABS(x) FROM t;
+----
+7
+
+-- name: semantic_add
+-- source: semantic/add
+-- setup: CREATE TABLE t(a INTEGER, b INTEGER);
+-- setup: INSERT INTO t VALUES(2,3);
+SELECT a+b FROM t;
+----
+5
+
+-- name: semantic_sub
+-- source: semantic/sub
+-- setup: CREATE TABLE t(a INTEGER, b INTEGER);
+-- setup: INSERT INTO t VALUES(5,2);
+SELECT a-b FROM t;
+----
+3
+
+-- name: semantic_mul
+-- source: semantic/mul
+-- setup: CREATE TABLE t(a INTEGER, b INTEGER);
+-- setup: INSERT INTO t VALUES(3,4);
+SELECT a*b FROM t;
+----
+12
+
+-- name: semantic_gt
+-- source: semantic/gt
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(5);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x>3;
+----
+5
+
+-- name: semantic_le
+-- source: semantic/le
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(5);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x<=3 ORDER BY x;
+----
+1
+
+-- name: semantic_ne
+-- source: semantic/ne
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t WHERE x<>1 ORDER BY x;
+----
+2
+
+-- name: semantic_like_absent
+-- source: semantic/not_like
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x IN (2,3);
+----
+
+-- name: semantic_having_agg
+-- source: semantic/having
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t GROUP BY x HAVING x=1 ORDER BY x;
+----
+1
+
+-- name: semantic_order_by_desc
+-- source: semantic/order_desc
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(3);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t ORDER BY x DESC;
+----
+3
+2
+1
+
+-- name: semantic_limit
+-- source: semantic/limit
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+-- setup: INSERT INTO t VALUES(3);
+SELECT x FROM t ORDER BY x LIMIT 2;
+----
+1
+2
+
+-- name: semantic_pk_table_no_rowid
+-- source: semantic/pk
+-- setup: CREATE TABLE t(x INTEGER PRIMARY KEY, y TEXT);
+-- setup: INSERT INTO t VALUES(1,'a');
+-- setup: INSERT INTO t VALUES(1,'b');
+SELECT COUNT(*) FROM t;
+----
+1
+
+-- name: semantic_count_star
+-- source: semantic/count_star
+-- setup: CREATE TABLE t(x INTEGER, y TEXT);
+-- setup: INSERT INTO t VALUES(1,'a');
+-- setup: INSERT INTO t VALUES(2,'b');
+SELECT count(*) FROM t;
+----
+2
+
+-- name: semantic_count_x
+-- source: semantic/count_x
+-- setup: CREATE TABLE t(x INTEGER, y TEXT);
+-- setup: INSERT INTO t VALUES(1,'a');
+-- setup: INSERT INTO t VALUES(NULL,'b');
+SELECT count(x) FROM t;
+----
+1
+
+-- name: semantic_group_concat_distinct_y
+-- source: semantic/group_concat_distinct_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT group_concat(DISTINCT y) FROM t1;
+----
+true,false,NULL
+
+-- name: semantic_total_distinct_y
+-- source: semantic/total_distinct_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT total(DISTINCT y) FROM t1;
+----
+0
+
+-- name: semantic_min_distinct_y
+-- source: semantic/min_distinct_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT min(DISTINCT y) FROM t1;
+----
+0
+
+-- name: semantic_max_distinct_y
+-- source: semantic/max_distinct_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT max(DISTINCT y) FROM t1;
+----
+0
+
+-- name: semantic_avg_distinct_y
+-- source: semantic/avg_distinct_y
+-- coltypes: I
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT avg(DISTINCT y) FROM t1;
+----
+0
+
+-- name: semantic_sum_distinct_y
+-- source: semantic/sum_distinct_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT sum(DISTINCT y) FROM t1;
+----
+0
+
+-- name: semantic_count_distinct_y
+-- source: semantic/count_distinct_y
+-- setup: CREATE TABLE t1(x INTEGER, y TEXT);
+-- setup: INSERT INTO t1 VALUES(1,'true');
+-- setup: INSERT INTO t1 VALUES(0,'false');
+-- setup: INSERT INTO t1 VALUES(NULL,'NULL');
+SELECT count(DISTINCT y) FROM t1;
+----
+3
+
+-- name: semantic_between_null
+-- source: semantic/between_null
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(NULL);
+SELECT x FROM t WHERE x BETWEEN 1 AND 5;
+----
+
+-- name: semantic_in_subquery_empty
+-- source: semantic/in_subquery_empty
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+SELECT x FROM t WHERE x IN (SELECT x FROM t WHERE x=99);
+----
+
+-- name: semantic_not_in_subquery_all
+-- source: semantic/not_in_subquery
+-- setup: CREATE TABLE t(x INTEGER);
+-- setup: INSERT INTO t VALUES(1);
+-- setup: INSERT INTO t VALUES(2);
+SELECT x FROM t WHERE x NOT IN (SELECT x FROM t WHERE x=99) ORDER BY x;
+----
+1
+2
+
+-- name: semantic_in_subquery_cross_column
+-- source: semantic/in_subquery_cross_col
+-- sort: rowsort
+-- setup: CREATE TABLE t(a INTEGER, b INTEGER);
+-- setup: INSERT INTO t VALUES(10, 10);
+-- setup: INSERT INTO t VALUES(20, 20);
+-- setup: INSERT INTO t VALUES(30, 40);
+SELECT a FROM t WHERE a IN (SELECT b FROM t);
+----
+10
+20
+
+-- name: semantic_in_subquery_or_where
+-- source: semantic/in_subquery_or_where
+-- sort: rowsort
+-- setup: CREATE TABLE t(a INTEGER, b INTEGER, c INTEGER);
+-- setup: INSERT INTO t VALUES(1, 5, 1);
+-- setup: INSERT INTO t VALUES(2, 15, 2);
+-- setup: INSERT INTO t VALUES(3, 25, 3);
+SELECT a FROM t WHERE a IN (SELECT c FROM t WHERE c > 1 OR b >= 15);
+----
+2
+3
+
+-- name: semantic_view_drop_missing_error
+-- source: semantic/drop_view_missing
+-- error
+DROP VIEW viewX;
+
+-- name: semantic_insert_or_replace
+-- source: semantic/upsert
+-- setup: CREATE TABLE t(x INTEGER PRIMARY KEY, y TEXT);
+-- setup: INSERT INTO t VALUES(1,'a');
+-- setup: INSERT OR REPLACE INTO t VALUES(1,'b');
+SELECT y FROM t WHERE x=1;
+----
+b

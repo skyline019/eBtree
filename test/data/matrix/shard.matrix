@@ -1,0 +1,39 @@
+case: four_shard_reopen
+setup:
+  durability: sync
+  ops: put sk0=sv0; put sk1=sv1
+run: multishard_reopen
+expect: ok
+get: sk0=sv0
+---
+case: route_stable_key
+setup:
+  durability: sync
+  ops: put route_key=rv
+run: multishard_reopen
+expect: ok
+get: route_key=rv
+---
+case: sixteen_shard_reopen
+setup:
+  durability: sync
+  ops: put s16k=s16v
+run: multishard16_reopen
+expect: ok
+get: s16k=s16v
+---
+case: two_fifty_six_shard_reopen
+setup:
+  durability: sync
+  ops: put s256k=s256v
+run: multishard256_reopen
+expect: ok
+get: s256k=s256v
+---
+case: route_key_stable
+setup:
+  durability: sync
+  ops: put r256k=r256v
+run: multishard256_reopen
+expect: ok
+get: r256k=r256v

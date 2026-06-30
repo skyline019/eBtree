@@ -1,0 +1,17 @@
+case: get_hit_no_fallback
+setup:
+  durability: sync
+  ops: put k=v
+run: checkpoint_scan
+expect: ok
+get: k=v
+assert_stat: fallback_read_total=0
+---
+case: missing_key_scan_no_fallback
+setup:
+  durability: sync
+  ops: put k=v
+run: scan_missing
+expect: ok
+get: z
+assert_stat: fallback_read_total=0

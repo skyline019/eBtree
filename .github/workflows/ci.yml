@@ -1,0 +1,100 @@
+# eB-Tree CI — https://github.com/skyline019/eBtree
+#
+# PR: build + P4-complete + semantic/label-110 smoke (~20 min)
+# main push: additionally P11 official 800/800 + P12 semantic gate (~45 min total)
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_DIR: build-ci
+  CONFIG: Release
+
+jobs:
+  build-and-test:
+    name: Windows MSVC
+    runs-on: windows-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Configure and build
+        shell: pwsh
+        env:
+          Python3_EXECUTABLE: ${{ steps.setup-python.outputs.python-path }}
+        run: |
+          Write-Host "Python: $env:Python3_EXECUTABLE"
+          & "${{ github.workspace }}/scripts/build/build_msvc.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Target ebtree_test_runner `
+            -Reconfigure
+
+      - name: Matrix codegen check
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/check_matrix_codegen.ps1" `
+            -RepoRoot "${{ github.workspace }}"
+
+      - name: Gate P4-complete
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Gate P4-complete
+
+      - name: SQL smoke (semantic + label-110)
+        shell: pwsh
+        run: |
+          $runner = Join-Path "${{ github.workspace }}/$env:BUILD_DIR" "$env:CONFIG/ebtree_test_runner.exe"
+          & $runner --gtest_filter="SemanticOracle.SemanticCorpusStrict100:SqllogicRunner.IndexBetweenLabel110*"
+
+      - name: Gate P11 official 800/800
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Gate P11-real-sql
+
+      - name: Gate P12 semantic
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Gate P12-semantic-sql
+
+      - name: Upload sqllogic baseline
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqllogic-baseline
+          path: .test-runs/**/reports/sqllogic_baseline.json
+          if-no-files-found: ignore
+          retention-days: 14

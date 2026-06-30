@@ -1,0 +1,69 @@
+-- name: create_insert_select
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('a', '1')
+SELECT key, value FROM t WHERE key = 'a'
+----
+a|1
+---
+-- name: index_lookup
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k', 'v')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v'
+----
+k
+---
+-- name: update_row
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k', '1')
+UPDATE t SET value = '2' WHERE key = 'k'
+----
+---
+-- name: select_after_update
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k', '1')
+-- setup: UPDATE t SET value = '2' WHERE key = 'k'
+SELECT value FROM t WHERE key = 'k'
+----
+2
+---
+-- name: delete_row
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k', '1')
+DELETE FROM t WHERE key = 'k'
+----
+---
+-- name: select_empty
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+SELECT key FROM t WHERE key = 'missing'
+----
+---
+-- name: upsert_replace
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('k', '9')
+SELECT value FROM t WHERE key = 'k'
+----
+9
+---
+-- name: drop_table_ok
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+DROP TABLE t
+----
+---
+-- name: union_distinct
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TABLE t2 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a', '1')
+-- setup: INSERT INTO t2 (key, value) VALUES ('b', '2')
+SELECT key FROM t1 UNION SELECT key FROM t2
+----
+a
+b
+---
+-- name: cte_select
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+k

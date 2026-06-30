@@ -1,0 +1,63 @@
+case: wal_replay_without_checkpoint
+setup:
+  durability: sync
+  ops: put w1=wv
+run: reopen
+expect: ok
+get: w1=wv
+---
+case: multi_key_wal_recovery
+setup:
+  durability: sync
+  ops: put a=1; put b=2
+run: reopen
+expect: ok
+get: b=2
+---
+case: flush_then_reopen
+setup:
+  durability: sync
+  ops: put f1=fv
+run: flush_reopen
+expect: ok
+get: f1=fv
+---
+case: wal_corrupt_tlog_fallback
+setup:
+  durability: sync
+  ops: put tf1=tv
+run: checkpoint_corrupt_wal_reopen
+expect: ok
+get: tf1=tv
+---
+case: fast_open_reopen
+setup:
+  durability: sync
+  ops: put fo_k=fo_v
+run: fast_open_reopen
+expect: ok
+get: fo_k=fo_v
+---
+case: lazy_root_corrupt
+setup:
+  durability: sync
+  ops: put lr1=lv1
+run: lazy_root_reopen
+expect: ok
+get: lr1=lv1
+---
+case: full_replay_reopen
+setup:
+  durability: sync
+  ops: put fr_k=fr_v
+run: full_replay_reopen
+expect: ok
+get: fr_k=fr_v
+---
+case: balanced_fast_open_reopen
+setup:
+  durability: balanced
+  ops: put bf_k=bf_v
+run: fast_open_reopen
+expect: ok
+get: bf_k=bf_v

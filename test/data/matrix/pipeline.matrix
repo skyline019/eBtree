@@ -1,0 +1,58 @@
+case: group_put_survives_group_commit_reopen
+setup:
+  durability: group
+  ops: put gc1=gcv
+run: group_commit_reopen
+expect: ok
+get: gc1=gcv
+assert_stat: group_commit_total=1
+---
+case: async_put_needs_flush_for_stable
+setup:
+  durability: async
+  ops: put async1=av
+run: async_stable_check
+expect: ok
+get: async1=av
+assert_stat: flusher_flush_total=1
+---
+case: flush_order_wal_before_datafile
+setup:
+  durability: sync
+  ops: put fo1=fov
+run: flush_reopen
+expect: ok
+get: fo1=fov
+assert_stat: wal_append_total=1
+---
+case: auto_batch_group_commit
+setup:
+  durability: group
+  ops: put b1=v1; put b2=v2
+run: auto_batch_group_commit
+expect: ok
+assert_stat: group_commit_total=1
+---
+case: scan_before_flush
+setup:
+  durability: sync
+  ops: put sk=sv
+run: scan_before_flush
+expect: ok
+get: sk=sv
+---
+case: async_reopen_lost
+setup:
+  durability: async
+  ops: put lost_k=lost_v
+run: async_reopen_lost
+expect: fail
+get: lost_k
+---
+case: memtable_3stage_flush
+setup:
+  durability: sync
+  ops: put mt_k=mt_v
+run: memtable_3stage_reopen
+expect: ok
+get: mt_k=mt_v

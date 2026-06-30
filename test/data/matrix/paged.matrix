@@ -1,0 +1,23 @@
+case: paged_checkpoint_reopen
+setup:
+  durability: sync
+  ops: put pg1=pgv1; put pg2=pgv2
+run: checkpoint_reopen
+expect: ok
+get: pg2=pgv2
+---
+case: paged_flush_reopen
+setup:
+  durability: sync
+  ops: put pf1=pfv1; put pf2=pfv2
+run: flush_reopen
+expect: ok
+get: pf2=pfv2
+---
+case: paged_multi_key
+setup:
+  durability: sync
+  ops: put pm1=pmv1; put pm2=pmv2; put pm3=pmv3
+run: checkpoint_reopen
+expect: ok
+get: pm3=pmv3

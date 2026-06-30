@@ -1,0 +1,8 @@
+case: wal_index_lazy_get
+setup:
+  durability: sync
+  ops: put wi1=wiv1
+run: fast_open_reopen
+expect: ok
+get: wi1=wiv1
+assert_stat: wal_full_scan_total=0

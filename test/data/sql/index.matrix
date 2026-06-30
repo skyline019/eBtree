@@ -1,0 +1,203 @@
+case: create_index_parse
+parse: "CREATE INDEX idx_val ON t (value)"
+expect_kind: kCreateIndex
+---
+case: create_unique_index_parse
+parse: "CREATE UNIQUE INDEX idx_key ON t (key)"
+expect_kind: kCreateIndex
+---
+case: drop_index_parse
+parse: "DROP INDEX idx_val"
+expect_kind: kDropIndex
+---
+case: index_scan_eq
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key, value FROM t WHERE value = 'v1'"
+expect: ok
+expect_rows: 1
+expect_value: v1
+---
+case: index_scan_miss
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key, value FROM t WHERE value = 'missing'"
+expect: ok
+expect_rows: 0
+---
+case: index_maintain_insert
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE INDEX idx_val ON t (value)"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+exec: "SELECT key FROM t WHERE value = 'v2'"
+expect: ok
+expect_rows: 1
+---
+case: explain_index_scan
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "EXPLAIN QUERY PLAN SELECT key FROM t WHERE value = 'x'"
+expect: ok
+expect_rows: 1
+---
+case: drop_index_exec
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE INDEX idx_val ON t (value)"
+setup: "DROP INDEX idx_val"
+exec: "SELECT key FROM t"
+expect: ok
+expect_rows: 0
+---
+case: index_scan_k2
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('a', 'one')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'one'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k3
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('b', 'two')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'two'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k4
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('c', 'three')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'three'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k5
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('d', 'four')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'four'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k6
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('e', 'five')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'five'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k7
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('f', 'six')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'six'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k8
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('g', 'seven')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'seven'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k9
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('h', 'eight')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'eight'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k10
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('i', 'nine')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'nine'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k11
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('j', 'ten')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'ten'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k12
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k', 'eleven')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'eleven'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k13
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('l', 'twelve')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'twelve'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k14
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('m', 'thirteen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'thirteen'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k15
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('n', 'fourteen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'fourteen'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k16
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('o', 'fifteen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'fifteen'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k17
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('p', 'sixteen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'sixteen'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k18
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('q', 'seventeen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'seventeen'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k19
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('r', 'eighteen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'eighteen'"
+expect: ok
+expect_rows: 1
+---
+case: index_scan_k20
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('s', 'nineteen')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value = 'nineteen'"
+expect: ok
+expect_rows: 1

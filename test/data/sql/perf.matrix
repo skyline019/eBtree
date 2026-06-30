@@ -1,0 +1,210 @@
+case: scan_1_budget_zero
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+exec: "SELECT key FROM t /* @max_pages=0 */"
+expect: mic_violation
+---
+case: scan_1_budget_ok
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+exec: "SELECT key FROM t /* @max_pages=32 */"
+expect: ok
+expect_rows: 1
+---
+case: scan_4_budget_zero
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+setup: "INSERT INTO t (key, value) VALUES ('k3', 'v3')"
+exec: "SELECT key FROM t /* @max_pages=0 */"
+expect: mic_violation
+---
+case: scan_4_budget_ok
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+setup: "INSERT INTO t (key, value) VALUES ('k3', 'v3')"
+exec: "SELECT key FROM t /* @max_pages=32 */"
+expect: ok
+expect_rows: 4
+---
+case: scan_8_budget_zero
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+setup: "INSERT INTO t (key, value) VALUES ('k3', 'v3')"
+setup: "INSERT INTO t (key, value) VALUES ('k4', 'v4')"
+setup: "INSERT INTO t (key, value) VALUES ('k5', 'v5')"
+setup: "INSERT INTO t (key, value) VALUES ('k6', 'v6')"
+setup: "INSERT INTO t (key, value) VALUES ('k7', 'v7')"
+exec: "SELECT key FROM t /* @max_pages=0 */"
+expect: mic_violation
+---
+case: scan_8_budget_ok
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+setup: "INSERT INTO t (key, value) VALUES ('k3', 'v3')"
+setup: "INSERT INTO t (key, value) VALUES ('k4', 'v4')"
+setup: "INSERT INTO t (key, value) VALUES ('k5', 'v5')"
+setup: "INSERT INTO t (key, value) VALUES ('k6', 'v6')"
+setup: "INSERT INTO t (key, value) VALUES ('k7', 'v7')"
+exec: "SELECT key FROM t /* @max_pages=32 */"
+expect: ok
+expect_rows: 8
+---
+case: scan_16_budget_zero
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+setup: "INSERT INTO t (key, value) VALUES ('k3', 'v3')"
+setup: "INSERT INTO t (key, value) VALUES ('k4', 'v4')"
+setup: "INSERT INTO t (key, value) VALUES ('k5', 'v5')"
+setup: "INSERT INTO t (key, value) VALUES ('k6', 'v6')"
+setup: "INSERT INTO t (key, value) VALUES ('k7', 'v7')"
+setup: "INSERT INTO t (key, value) VALUES ('k8', 'v8')"
+setup: "INSERT INTO t (key, value) VALUES ('k9', 'v9')"
+setup: "INSERT INTO t (key, value) VALUES ('k10', 'v10')"
+setup: "INSERT INTO t (key, value) VALUES ('k11', 'v11')"
+setup: "INSERT INTO t (key, value) VALUES ('k12', 'v12')"
+setup: "INSERT INTO t (key, value) VALUES ('k13', 'v13')"
+setup: "INSERT INTO t (key, value) VALUES ('k14', 'v14')"
+setup: "INSERT INTO t (key, value) VALUES ('k15', 'v15')"
+exec: "SELECT key FROM t /* @max_pages=0 */"
+expect: mic_violation
+---
+case: scan_16_budget_ok
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', 'v0')"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+setup: "INSERT INTO t (key, value) VALUES ('k3', 'v3')"
+setup: "INSERT INTO t (key, value) VALUES ('k4', 'v4')"
+setup: "INSERT INTO t (key, value) VALUES ('k5', 'v5')"
+setup: "INSERT INTO t (key, value) VALUES ('k6', 'v6')"
+setup: "INSERT INTO t (key, value) VALUES ('k7', 'v7')"
+setup: "INSERT INTO t (key, value) VALUES ('k8', 'v8')"
+setup: "INSERT INTO t (key, value) VALUES ('k9', 'v9')"
+setup: "INSERT INTO t (key, value) VALUES ('k10', 'v10')"
+setup: "INSERT INTO t (key, value) VALUES ('k11', 'v11')"
+setup: "INSERT INTO t (key, value) VALUES ('k12', 'v12')"
+setup: "INSERT INTO t (key, value) VALUES ('k13', 'v13')"
+setup: "INSERT INTO t (key, value) VALUES ('k14', 'v14')"
+setup: "INSERT INTO t (key, value) VALUES ('k15', 'v15')"
+exec: "SELECT key FROM t /* @max_pages=32 */"
+expect: ok
+expect_rows: 16
+---
+case: join_budget_zero
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key /* @max_pages=0 */"
+expect: mic_violation
+---
+case: join_budget_ok
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key /* @max_pages=32 */"
+expect: ok
+expect_rows: 1
+---
+case: join_nomatch_ok
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k2', '2')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key /* @max_pages=32 */"
+expect: ok
+expect_rows: 0
+---
+case: join_3table_zero
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE c (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO c (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key JOIN c ON b.key=c.key /* @max_pages=0 */"
+expect: mic_violation
+---
+case: in_subquery_zero
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO a (key, value) VALUES ('k2', '2')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a WHERE a.key IN (SELECT b.key FROM b) /* @max_pages=0 */"
+expect: mic_violation
+---
+case: in_subquery_ok
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO a (key, value) VALUES ('k2', '2')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a WHERE a.key IN (SELECT b.key FROM b) /* @max_pages=32 */"
+expect: ok
+expect_rows: 1
+---
+case: in_subquery_multi_ok
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO a (key, value) VALUES ('k2', '2')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k2', '2')"
+exec: "SELECT a.key FROM a WHERE a.key IN (SELECT b.key FROM b) /* @max_pages=32 */"
+expect: ok
+expect_rows: 2
+---
+case: join_in_combo_zero
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key WHERE a.key IN ('k1') /* @max_pages=0 */"
+expect: mic_violation
+---
+case: join_in_combo_ok
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key WHERE a.key IN ('k1') /* @max_pages=32 */"
+expect: ok
+expect_rows: 1
+---
+case: scan_range_zero
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+exec: "SELECT key FROM t WHERE key >= 'k1' /* @max_pages=0 */"
+expect: mic_violation
+---
+case: scan_range_ok
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+setup: "INSERT INTO t (key, value) VALUES ('k2', 'v2')"
+exec: "SELECT key FROM t WHERE key >= 'k1' /* @max_pages=32 */"
+expect: ok
+expect_rows: 2
+---
+case: join_3table_ok
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE c (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO c (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key=b.key JOIN c ON b.key=c.key /* @max_pages=32 */"
+expect: ok
+expect_rows: 1

@@ -1,0 +1,23 @@
+case: upsert_parse
+parse: "INSERT OR REPLACE INTO t (key, value) VALUES ('k1', 'v1')"
+expect_kind: kUpsert
+---
+case: upsert_exec
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+exec: "INSERT OR REPLACE INTO t (key, value) VALUES ('k1', 'v2')"
+follow: "SELECT key, value FROM t WHERE key = 'k1'"
+expect_rows: 1
+expect_value: v2
+---
+case: upsert_new_row
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+exec: "INSERT OR REPLACE INTO t (key, value) VALUES ('k9', 'v9')"
+follow: "SELECT key FROM t WHERE key = 'k9'"
+expect_rows: 1
+---
+case: explain_table_scan
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+exec: "EXPLAIN QUERY PLAN SELECT key FROM t"
+expect: ok
+expect_rows: 1

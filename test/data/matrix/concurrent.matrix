@@ -1,0 +1,23 @@
+case: concurrent_checkpoint
+setup:
+  durability: sync
+  ops: put cx1=cxv1
+run: checkpoint_reopen
+expect: ok
+get: cx1=cxv1
+---
+case: concurrent_flush_reopen
+setup:
+  durability: sync
+  ops: put cy1=cyv1
+run: flush_reopen
+expect: ok
+get: cy1=cyv1
+---
+case: concurrent_wal_reopen
+setup:
+  durability: sync
+  ops: put cz1=czv1
+run: reopen
+expect: ok
+get: cz1=czv1

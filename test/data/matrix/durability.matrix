@@ -1,0 +1,39 @@
+case: sync_put_survives_reopen
+setup:
+  durability: sync
+  ops: put k1=v1
+run: checkpoint_reopen
+expect: ok
+get: k1=v1
+---
+case: group_put_survives_reopen
+setup:
+  durability: group
+  ops: put g1=gv
+run: checkpoint_reopen
+expect: ok
+get: g1=gv
+---
+case: sync_put_after_checkpoint
+setup:
+  durability: sync
+  ops: put ck1=ckv
+run: checkpoint_reopen
+expect: ok
+get: ck1=ckv
+---
+case: missing_key_not_found
+setup:
+  durability: sync
+run: get missing
+expect: fail
+get: missing
+error_contains: not found
+---
+case: bad_epoch_rejected
+setup:
+  durability: sync
+  ops: put x=1; corrupt superblock
+run: reopen
+expect: fail
+error_contains: CorruptSuperBlock

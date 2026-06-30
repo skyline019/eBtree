@@ -1,0 +1,10 @@
+^E:\DB\DB\GTEST_CAPI\BUILD\_DEPS\GOOGLETEST-SUBBUILD\CMAKEFILES\BEBE51AAEDB14CF1FA9164569758A219\GENERATE.STAMP.RULE
+setlocal
+E:\CMake\bin\cmake.exe -SE:/db/DB/gtest_capi/build/_deps/googletest-subbuild -BE:/db/DB/gtest_capi/build/_deps/googletest-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/db/DB/gtest_capi/build/_deps/googletest-subbuild/googletest-populate.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

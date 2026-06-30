@@ -1,0 +1,92 @@
+version: 1
+invariants:
+  - id: I-D1
+    test: EbInvariantDurability.WalPrecedesDataFile
+    adr: Docs/adr/001-invariants.md
+  - id: I-D2
+    test: EbInvariantDurability.SuperBlockDataLsnLeStable
+    adr: Docs/adr/001-invariants.md
+  - id: I-D3
+    test: EbInvariantDurability.DataFileLsnMonotonic
+    adr: Docs/adr/001-invariants.md
+  - id: I-D4
+    test: EbFailure.CorruptSuperBlockRejected
+    adr: Docs/adr/001-invariants.md
+  - id: I-NF0
+    test: EbInvariantNoFallback.EmptyKeyGetRejected
+    adr: Docs/adr/001-invariants.md
+  - id: I-NF1
+    test: EbBtreeNoFallback.SummaryPrunesMissingKey
+    adr: Docs/adr/001-invariants.md
+  - id: I-NF2
+    test: EbBtreeNoFallback.StaleSummaryRejected
+    adr: Docs/adr/001-invariants.md
+  - id: I-NF2b
+    test: EbInvariantSummary.RepairDoesNotTriggerRecovery
+    adr: Docs/adr/001-invariants.md
+  - id: I-NF3
+    test: EbInvariantNoFallback.ReadPathNoRecovery
+    adr: Docs/adr/001-invariants.md
+  - id: I-R1
+    test: EbInvariantRecovery.FullReplayDoesNotDeferWal
+    adr: Docs/adr/004-lazy-recovery.md
+  - id: I-R2
+    test: EbInvariantRecovery.BadBlockDoesNotTriggerFallbackRead
+    adr: Docs/adr/005-tlog-snapshot.md
+  - id: I-MT1
+    test: EbInvariantMemTable.RotatePreservesKeys
+    adr: Docs/adr/007-memtable-3stage.md
+  - id: I-MT2
+    test: EbInvariantMemTable.CheckpointClearsAllStages
+    adr: Docs/adr/007-memtable-3stage.md
+  - id: I-GC1
+    test: EbInvariantGc.LoadAllIgnoresReclaimGeneration
+    adr: Docs/adr/006-active-reclaim-gc.md
+  - id: I-MM1
+    test: EbInvariantMmap.LoadAllEquivalentToMmapView
+    adr: Docs/adr/010-mmap-rcu-window.md
+  - id: I-MM2
+    test: EbInvariantMmap.RotateEpochOldPinStillReadable
+    adr: Docs/adr/010-mmap-rcu-window.md
+  - id: I-SH1
+    test: EbComplexMultishard.SameKeySingleShard
+    adr: Docs/adr/011-multishard-routing.md
+  - id: I-SH2
+    test: EbComplexMultishard.RouteStableSixteenShard
+    adr: Docs/adr/011-multishard-routing.md
+  - id: I-SH3
+    test: EbComplexMultishard.TwoFiftySixShardSmoke
+    adr: Docs/adr/011-multishard-routing.md
+  - id: I-PG1
+    test: EbInvariantPagedBtree.LeafPageCrcRoundTrip
+    adr: Docs/adr/008-p6-deferred.md
+  - id: I-PG2
+    test: EbInvariantPagedBtree.RootScanMatchesIndex
+    adr: Docs/adr/008-p6-deferred.md
+  - id: I-PG3
+    test: EbInvariantPagedBtree.TrieSummaryTypeSkeleton
+    adr: Docs/adr/008-p6-deferred.md
+  - id: I-PG4
+    test: EbInvariantPagedBtree.CorruptRootHealedWithoutFallback
+    adr: Docs/adr/008-p6-deferred.md
+  - id: I-PG5
+    test: EbInvariantOndiskBtree.OpenLoadsRootOnly
+    adr: Docs/adr/016-ondisk-query-wal-index.md
+  - id: I-PG6
+    test: EbInvariantOndiskBtree.HistogramSummaryType
+    adr: Docs/adr/016-ondisk-query-wal-index.md
+  - id: I-WAL1
+    test: EbWalKeyIndex.BuildAndLookup
+    adr: Docs/adr/016-ondisk-query-wal-index.md
+  - id: I-SH4
+    test: EbComplexLazyShard.TwoFiftySixOpenIsLazy
+    adr: Docs/adr/011-multishard-routing.md
+  - id: I-C1
+    test: EbInvariantConcurrency.ConcurrentReadDoesNotDeferWal
+    adr: Docs/adr/012-concurrent-reads.md
+  - id: I-C2
+    test: EbInvariantConcurrency.ConcurrentReadsConsistent
+    adr: Docs/adr/012-concurrent-reads.md
+  - id: I-NF4
+    test: EbMatrix.NoFallbackMatrixTest.RunCase
+    adr: Docs/adr/019-explicit-read-tiers.md

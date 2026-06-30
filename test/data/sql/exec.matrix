@@ -1,0 +1,31 @@
+case: update_row
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+exec: "UPDATE t SET value = 'v2' WHERE key = 'k1'"
+expect: ok
+expect_rows: 0
+---
+case: select_after_update
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+exec: "UPDATE t SET value = 'v2' WHERE key = 'k1'"
+expect: ok
+follow: "SELECT key, value FROM t WHERE key = 'k1'"
+expect_rows: 1
+expect_value: v2
+---
+case: cte_exec
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', 'v1')"
+exec: "WITH cte AS (SELECT key FROM t) SELECT key FROM cte"
+expect: ok
+expect_rows: 1
+---
+case: setop_union
+setup: "CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE t2 (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t1 (key, value) VALUES ('a', '1')"
+setup: "INSERT INTO t2 (key, value) VALUES ('b', '2')"
+exec: "SELECT key FROM t1 UNION SELECT key FROM t2"
+expect: ok
+expect_rows: 2

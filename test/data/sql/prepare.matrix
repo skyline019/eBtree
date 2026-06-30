@@ -1,0 +1,8 @@
+case: leaf_prefix_shared_keys
+setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+setup: INSERT INTO t (key, value) VALUES ('prefix_a', '1')
+setup: INSERT INTO t (key, value) VALUES ('prefix_b', '2')
+setup: INSERT INTO t (key, value) VALUES ('prefix_c', '3')
+exec: "SELECT key FROM t WHERE key = 'prefix_b'"
+expect: ok
+expect_rows: 1

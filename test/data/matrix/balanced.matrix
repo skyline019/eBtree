@@ -1,0 +1,8 @@
+case: balanced_put_reopen
+setup:
+  durability: balanced
+  ops: put bk=bv
+run: reopen
+expect: ok
+get: bk=bv
+assert_stat: stable_lsn=1

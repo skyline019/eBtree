@@ -1,0 +1,61 @@
+case: flashback_at_checkpoint
+setup:
+  durability: sync
+  ops: put fb_k=fb_v0
+run: flashback_checkpoint
+expect: ok
+get: fb_k=fb_v0
+---
+case: flashback_scan_asof
+setup:
+  durability: sync
+  ops: put fs1=fsv1; put fs2=fsv2
+run: flashback_checkpoint
+expect: ok
+get: fs1=fsv1
+---
+case: flashback_no_fallback
+setup:
+  durability: sync
+  ops: put fnf1=fnfv
+run: flashback_checkpoint
+expect: ok
+get: fnf1=fnfv
+assert_stat: fallback_read_total=0
+---
+case: flashback_before_first_snapshot
+setup:
+  durability: sync
+  ops: put bf_k=bf_v
+run: flashback_checkpoint
+expect: not_found
+get: bf_k
+corrupt: 6999
+---
+case: flashback_corrupt_wal_reopen
+setup:
+  durability: sync
+  ops: put fcw_k=fcw_v
+run: flashback_corrupt_wal_reopen
+expect: ok
+get: fcw_k=fcw_v
+corrupt: 7100
+assert_stat: fallback_read_total=0
+---
+case: flashback_scan_two_versions
+setup:
+  durability: sync
+  ops: put fsv1=a1; put fsv2=b1
+run: flashback_scan_two_checkpoint
+expect: ok
+get: fsv1=a1
+corrupt: 7200
+assert_stat: fallback_read_total=0
+---
+case: flashback_tlog_tail
+setup:
+  durability: sync
+  ops: put ft_k=ft_v1
+run: flashback_multi_checkpoint
+expect: ok
+assert_stat: tlog_snapshot_total=2

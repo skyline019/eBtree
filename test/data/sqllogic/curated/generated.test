@@ -1,0 +1,3700 @@
+-- name: select_key_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k0', '0')
+SELECT key FROM t WHERE key = 'k0'
+----
+k0
+---
+-- name: select_key_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k1', '1')
+SELECT key FROM t WHERE key = 'k1'
+----
+k1
+---
+-- name: select_key_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k2', '2')
+SELECT key FROM t WHERE key = 'k2'
+----
+k2
+---
+-- name: select_key_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k3', '3')
+SELECT key FROM t WHERE key = 'k3'
+----
+k3
+---
+-- name: select_key_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k4', '4')
+SELECT key FROM t WHERE key = 'k4'
+----
+k4
+---
+-- name: select_key_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k5', '5')
+SELECT key FROM t WHERE key = 'k5'
+----
+k5
+---
+-- name: select_key_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k6', '6')
+SELECT key FROM t WHERE key = 'k6'
+----
+k6
+---
+-- name: select_key_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k7', '7')
+SELECT key FROM t WHERE key = 'k7'
+----
+k7
+---
+-- name: select_key_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k8', '8')
+SELECT key FROM t WHERE key = 'k8'
+----
+k8
+---
+-- name: select_key_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k9', '9')
+SELECT key FROM t WHERE key = 'k9'
+----
+k9
+---
+-- name: select_key_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k10', '10')
+SELECT key FROM t WHERE key = 'k10'
+----
+k10
+---
+-- name: select_key_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k11', '11')
+SELECT key FROM t WHERE key = 'k11'
+----
+k11
+---
+-- name: select_key_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k12', '12')
+SELECT key FROM t WHERE key = 'k12'
+----
+k12
+---
+-- name: select_key_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k13', '13')
+SELECT key FROM t WHERE key = 'k13'
+----
+k13
+---
+-- name: select_key_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k14', '14')
+SELECT key FROM t WHERE key = 'k14'
+----
+k14
+---
+-- name: select_key_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k15', '15')
+SELECT key FROM t WHERE key = 'k15'
+----
+k15
+---
+-- name: select_key_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k16', '16')
+SELECT key FROM t WHERE key = 'k16'
+----
+k16
+---
+-- name: select_key_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k17', '17')
+SELECT key FROM t WHERE key = 'k17'
+----
+k17
+---
+-- name: select_key_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k18', '18')
+SELECT key FROM t WHERE key = 'k18'
+----
+k18
+---
+-- name: select_key_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k19', '19')
+SELECT key FROM t WHERE key = 'k19'
+----
+k19
+---
+-- name: select_key_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k20', '20')
+SELECT key FROM t WHERE key = 'k20'
+----
+k20
+---
+-- name: select_key_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k21', '21')
+SELECT key FROM t WHERE key = 'k21'
+----
+k21
+---
+-- name: select_key_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k22', '22')
+SELECT key FROM t WHERE key = 'k22'
+----
+k22
+---
+-- name: select_key_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k23', '23')
+SELECT key FROM t WHERE key = 'k23'
+----
+k23
+---
+-- name: select_key_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k24', '24')
+SELECT key FROM t WHERE key = 'k24'
+----
+k24
+---
+-- name: select_key_25
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k25', '25')
+SELECT key FROM t WHERE key = 'k25'
+----
+k25
+---
+-- name: select_key_26
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k26', '26')
+SELECT key FROM t WHERE key = 'k26'
+----
+k26
+---
+-- name: select_key_27
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k27', '27')
+SELECT key FROM t WHERE key = 'k27'
+----
+k27
+---
+-- name: select_key_28
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k28', '28')
+SELECT key FROM t WHERE key = 'k28'
+----
+k28
+---
+-- name: select_key_29
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k29', '29')
+SELECT key FROM t WHERE key = 'k29'
+----
+k29
+---
+-- name: select_key_30
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k30', '30')
+SELECT key FROM t WHERE key = 'k30'
+----
+k30
+---
+-- name: select_key_31
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k31', '31')
+SELECT key FROM t WHERE key = 'k31'
+----
+k31
+---
+-- name: select_key_32
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k32', '32')
+SELECT key FROM t WHERE key = 'k32'
+----
+k32
+---
+-- name: select_key_33
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k33', '33')
+SELECT key FROM t WHERE key = 'k33'
+----
+k33
+---
+-- name: select_key_34
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k34', '34')
+SELECT key FROM t WHERE key = 'k34'
+----
+k34
+---
+-- name: select_key_35
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k35', '35')
+SELECT key FROM t WHERE key = 'k35'
+----
+k35
+---
+-- name: select_key_36
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k36', '36')
+SELECT key FROM t WHERE key = 'k36'
+----
+k36
+---
+-- name: select_key_37
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k37', '37')
+SELECT key FROM t WHERE key = 'k37'
+----
+k37
+---
+-- name: select_key_38
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k38', '38')
+SELECT key FROM t WHERE key = 'k38'
+----
+k38
+---
+-- name: select_key_39
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k39', '39')
+SELECT key FROM t WHERE key = 'k39'
+----
+k39
+---
+-- name: select_key_40
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k40', '40')
+SELECT key FROM t WHERE key = 'k40'
+----
+k40
+---
+-- name: select_key_41
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k41', '41')
+SELECT key FROM t WHERE key = 'k41'
+----
+k41
+---
+-- name: select_key_42
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k42', '42')
+SELECT key FROM t WHERE key = 'k42'
+----
+k42
+---
+-- name: select_key_43
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k43', '43')
+SELECT key FROM t WHERE key = 'k43'
+----
+k43
+---
+-- name: select_key_44
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k44', '44')
+SELECT key FROM t WHERE key = 'k44'
+----
+k44
+---
+-- name: select_key_45
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k45', '45')
+SELECT key FROM t WHERE key = 'k45'
+----
+k45
+---
+-- name: select_key_46
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k46', '46')
+SELECT key FROM t WHERE key = 'k46'
+----
+k46
+---
+-- name: select_key_47
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k47', '47')
+SELECT key FROM t WHERE key = 'k47'
+----
+k47
+---
+-- name: select_key_48
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k48', '48')
+SELECT key FROM t WHERE key = 'k48'
+----
+k48
+---
+-- name: select_key_49
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k49', '49')
+SELECT key FROM t WHERE key = 'k49'
+----
+k49
+---
+-- name: select_key_50
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k50', '50')
+SELECT key FROM t WHERE key = 'k50'
+----
+k50
+---
+-- name: select_key_51
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k51', '51')
+SELECT key FROM t WHERE key = 'k51'
+----
+k51
+---
+-- name: select_key_52
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k52', '52')
+SELECT key FROM t WHERE key = 'k52'
+----
+k52
+---
+-- name: select_key_53
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k53', '53')
+SELECT key FROM t WHERE key = 'k53'
+----
+k53
+---
+-- name: select_key_54
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k54', '54')
+SELECT key FROM t WHERE key = 'k54'
+----
+k54
+---
+-- name: select_key_55
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k55', '55')
+SELECT key FROM t WHERE key = 'k55'
+----
+k55
+---
+-- name: select_key_56
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k56', '56')
+SELECT key FROM t WHERE key = 'k56'
+----
+k56
+---
+-- name: select_key_57
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k57', '57')
+SELECT key FROM t WHERE key = 'k57'
+----
+k57
+---
+-- name: select_key_58
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k58', '58')
+SELECT key FROM t WHERE key = 'k58'
+----
+k58
+---
+-- name: select_key_59
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k59', '59')
+SELECT key FROM t WHERE key = 'k59'
+----
+k59
+---
+-- name: select_key_60
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k60', '60')
+SELECT key FROM t WHERE key = 'k60'
+----
+k60
+---
+-- name: select_key_61
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k61', '61')
+SELECT key FROM t WHERE key = 'k61'
+----
+k61
+---
+-- name: select_key_62
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k62', '62')
+SELECT key FROM t WHERE key = 'k62'
+----
+k62
+---
+-- name: select_key_63
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k63', '63')
+SELECT key FROM t WHERE key = 'k63'
+----
+k63
+---
+-- name: select_key_64
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k64', '64')
+SELECT key FROM t WHERE key = 'k64'
+----
+k64
+---
+-- name: select_key_65
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k65', '65')
+SELECT key FROM t WHERE key = 'k65'
+----
+k65
+---
+-- name: select_key_66
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k66', '66')
+SELECT key FROM t WHERE key = 'k66'
+----
+k66
+---
+-- name: select_key_67
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k67', '67')
+SELECT key FROM t WHERE key = 'k67'
+----
+k67
+---
+-- name: select_key_68
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k68', '68')
+SELECT key FROM t WHERE key = 'k68'
+----
+k68
+---
+-- name: select_key_69
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k69', '69')
+SELECT key FROM t WHERE key = 'k69'
+----
+k69
+---
+-- name: select_key_70
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k70', '70')
+SELECT key FROM t WHERE key = 'k70'
+----
+k70
+---
+-- name: select_key_71
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k71', '71')
+SELECT key FROM t WHERE key = 'k71'
+----
+k71
+---
+-- name: select_key_72
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k72', '72')
+SELECT key FROM t WHERE key = 'k72'
+----
+k72
+---
+-- name: select_key_73
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k73', '73')
+SELECT key FROM t WHERE key = 'k73'
+----
+k73
+---
+-- name: select_key_74
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k74', '74')
+SELECT key FROM t WHERE key = 'k74'
+----
+k74
+---
+-- name: select_key_75
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k75', '75')
+SELECT key FROM t WHERE key = 'k75'
+----
+k75
+---
+-- name: select_key_76
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k76', '76')
+SELECT key FROM t WHERE key = 'k76'
+----
+k76
+---
+-- name: select_key_77
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k77', '77')
+SELECT key FROM t WHERE key = 'k77'
+----
+k77
+---
+-- name: select_key_78
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k78', '78')
+SELECT key FROM t WHERE key = 'k78'
+----
+k78
+---
+-- name: select_key_79
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k79', '79')
+SELECT key FROM t WHERE key = 'k79'
+----
+k79
+---
+-- name: select_key_80
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k80', '80')
+SELECT key FROM t WHERE key = 'k80'
+----
+k80
+---
+-- name: select_key_81
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k81', '81')
+SELECT key FROM t WHERE key = 'k81'
+----
+k81
+---
+-- name: select_key_82
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k82', '82')
+SELECT key FROM t WHERE key = 'k82'
+----
+k82
+---
+-- name: select_key_83
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k83', '83')
+SELECT key FROM t WHERE key = 'k83'
+----
+k83
+---
+-- name: select_key_84
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k84', '84')
+SELECT key FROM t WHERE key = 'k84'
+----
+k84
+---
+-- name: select_key_85
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k85', '85')
+SELECT key FROM t WHERE key = 'k85'
+----
+k85
+---
+-- name: select_key_86
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k86', '86')
+SELECT key FROM t WHERE key = 'k86'
+----
+k86
+---
+-- name: select_key_87
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k87', '87')
+SELECT key FROM t WHERE key = 'k87'
+----
+k87
+---
+-- name: select_key_88
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k88', '88')
+SELECT key FROM t WHERE key = 'k88'
+----
+k88
+---
+-- name: select_key_89
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k89', '89')
+SELECT key FROM t WHERE key = 'k89'
+----
+k89
+---
+-- name: select_key_90
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k90', '90')
+SELECT key FROM t WHERE key = 'k90'
+----
+k90
+---
+-- name: select_key_91
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k91', '91')
+SELECT key FROM t WHERE key = 'k91'
+----
+k91
+---
+-- name: select_key_92
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k92', '92')
+SELECT key FROM t WHERE key = 'k92'
+----
+k92
+---
+-- name: select_key_93
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k93', '93')
+SELECT key FROM t WHERE key = 'k93'
+----
+k93
+---
+-- name: select_key_94
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k94', '94')
+SELECT key FROM t WHERE key = 'k94'
+----
+k94
+---
+-- name: select_key_95
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k95', '95')
+SELECT key FROM t WHERE key = 'k95'
+----
+k95
+---
+-- name: select_key_96
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k96', '96')
+SELECT key FROM t WHERE key = 'k96'
+----
+k96
+---
+-- name: select_key_97
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k97', '97')
+SELECT key FROM t WHERE key = 'k97'
+----
+k97
+---
+-- name: select_key_98
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k98', '98')
+SELECT key FROM t WHERE key = 'k98'
+----
+k98
+---
+-- name: select_key_99
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k99', '99')
+SELECT key FROM t WHERE key = 'k99'
+----
+k99
+---
+-- name: select_key_100
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k100', '100')
+SELECT key FROM t WHERE key = 'k100'
+----
+k100
+---
+-- name: select_key_101
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k101', '101')
+SELECT key FROM t WHERE key = 'k101'
+----
+k101
+---
+-- name: select_key_102
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k102', '102')
+SELECT key FROM t WHERE key = 'k102'
+----
+k102
+---
+-- name: select_key_103
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k103', '103')
+SELECT key FROM t WHERE key = 'k103'
+----
+k103
+---
+-- name: select_key_104
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k104', '104')
+SELECT key FROM t WHERE key = 'k104'
+----
+k104
+---
+-- name: select_key_105
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k105', '105')
+SELECT key FROM t WHERE key = 'k105'
+----
+k105
+---
+-- name: select_key_106
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k106', '106')
+SELECT key FROM t WHERE key = 'k106'
+----
+k106
+---
+-- name: select_key_107
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k107', '107')
+SELECT key FROM t WHERE key = 'k107'
+----
+k107
+---
+-- name: select_key_108
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k108', '108')
+SELECT key FROM t WHERE key = 'k108'
+----
+k108
+---
+-- name: select_key_109
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k109', '109')
+SELECT key FROM t WHERE key = 'k109'
+----
+k109
+---
+-- name: select_key_110
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k110', '110')
+SELECT key FROM t WHERE key = 'k110'
+----
+k110
+---
+-- name: select_key_111
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k111', '111')
+SELECT key FROM t WHERE key = 'k111'
+----
+k111
+---
+-- name: select_key_112
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k112', '112')
+SELECT key FROM t WHERE key = 'k112'
+----
+k112
+---
+-- name: select_key_113
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k113', '113')
+SELECT key FROM t WHERE key = 'k113'
+----
+k113
+---
+-- name: select_key_114
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k114', '114')
+SELECT key FROM t WHERE key = 'k114'
+----
+k114
+---
+-- name: select_key_115
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k115', '115')
+SELECT key FROM t WHERE key = 'k115'
+----
+k115
+---
+-- name: select_key_116
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k116', '116')
+SELECT key FROM t WHERE key = 'k116'
+----
+k116
+---
+-- name: select_key_117
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k117', '117')
+SELECT key FROM t WHERE key = 'k117'
+----
+k117
+---
+-- name: select_key_118
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k118', '118')
+SELECT key FROM t WHERE key = 'k118'
+----
+k118
+---
+-- name: select_key_119
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('k119', '119')
+SELECT key FROM t WHERE key = 'k119'
+----
+k119
+---
+-- name: index_eq_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk0', 'v0')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v0'
+----
+pk0
+---
+-- name: index_eq_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk1', 'v1')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v1'
+----
+pk1
+---
+-- name: index_eq_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk2', 'v2')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v2'
+----
+pk2
+---
+-- name: index_eq_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk3', 'v3')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v3'
+----
+pk3
+---
+-- name: index_eq_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk4', 'v4')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v4'
+----
+pk4
+---
+-- name: index_eq_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk5', 'v5')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v5'
+----
+pk5
+---
+-- name: index_eq_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk6', 'v6')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v6'
+----
+pk6
+---
+-- name: index_eq_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk7', 'v7')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v7'
+----
+pk7
+---
+-- name: index_eq_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk8', 'v8')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v8'
+----
+pk8
+---
+-- name: index_eq_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk9', 'v9')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v9'
+----
+pk9
+---
+-- name: index_eq_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk10', 'v10')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v10'
+----
+pk10
+---
+-- name: index_eq_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk11', 'v11')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v11'
+----
+pk11
+---
+-- name: index_eq_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk12', 'v12')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v12'
+----
+pk12
+---
+-- name: index_eq_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk13', 'v13')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v13'
+----
+pk13
+---
+-- name: index_eq_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk14', 'v14')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v14'
+----
+pk14
+---
+-- name: index_eq_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk15', 'v15')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v15'
+----
+pk15
+---
+-- name: index_eq_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk16', 'v16')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v16'
+----
+pk16
+---
+-- name: index_eq_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk17', 'v17')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v17'
+----
+pk17
+---
+-- name: index_eq_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk18', 'v18')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v18'
+----
+pk18
+---
+-- name: index_eq_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk19', 'v19')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v19'
+----
+pk19
+---
+-- name: index_eq_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk20', 'v20')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v20'
+----
+pk20
+---
+-- name: index_eq_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk21', 'v21')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v21'
+----
+pk21
+---
+-- name: index_eq_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk22', 'v22')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v22'
+----
+pk22
+---
+-- name: index_eq_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk23', 'v23')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v23'
+----
+pk23
+---
+-- name: index_eq_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk24', 'v24')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v24'
+----
+pk24
+---
+-- name: index_eq_25
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk25', 'v25')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v25'
+----
+pk25
+---
+-- name: index_eq_26
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk26', 'v26')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v26'
+----
+pk26
+---
+-- name: index_eq_27
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk27', 'v27')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v27'
+----
+pk27
+---
+-- name: index_eq_28
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk28', 'v28')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v28'
+----
+pk28
+---
+-- name: index_eq_29
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk29', 'v29')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v29'
+----
+pk29
+---
+-- name: index_eq_30
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk30', 'v30')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v30'
+----
+pk30
+---
+-- name: index_eq_31
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk31', 'v31')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v31'
+----
+pk31
+---
+-- name: index_eq_32
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk32', 'v32')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v32'
+----
+pk32
+---
+-- name: index_eq_33
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk33', 'v33')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v33'
+----
+pk33
+---
+-- name: index_eq_34
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk34', 'v34')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v34'
+----
+pk34
+---
+-- name: index_eq_35
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk35', 'v35')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v35'
+----
+pk35
+---
+-- name: index_eq_36
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk36', 'v36')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v36'
+----
+pk36
+---
+-- name: index_eq_37
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk37', 'v37')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v37'
+----
+pk37
+---
+-- name: index_eq_38
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk38', 'v38')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v38'
+----
+pk38
+---
+-- name: index_eq_39
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk39', 'v39')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v39'
+----
+pk39
+---
+-- name: index_eq_40
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk40', 'v40')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v40'
+----
+pk40
+---
+-- name: index_eq_41
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk41', 'v41')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v41'
+----
+pk41
+---
+-- name: index_eq_42
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk42', 'v42')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v42'
+----
+pk42
+---
+-- name: index_eq_43
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk43', 'v43')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v43'
+----
+pk43
+---
+-- name: index_eq_44
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk44', 'v44')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v44'
+----
+pk44
+---
+-- name: index_eq_45
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk45', 'v45')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v45'
+----
+pk45
+---
+-- name: index_eq_46
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk46', 'v46')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v46'
+----
+pk46
+---
+-- name: index_eq_47
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk47', 'v47')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v47'
+----
+pk47
+---
+-- name: index_eq_48
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk48', 'v48')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v48'
+----
+pk48
+---
+-- name: index_eq_49
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk49', 'v49')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v49'
+----
+pk49
+---
+-- name: index_eq_50
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk50', 'v50')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v50'
+----
+pk50
+---
+-- name: index_eq_51
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk51', 'v51')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v51'
+----
+pk51
+---
+-- name: index_eq_52
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk52', 'v52')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v52'
+----
+pk52
+---
+-- name: index_eq_53
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk53', 'v53')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v53'
+----
+pk53
+---
+-- name: index_eq_54
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk54', 'v54')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v54'
+----
+pk54
+---
+-- name: index_eq_55
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk55', 'v55')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v55'
+----
+pk55
+---
+-- name: index_eq_56
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk56', 'v56')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v56'
+----
+pk56
+---
+-- name: index_eq_57
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk57', 'v57')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v57'
+----
+pk57
+---
+-- name: index_eq_58
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk58', 'v58')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v58'
+----
+pk58
+---
+-- name: index_eq_59
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk59', 'v59')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v59'
+----
+pk59
+---
+-- name: index_eq_60
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk60', 'v60')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v60'
+----
+pk60
+---
+-- name: index_eq_61
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk61', 'v61')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v61'
+----
+pk61
+---
+-- name: index_eq_62
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk62', 'v62')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v62'
+----
+pk62
+---
+-- name: index_eq_63
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk63', 'v63')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v63'
+----
+pk63
+---
+-- name: index_eq_64
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk64', 'v64')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v64'
+----
+pk64
+---
+-- name: index_eq_65
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk65', 'v65')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v65'
+----
+pk65
+---
+-- name: index_eq_66
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk66', 'v66')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v66'
+----
+pk66
+---
+-- name: index_eq_67
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk67', 'v67')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v67'
+----
+pk67
+---
+-- name: index_eq_68
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk68', 'v68')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v68'
+----
+pk68
+---
+-- name: index_eq_69
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk69', 'v69')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v69'
+----
+pk69
+---
+-- name: index_eq_70
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk70', 'v70')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v70'
+----
+pk70
+---
+-- name: index_eq_71
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk71', 'v71')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v71'
+----
+pk71
+---
+-- name: index_eq_72
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk72', 'v72')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v72'
+----
+pk72
+---
+-- name: index_eq_73
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk73', 'v73')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v73'
+----
+pk73
+---
+-- name: index_eq_74
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk74', 'v74')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v74'
+----
+pk74
+---
+-- name: index_eq_75
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk75', 'v75')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v75'
+----
+pk75
+---
+-- name: index_eq_76
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk76', 'v76')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v76'
+----
+pk76
+---
+-- name: index_eq_77
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk77', 'v77')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v77'
+----
+pk77
+---
+-- name: index_eq_78
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk78', 'v78')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v78'
+----
+pk78
+---
+-- name: index_eq_79
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('pk79', 'v79')
+-- setup: CREATE INDEX idx_v ON t (value)
+SELECT key FROM t WHERE value = 'v79'
+----
+pk79
+---
+-- name: upsert_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u0', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u0', '9')
+SELECT value FROM t WHERE key = 'u0'
+----
+9
+---
+-- name: upsert_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u1', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u1', '9')
+SELECT value FROM t WHERE key = 'u1'
+----
+9
+---
+-- name: upsert_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u2', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u2', '9')
+SELECT value FROM t WHERE key = 'u2'
+----
+9
+---
+-- name: upsert_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u3', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u3', '9')
+SELECT value FROM t WHERE key = 'u3'
+----
+9
+---
+-- name: upsert_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u4', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u4', '9')
+SELECT value FROM t WHERE key = 'u4'
+----
+9
+---
+-- name: upsert_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u5', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u5', '9')
+SELECT value FROM t WHERE key = 'u5'
+----
+9
+---
+-- name: upsert_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u6', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u6', '9')
+SELECT value FROM t WHERE key = 'u6'
+----
+9
+---
+-- name: upsert_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u7', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u7', '9')
+SELECT value FROM t WHERE key = 'u7'
+----
+9
+---
+-- name: upsert_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u8', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u8', '9')
+SELECT value FROM t WHERE key = 'u8'
+----
+9
+---
+-- name: upsert_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u9', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u9', '9')
+SELECT value FROM t WHERE key = 'u9'
+----
+9
+---
+-- name: upsert_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u10', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u10', '9')
+SELECT value FROM t WHERE key = 'u10'
+----
+9
+---
+-- name: upsert_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u11', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u11', '9')
+SELECT value FROM t WHERE key = 'u11'
+----
+9
+---
+-- name: upsert_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u12', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u12', '9')
+SELECT value FROM t WHERE key = 'u12'
+----
+9
+---
+-- name: upsert_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u13', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u13', '9')
+SELECT value FROM t WHERE key = 'u13'
+----
+9
+---
+-- name: upsert_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u14', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u14', '9')
+SELECT value FROM t WHERE key = 'u14'
+----
+9
+---
+-- name: upsert_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u15', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u15', '9')
+SELECT value FROM t WHERE key = 'u15'
+----
+9
+---
+-- name: upsert_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u16', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u16', '9')
+SELECT value FROM t WHERE key = 'u16'
+----
+9
+---
+-- name: upsert_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u17', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u17', '9')
+SELECT value FROM t WHERE key = 'u17'
+----
+9
+---
+-- name: upsert_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u18', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u18', '9')
+SELECT value FROM t WHERE key = 'u18'
+----
+9
+---
+-- name: upsert_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u19', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u19', '9')
+SELECT value FROM t WHERE key = 'u19'
+----
+9
+---
+-- name: upsert_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u20', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u20', '9')
+SELECT value FROM t WHERE key = 'u20'
+----
+9
+---
+-- name: upsert_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u21', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u21', '9')
+SELECT value FROM t WHERE key = 'u21'
+----
+9
+---
+-- name: upsert_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u22', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u22', '9')
+SELECT value FROM t WHERE key = 'u22'
+----
+9
+---
+-- name: upsert_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u23', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u23', '9')
+SELECT value FROM t WHERE key = 'u23'
+----
+9
+---
+-- name: upsert_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u24', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u24', '9')
+SELECT value FROM t WHERE key = 'u24'
+----
+9
+---
+-- name: upsert_25
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u25', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u25', '9')
+SELECT value FROM t WHERE key = 'u25'
+----
+9
+---
+-- name: upsert_26
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u26', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u26', '9')
+SELECT value FROM t WHERE key = 'u26'
+----
+9
+---
+-- name: upsert_27
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u27', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u27', '9')
+SELECT value FROM t WHERE key = 'u27'
+----
+9
+---
+-- name: upsert_28
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u28', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u28', '9')
+SELECT value FROM t WHERE key = 'u28'
+----
+9
+---
+-- name: upsert_29
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u29', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u29', '9')
+SELECT value FROM t WHERE key = 'u29'
+----
+9
+---
+-- name: upsert_30
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u30', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u30', '9')
+SELECT value FROM t WHERE key = 'u30'
+----
+9
+---
+-- name: upsert_31
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u31', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u31', '9')
+SELECT value FROM t WHERE key = 'u31'
+----
+9
+---
+-- name: upsert_32
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u32', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u32', '9')
+SELECT value FROM t WHERE key = 'u32'
+----
+9
+---
+-- name: upsert_33
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u33', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u33', '9')
+SELECT value FROM t WHERE key = 'u33'
+----
+9
+---
+-- name: upsert_34
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u34', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u34', '9')
+SELECT value FROM t WHERE key = 'u34'
+----
+9
+---
+-- name: upsert_35
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u35', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u35', '9')
+SELECT value FROM t WHERE key = 'u35'
+----
+9
+---
+-- name: upsert_36
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u36', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u36', '9')
+SELECT value FROM t WHERE key = 'u36'
+----
+9
+---
+-- name: upsert_37
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u37', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u37', '9')
+SELECT value FROM t WHERE key = 'u37'
+----
+9
+---
+-- name: upsert_38
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u38', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u38', '9')
+SELECT value FROM t WHERE key = 'u38'
+----
+9
+---
+-- name: upsert_39
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u39', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u39', '9')
+SELECT value FROM t WHERE key = 'u39'
+----
+9
+---
+-- name: upsert_40
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u40', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u40', '9')
+SELECT value FROM t WHERE key = 'u40'
+----
+9
+---
+-- name: upsert_41
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u41', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u41', '9')
+SELECT value FROM t WHERE key = 'u41'
+----
+9
+---
+-- name: upsert_42
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u42', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u42', '9')
+SELECT value FROM t WHERE key = 'u42'
+----
+9
+---
+-- name: upsert_43
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u43', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u43', '9')
+SELECT value FROM t WHERE key = 'u43'
+----
+9
+---
+-- name: upsert_44
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u44', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u44', '9')
+SELECT value FROM t WHERE key = 'u44'
+----
+9
+---
+-- name: upsert_45
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u45', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u45', '9')
+SELECT value FROM t WHERE key = 'u45'
+----
+9
+---
+-- name: upsert_46
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u46', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u46', '9')
+SELECT value FROM t WHERE key = 'u46'
+----
+9
+---
+-- name: upsert_47
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u47', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u47', '9')
+SELECT value FROM t WHERE key = 'u47'
+----
+9
+---
+-- name: upsert_48
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u48', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u48', '9')
+SELECT value FROM t WHERE key = 'u48'
+----
+9
+---
+-- name: upsert_49
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u49', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u49', '9')
+SELECT value FROM t WHERE key = 'u49'
+----
+9
+---
+-- name: upsert_50
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u50', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u50', '9')
+SELECT value FROM t WHERE key = 'u50'
+----
+9
+---
+-- name: upsert_51
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u51', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u51', '9')
+SELECT value FROM t WHERE key = 'u51'
+----
+9
+---
+-- name: upsert_52
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u52', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u52', '9')
+SELECT value FROM t WHERE key = 'u52'
+----
+9
+---
+-- name: upsert_53
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u53', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u53', '9')
+SELECT value FROM t WHERE key = 'u53'
+----
+9
+---
+-- name: upsert_54
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u54', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u54', '9')
+SELECT value FROM t WHERE key = 'u54'
+----
+9
+---
+-- name: upsert_55
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u55', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u55', '9')
+SELECT value FROM t WHERE key = 'u55'
+----
+9
+---
+-- name: upsert_56
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u56', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u56', '9')
+SELECT value FROM t WHERE key = 'u56'
+----
+9
+---
+-- name: upsert_57
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u57', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u57', '9')
+SELECT value FROM t WHERE key = 'u57'
+----
+9
+---
+-- name: upsert_58
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u58', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u58', '9')
+SELECT value FROM t WHERE key = 'u58'
+----
+9
+---
+-- name: upsert_59
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('u59', '1')
+-- setup: INSERT OR REPLACE INTO t (key, value) VALUES ('u59', '9')
+SELECT value FROM t WHERE key = 'u59'
+----
+9
+---
+-- name: union_0
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a0', '1')
+SELECT key FROM t1 WHERE key = 'a0'
+----
+a0
+---
+-- name: union_1
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a1', '1')
+SELECT key FROM t1 WHERE key = 'a1'
+----
+a1
+---
+-- name: union_2
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a2', '1')
+SELECT key FROM t1 WHERE key = 'a2'
+----
+a2
+---
+-- name: union_3
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a3', '1')
+SELECT key FROM t1 WHERE key = 'a3'
+----
+a3
+---
+-- name: union_4
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a4', '1')
+SELECT key FROM t1 WHERE key = 'a4'
+----
+a4
+---
+-- name: union_5
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a5', '1')
+SELECT key FROM t1 WHERE key = 'a5'
+----
+a5
+---
+-- name: union_6
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a6', '1')
+SELECT key FROM t1 WHERE key = 'a6'
+----
+a6
+---
+-- name: union_7
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a7', '1')
+SELECT key FROM t1 WHERE key = 'a7'
+----
+a7
+---
+-- name: union_8
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a8', '1')
+SELECT key FROM t1 WHERE key = 'a8'
+----
+a8
+---
+-- name: union_9
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a9', '1')
+SELECT key FROM t1 WHERE key = 'a9'
+----
+a9
+---
+-- name: union_10
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a10', '1')
+SELECT key FROM t1 WHERE key = 'a10'
+----
+a10
+---
+-- name: union_11
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a11', '1')
+SELECT key FROM t1 WHERE key = 'a11'
+----
+a11
+---
+-- name: union_12
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a12', '1')
+SELECT key FROM t1 WHERE key = 'a12'
+----
+a12
+---
+-- name: union_13
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a13', '1')
+SELECT key FROM t1 WHERE key = 'a13'
+----
+a13
+---
+-- name: union_14
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a14', '1')
+SELECT key FROM t1 WHERE key = 'a14'
+----
+a14
+---
+-- name: union_15
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a15', '1')
+SELECT key FROM t1 WHERE key = 'a15'
+----
+a15
+---
+-- name: union_16
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a16', '1')
+SELECT key FROM t1 WHERE key = 'a16'
+----
+a16
+---
+-- name: union_17
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a17', '1')
+SELECT key FROM t1 WHERE key = 'a17'
+----
+a17
+---
+-- name: union_18
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a18', '1')
+SELECT key FROM t1 WHERE key = 'a18'
+----
+a18
+---
+-- name: union_19
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a19', '1')
+SELECT key FROM t1 WHERE key = 'a19'
+----
+a19
+---
+-- name: union_20
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a20', '1')
+SELECT key FROM t1 WHERE key = 'a20'
+----
+a20
+---
+-- name: union_21
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a21', '1')
+SELECT key FROM t1 WHERE key = 'a21'
+----
+a21
+---
+-- name: union_22
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a22', '1')
+SELECT key FROM t1 WHERE key = 'a22'
+----
+a22
+---
+-- name: union_23
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a23', '1')
+SELECT key FROM t1 WHERE key = 'a23'
+----
+a23
+---
+-- name: union_24
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a24', '1')
+SELECT key FROM t1 WHERE key = 'a24'
+----
+a24
+---
+-- name: union_25
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a25', '1')
+SELECT key FROM t1 WHERE key = 'a25'
+----
+a25
+---
+-- name: union_26
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a26', '1')
+SELECT key FROM t1 WHERE key = 'a26'
+----
+a26
+---
+-- name: union_27
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a27', '1')
+SELECT key FROM t1 WHERE key = 'a27'
+----
+a27
+---
+-- name: union_28
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a28', '1')
+SELECT key FROM t1 WHERE key = 'a28'
+----
+a28
+---
+-- name: union_29
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a29', '1')
+SELECT key FROM t1 WHERE key = 'a29'
+----
+a29
+---
+-- name: union_30
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a30', '1')
+SELECT key FROM t1 WHERE key = 'a30'
+----
+a30
+---
+-- name: union_31
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a31', '1')
+SELECT key FROM t1 WHERE key = 'a31'
+----
+a31
+---
+-- name: union_32
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a32', '1')
+SELECT key FROM t1 WHERE key = 'a32'
+----
+a32
+---
+-- name: union_33
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a33', '1')
+SELECT key FROM t1 WHERE key = 'a33'
+----
+a33
+---
+-- name: union_34
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a34', '1')
+SELECT key FROM t1 WHERE key = 'a34'
+----
+a34
+---
+-- name: union_35
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a35', '1')
+SELECT key FROM t1 WHERE key = 'a35'
+----
+a35
+---
+-- name: union_36
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a36', '1')
+SELECT key FROM t1 WHERE key = 'a36'
+----
+a36
+---
+-- name: union_37
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a37', '1')
+SELECT key FROM t1 WHERE key = 'a37'
+----
+a37
+---
+-- name: union_38
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a38', '1')
+SELECT key FROM t1 WHERE key = 'a38'
+----
+a38
+---
+-- name: union_39
+-- setup: CREATE TABLE t1 (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t1 (key, value) VALUES ('a39', '1')
+SELECT key FROM t1 WHERE key = 'a39'
+----
+a39
+---
+-- name: cte_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c0', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c0
+---
+-- name: cte_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c1', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c1
+---
+-- name: cte_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c2', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c2
+---
+-- name: cte_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c3', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c3
+---
+-- name: cte_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c4', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c4
+---
+-- name: cte_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c5', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c5
+---
+-- name: cte_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c6', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c6
+---
+-- name: cte_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c7', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c7
+---
+-- name: cte_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c8', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c8
+---
+-- name: cte_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c9', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c9
+---
+-- name: cte_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c10', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c10
+---
+-- name: cte_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c11', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c11
+---
+-- name: cte_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c12', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c12
+---
+-- name: cte_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c13', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c13
+---
+-- name: cte_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c14', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c14
+---
+-- name: cte_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c15', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c15
+---
+-- name: cte_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c16', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c16
+---
+-- name: cte_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c17', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c17
+---
+-- name: cte_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c18', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c18
+---
+-- name: cte_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c19', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c19
+---
+-- name: cte_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c20', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c20
+---
+-- name: cte_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c21', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c21
+---
+-- name: cte_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c22', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c22
+---
+-- name: cte_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c23', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c23
+---
+-- name: cte_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c24', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c24
+---
+-- name: cte_25
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c25', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c25
+---
+-- name: cte_26
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c26', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c26
+---
+-- name: cte_27
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c27', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c27
+---
+-- name: cte_28
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c28', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c28
+---
+-- name: cte_29
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c29', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c29
+---
+-- name: cte_30
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c30', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c30
+---
+-- name: cte_31
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c31', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c31
+---
+-- name: cte_32
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c32', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c32
+---
+-- name: cte_33
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c33', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c33
+---
+-- name: cte_34
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c34', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c34
+---
+-- name: cte_35
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c35', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c35
+---
+-- name: cte_36
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c36', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c36
+---
+-- name: cte_37
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c37', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c37
+---
+-- name: cte_38
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c38', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c38
+---
+-- name: cte_39
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('c39', 'v')
+WITH c AS (SELECT key FROM t) SELECT key FROM c
+----
+c39
+---
+-- name: prepare_exec_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p0', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p0'
+EXECUTE s
+----
+p0
+---
+-- name: prepare_exec_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p1', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p1'
+EXECUTE s
+----
+p1
+---
+-- name: prepare_exec_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p2', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p2'
+EXECUTE s
+----
+p2
+---
+-- name: prepare_exec_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p3', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p3'
+EXECUTE s
+----
+p3
+---
+-- name: prepare_exec_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p4', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p4'
+EXECUTE s
+----
+p4
+---
+-- name: prepare_exec_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p5', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p5'
+EXECUTE s
+----
+p5
+---
+-- name: prepare_exec_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p6', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p6'
+EXECUTE s
+----
+p6
+---
+-- name: prepare_exec_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p7', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p7'
+EXECUTE s
+----
+p7
+---
+-- name: prepare_exec_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p8', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p8'
+EXECUTE s
+----
+p8
+---
+-- name: prepare_exec_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p9', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p9'
+EXECUTE s
+----
+p9
+---
+-- name: prepare_exec_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p10', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p10'
+EXECUTE s
+----
+p10
+---
+-- name: prepare_exec_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p11', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p11'
+EXECUTE s
+----
+p11
+---
+-- name: prepare_exec_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p12', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p12'
+EXECUTE s
+----
+p12
+---
+-- name: prepare_exec_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p13', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p13'
+EXECUTE s
+----
+p13
+---
+-- name: prepare_exec_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p14', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p14'
+EXECUTE s
+----
+p14
+---
+-- name: prepare_exec_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p15', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p15'
+EXECUTE s
+----
+p15
+---
+-- name: prepare_exec_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p16', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p16'
+EXECUTE s
+----
+p16
+---
+-- name: prepare_exec_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p17', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p17'
+EXECUTE s
+----
+p17
+---
+-- name: prepare_exec_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p18', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p18'
+EXECUTE s
+----
+p18
+---
+-- name: prepare_exec_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p19', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p19'
+EXECUTE s
+----
+p19
+---
+-- name: prepare_exec_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p20', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p20'
+EXECUTE s
+----
+p20
+---
+-- name: prepare_exec_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p21', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p21'
+EXECUTE s
+----
+p21
+---
+-- name: prepare_exec_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p22', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p22'
+EXECUTE s
+----
+p22
+---
+-- name: prepare_exec_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p23', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p23'
+EXECUTE s
+----
+p23
+---
+-- name: prepare_exec_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p24', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p24'
+EXECUTE s
+----
+p24
+---
+-- name: prepare_exec_25
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p25', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p25'
+EXECUTE s
+----
+p25
+---
+-- name: prepare_exec_26
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p26', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p26'
+EXECUTE s
+----
+p26
+---
+-- name: prepare_exec_27
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p27', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p27'
+EXECUTE s
+----
+p27
+---
+-- name: prepare_exec_28
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p28', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p28'
+EXECUTE s
+----
+p28
+---
+-- name: prepare_exec_29
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('p29', 'x')
+-- setup: PREPARE s AS SELECT key FROM t WHERE key = 'p29'
+EXECUTE s
+----
+p29
+---
+-- name: view_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v0', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v0'
+----
+v0
+---
+-- name: view_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v1', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v1'
+----
+v1
+---
+-- name: view_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v2', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v2'
+----
+v2
+---
+-- name: view_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v3', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v3'
+----
+v3
+---
+-- name: view_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v4', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v4'
+----
+v4
+---
+-- name: view_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v5', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v5'
+----
+v5
+---
+-- name: view_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v6', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v6'
+----
+v6
+---
+-- name: view_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v7', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v7'
+----
+v7
+---
+-- name: view_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v8', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v8'
+----
+v8
+---
+-- name: view_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v9', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v9'
+----
+v9
+---
+-- name: view_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v10', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v10'
+----
+v10
+---
+-- name: view_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v11', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v11'
+----
+v11
+---
+-- name: view_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v12', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v12'
+----
+v12
+---
+-- name: view_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v13', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v13'
+----
+v13
+---
+-- name: view_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v14', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v14'
+----
+v14
+---
+-- name: view_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v15', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v15'
+----
+v15
+---
+-- name: view_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v16', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v16'
+----
+v16
+---
+-- name: view_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v17', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v17'
+----
+v17
+---
+-- name: view_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v18', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v18'
+----
+v18
+---
+-- name: view_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v19', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v19'
+----
+v19
+---
+-- name: view_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v20', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v20'
+----
+v20
+---
+-- name: view_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v21', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v21'
+----
+v21
+---
+-- name: view_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v22', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v22'
+----
+v22
+---
+-- name: view_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v23', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v23'
+----
+v23
+---
+-- name: view_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('v24', '1')
+-- setup: CREATE VIEW v AS SELECT key, value FROM t
+SELECT key FROM v WHERE key = 'v24'
+----
+v24
+---
+-- name: pragma_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: pragma_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+PRAGMA table_info(t)
+----
+0|key|TEXT|1||1
+---
+-- name: extra_select_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x0', 'v')
+SELECT value FROM t WHERE key = 'x0'
+----
+v
+---
+-- name: extra_select_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x1', 'v')
+SELECT value FROM t WHERE key = 'x1'
+----
+v
+---
+-- name: extra_select_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x2', 'v')
+SELECT value FROM t WHERE key = 'x2'
+----
+v
+---
+-- name: extra_select_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x3', 'v')
+SELECT value FROM t WHERE key = 'x3'
+----
+v
+---
+-- name: extra_select_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x4', 'v')
+SELECT value FROM t WHERE key = 'x4'
+----
+v
+---
+-- name: extra_select_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x5', 'v')
+SELECT value FROM t WHERE key = 'x5'
+----
+v
+---
+-- name: extra_select_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x6', 'v')
+SELECT value FROM t WHERE key = 'x6'
+----
+v
+---
+-- name: extra_select_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x7', 'v')
+SELECT value FROM t WHERE key = 'x7'
+----
+v
+---
+-- name: extra_select_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x8', 'v')
+SELECT value FROM t WHERE key = 'x8'
+----
+v
+---
+-- name: extra_select_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x9', 'v')
+SELECT value FROM t WHERE key = 'x9'
+----
+v
+---
+-- name: extra_select_10
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x10', 'v')
+SELECT value FROM t WHERE key = 'x10'
+----
+v
+---
+-- name: extra_select_11
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x11', 'v')
+SELECT value FROM t WHERE key = 'x11'
+----
+v
+---
+-- name: extra_select_12
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x12', 'v')
+SELECT value FROM t WHERE key = 'x12'
+----
+v
+---
+-- name: extra_select_13
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x13', 'v')
+SELECT value FROM t WHERE key = 'x13'
+----
+v
+---
+-- name: extra_select_14
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x14', 'v')
+SELECT value FROM t WHERE key = 'x14'
+----
+v
+---
+-- name: extra_select_15
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x15', 'v')
+SELECT value FROM t WHERE key = 'x15'
+----
+v
+---
+-- name: extra_select_16
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x16', 'v')
+SELECT value FROM t WHERE key = 'x16'
+----
+v
+---
+-- name: extra_select_17
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x17', 'v')
+SELECT value FROM t WHERE key = 'x17'
+----
+v
+---
+-- name: extra_select_18
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x18', 'v')
+SELECT value FROM t WHERE key = 'x18'
+----
+v
+---
+-- name: extra_select_19
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x19', 'v')
+SELECT value FROM t WHERE key = 'x19'
+----
+v
+---
+-- name: extra_select_20
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x20', 'v')
+SELECT value FROM t WHERE key = 'x20'
+----
+v
+---
+-- name: extra_select_21
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x21', 'v')
+SELECT value FROM t WHERE key = 'x21'
+----
+v
+---
+-- name: extra_select_22
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x22', 'v')
+SELECT value FROM t WHERE key = 'x22'
+----
+v
+---
+-- name: extra_select_23
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x23', 'v')
+SELECT value FROM t WHERE key = 'x23'
+----
+v
+---
+-- name: extra_select_24
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x24', 'v')
+SELECT value FROM t WHERE key = 'x24'
+----
+v
+---
+-- name: extra_select_25
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x25', 'v')
+SELECT value FROM t WHERE key = 'x25'
+----
+v
+---
+-- name: extra_select_26
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x26', 'v')
+SELECT value FROM t WHERE key = 'x26'
+----
+v
+---
+-- name: extra_select_27
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x27', 'v')
+SELECT value FROM t WHERE key = 'x27'
+----
+v
+---
+-- name: extra_select_28
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x28', 'v')
+SELECT value FROM t WHERE key = 'x28'
+----
+v
+---
+-- name: extra_select_29
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x29', 'v')
+SELECT value FROM t WHERE key = 'x29'
+----
+v
+---
+-- name: extra_select_30
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x30', 'v')
+SELECT value FROM t WHERE key = 'x30'
+----
+v
+---
+-- name: extra_select_31
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x31', 'v')
+SELECT value FROM t WHERE key = 'x31'
+----
+v
+---
+-- name: extra_select_32
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x32', 'v')
+SELECT value FROM t WHERE key = 'x32'
+----
+v
+---
+-- name: extra_select_33
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x33', 'v')
+SELECT value FROM t WHERE key = 'x33'
+----
+v
+---
+-- name: extra_select_34
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x34', 'v')
+SELECT value FROM t WHERE key = 'x34'
+----
+v
+---
+-- name: extra_select_35
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x35', 'v')
+SELECT value FROM t WHERE key = 'x35'
+----
+v
+---
+-- name: extra_select_36
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x36', 'v')
+SELECT value FROM t WHERE key = 'x36'
+----
+v
+---
+-- name: extra_select_37
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x37', 'v')
+SELECT value FROM t WHERE key = 'x37'
+----
+v
+---
+-- name: extra_select_38
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x38', 'v')
+SELECT value FROM t WHERE key = 'x38'
+----
+v
+---
+-- name: extra_select_39
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x39', 'v')
+SELECT value FROM t WHERE key = 'x39'
+----
+v
+---
+-- name: extra_select_40
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x40', 'v')
+SELECT value FROM t WHERE key = 'x40'
+----
+v
+---
+-- name: extra_select_41
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x41', 'v')
+SELECT value FROM t WHERE key = 'x41'
+----
+v
+---
+-- name: extra_select_42
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x42', 'v')
+SELECT value FROM t WHERE key = 'x42'
+----
+v
+---
+-- name: extra_select_43
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x43', 'v')
+SELECT value FROM t WHERE key = 'x43'
+----
+v
+---
+-- name: extra_select_44
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x44', 'v')
+SELECT value FROM t WHERE key = 'x44'
+----
+v
+---
+-- name: extra_select_45
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x45', 'v')
+SELECT value FROM t WHERE key = 'x45'
+----
+v
+---
+-- name: extra_select_46
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x46', 'v')
+SELECT value FROM t WHERE key = 'x46'
+----
+v
+---
+-- name: extra_select_47
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x47', 'v')
+SELECT value FROM t WHERE key = 'x47'
+----
+v
+---
+-- name: extra_select_48
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x48', 'v')
+SELECT value FROM t WHERE key = 'x48'
+----
+v
+---
+-- name: extra_select_49
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x49', 'v')
+SELECT value FROM t WHERE key = 'x49'
+----
+v
+---
+-- name: extra_select_50
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x50', 'v')
+SELECT value FROM t WHERE key = 'x50'
+----
+v
+---
+-- name: extra_select_51
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x51', 'v')
+SELECT value FROM t WHERE key = 'x51'
+----
+v
+---
+-- name: extra_select_52
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x52', 'v')
+SELECT value FROM t WHERE key = 'x52'
+----
+v
+---
+-- name: extra_select_53
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x53', 'v')
+SELECT value FROM t WHERE key = 'x53'
+----
+v
+---
+-- name: extra_select_54
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x54', 'v')
+SELECT value FROM t WHERE key = 'x54'
+----
+v
+---
+-- name: extra_select_55
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x55', 'v')
+SELECT value FROM t WHERE key = 'x55'
+----
+v
+---
+-- name: extra_select_56
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x56', 'v')
+SELECT value FROM t WHERE key = 'x56'
+----
+v
+---
+-- name: extra_select_57
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x57', 'v')
+SELECT value FROM t WHERE key = 'x57'
+----
+v
+---
+-- name: extra_select_58
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x58', 'v')
+SELECT value FROM t WHERE key = 'x58'
+----
+v
+---
+-- name: extra_select_59
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x59', 'v')
+SELECT value FROM t WHERE key = 'x59'
+----
+v
+---
+-- name: extra_select_60
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x60', 'v')
+SELECT value FROM t WHERE key = 'x60'
+----
+v
+---
+-- name: extra_select_61
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x61', 'v')
+SELECT value FROM t WHERE key = 'x61'
+----
+v
+---
+-- name: extra_select_62
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x62', 'v')
+SELECT value FROM t WHERE key = 'x62'
+----
+v
+---
+-- name: extra_select_63
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x63', 'v')
+SELECT value FROM t WHERE key = 'x63'
+----
+v
+---
+-- name: extra_select_64
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x64', 'v')
+SELECT value FROM t WHERE key = 'x64'
+----
+v
+---
+-- name: extra_select_65
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x65', 'v')
+SELECT value FROM t WHERE key = 'x65'
+----
+v
+---
+-- name: extra_select_66
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x66', 'v')
+SELECT value FROM t WHERE key = 'x66'
+----
+v
+---
+-- name: extra_select_67
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x67', 'v')
+SELECT value FROM t WHERE key = 'x67'
+----
+v
+---
+-- name: extra_select_68
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x68', 'v')
+SELECT value FROM t WHERE key = 'x68'
+----
+v
+---
+-- name: extra_select_69
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x69', 'v')
+SELECT value FROM t WHERE key = 'x69'
+----
+v
+---
+-- name: extra_select_70
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x70', 'v')
+SELECT value FROM t WHERE key = 'x70'
+----
+v
+---
+-- name: extra_select_71
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x71', 'v')
+SELECT value FROM t WHERE key = 'x71'
+----
+v
+---
+-- name: extra_select_72
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x72', 'v')
+SELECT value FROM t WHERE key = 'x72'
+----
+v
+---
+-- name: extra_select_73
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x73', 'v')
+SELECT value FROM t WHERE key = 'x73'
+----
+v
+---
+-- name: extra_select_74
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: INSERT INTO t (key, value) VALUES ('x74', 'v')
+SELECT value FROM t WHERE key = 'x74'
+----
+v
+---
+-- name: not_null_fail_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_5
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_6
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_7
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_8
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: not_null_fail_9
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY NOT NULL, value TEXT)
+-- error
+INSERT INTO t (key, value) VALUES ('', 'x')
+---
+-- name: trigger_0
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TABLE log (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TRIGGER tr AFTER INSERT ON t BEGIN INSERT INTO log (key, value) VALUES ('ok', '1'); END
+-- setup: INSERT INTO t (key, value) VALUES ('t0', '1')
+SELECT key FROM log WHERE key = 'ok'
+----
+ok
+---
+-- name: trigger_1
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TABLE log (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TRIGGER tr AFTER INSERT ON t BEGIN INSERT INTO log (key, value) VALUES ('ok', '1'); END
+-- setup: INSERT INTO t (key, value) VALUES ('t1', '1')
+SELECT key FROM log WHERE key = 'ok'
+----
+ok
+---
+-- name: trigger_2
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TABLE log (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TRIGGER tr AFTER INSERT ON t BEGIN INSERT INTO log (key, value) VALUES ('ok', '1'); END
+-- setup: INSERT INTO t (key, value) VALUES ('t2', '1')
+SELECT key FROM log WHERE key = 'ok'
+----
+ok
+---
+-- name: trigger_3
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TABLE log (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TRIGGER tr AFTER INSERT ON t BEGIN INSERT INTO log (key, value) VALUES ('ok', '1'); END
+-- setup: INSERT INTO t (key, value) VALUES ('t3', '1')
+SELECT key FROM log WHERE key = 'ok'
+----
+ok
+---
+-- name: trigger_4
+-- setup: CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TABLE log (key TEXT PRIMARY KEY, value TEXT)
+-- setup: CREATE TRIGGER tr AFTER INSERT ON t BEGIN INSERT INTO log (key, value) VALUES ('ok', '1'); END
+-- setup: INSERT INTO t (key, value) VALUES ('t4', '1')
+SELECT key FROM log WHERE key = 'ok'
+----
+ok
+---

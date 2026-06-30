@@ -1,0 +1,18 @@
+case: inner_join_exec
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a JOIN b ON a.key = b.key"
+expect: ok
+expect_rows: 1
+---
+case: in_uncorrelated
+setup: "CREATE TABLE a (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE TABLE b (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO a (key, value) VALUES ('k1', '1')"
+setup: "INSERT INTO a (key, value) VALUES ('k2', '2')"
+setup: "INSERT INTO b (key, value) VALUES ('k1', '1')"
+exec: "SELECT a.key FROM a WHERE a.key IN (SELECT b.key FROM b)"
+expect: ok
+expect_rows: 1

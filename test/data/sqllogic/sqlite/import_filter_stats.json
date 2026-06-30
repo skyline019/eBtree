@@ -1,0 +1,14 @@
+{
+  "source": "risinglightdb/sqllogictest-sqlite@e4e221d8",
+  "mirror": "cn",
+  "files": 25,
+  "raw_cases": 120371,
+  "imported": 800,
+  "filtered": 119571,
+  "filter_reasons": {
+    "per_file_cap": 118766,
+    "multi_column_result": 5,
+    "hash_threshold_result": 800
+  },
+  "per_file_cap": 50
+}

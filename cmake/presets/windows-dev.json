@@ -1,0 +1,22 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "windows-dev",
+      "displayName": "Windows Dev (Anaconda Python)",
+      "generator": "Visual Studio 18 2026",
+      "binaryDir": "${sourceDir}/build-msvc-2026",
+      "cacheVariables": {
+        "EBTREE_BUILD_TESTS": "ON",
+        "EBTREE_BUILD_SQL": "ON",
+        "EBTREE_PYTHON3_ROOT": "d:/anaconda3",
+        "Python3_EXECUTABLE": "d:/anaconda3/python.exe"
+      }
+    }
+  ]
+}

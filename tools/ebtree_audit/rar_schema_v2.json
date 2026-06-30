@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ebtree.local/rar/v2",
+  "title": "Recovery Attestation Report v2",
+  "type": "object",
+  "required": [
+    "rar_version",
+    "attest_export_version",
+    "generated_at_unix",
+    "engine_path",
+    "durability_tier",
+    "shard_count",
+    "physical",
+    "policy",
+    "verdict"
+  ],
+  "properties": {
+    "rar_version": { "type": "string", "const": "2.0" },
+    "attest_export_version": { "type": "integer", "minimum": 1 },
+    "generated_at_unix": { "type": "integer", "minimum": 0 },
+    "engine_path": { "type": "string" },
+    "durability_tier": {
+      "type": "string",
+      "enum": ["sync", "balanced", "group", "async"]
+    },
+    "shard_count": { "type": "integer", "minimum": 1 },
+    "physical": { "$ref": "rar_schema_v1.json#/properties/physical" },
+    "recovery": { "$ref": "rar_schema_v1.json#/definitions/recovery" },
+    "contract": { "$ref": "rar_schema_v1.json#/definitions/contract" },
+    "policy": { "$ref": "rar_schema_v1.json#/definitions/policy" },
+    "catalog": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "table_count": { "type": "integer", "minimum": 0 },
+        "key_set_source": { "type": "string" }
+      }
+    },
+    "op_log": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "entry_count": { "type": "integer", "minimum": 0 },
+        "durable_entry_count": { "type": "integer", "minimum": 0 },
+        "key_set_source": { "type": "string" }
+      }
+    },
+    "verdict": { "type": "string", "enum": ["PASS", "WARN", "REFUSE_START"] },
+    "verdict_reason": { "type": "string" },
+    "signature": { "type": "string" }
+  }
+}

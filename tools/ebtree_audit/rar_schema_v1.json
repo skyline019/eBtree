@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ebtree.local/rar/v1",
+  "title": "Recovery Attestation Report v1",
+  "type": "object",
+  "required": [
+    "rar_version",
+    "generated_at_unix",
+    "engine_path",
+    "durability_tier",
+    "shard_count",
+    "physical",
+    "policy",
+    "verdict"
+  ],
+  "properties": {
+    "rar_version": { "type": "string", "const": "1.0" },
+    "generated_at_unix": { "type": "integer", "minimum": 0 },
+    "engine_path": { "type": "string" },
+    "durability_tier": {
+      "type": "string",
+      "enum": ["sync", "balanced", "group", "async"]
+    },
+    "shard_count": { "type": "integer", "minimum": 1 },
+    "physical": {
+      "type": "object",
+      "required": ["shards"],
+      "properties": {
+        "shards": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/physical_shard" }
+        }
+      }
+    },
+    "recovery": { "$ref": "#/definitions/recovery" },
+    "contract": { "$ref": "#/definitions/contract" },
+    "policy": { "$ref": "#/definitions/policy" },
+    "op_log": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "entry_count": { "type": "integer", "minimum": 0 },
+        "durable_entry_count": { "type": "integer", "minimum": 0 },
+        "key_set_source": { "type": "string", "const": "op_log" }
+      }
+    },
+    "verdict": { "type": "string", "enum": ["PASS", "WARN", "REFUSE_START"] },
+    "verdict_reason": { "type": "string" }
+  },
+  "definitions": {
+    "physical_shard": {
+      "type": "object",
+      "required": ["shard_id", "superblock", "wal", "datafile", "invariants"],
+      "properties": {
+        "shard_id": { "type": "integer", "minimum": 0 },
+        "superblock": {
+          "type": "object",
+          "properties": {
+            "active_slot": { "type": "integer" },
+            "epoch": { "type": "integer" },
+            "data_lsn": { "type": "integer" },
+            "wal_lsn": { "type": "integer" },
+            "active_root": { "type": "integer" },
+            "tlog_tail": { "type": "integer" },
+            "valid": { "type": "boolean" }
+          }
+        },
+        "wal": {
+          "type": "object",
+          "properties": {
+            "record_count": { "type": "integer" },
+            "max_lsn": { "type": "integer" },
+            "badwal_marker": { "type": "boolean" },
+            "unreplayed_tail_count": { "type": "integer" }
+          }
+        },
+        "datafile": {
+          "type": "object",
+          "properties": {
+            "record_count": { "type": "integer" },
+            "max_lsn": { "type": "integer" }
+          }
+        },
+        "tlog": {
+          "type": "object",
+          "properties": {
+            "chain_length": { "type": "integer" },
+            "latest_data_lsn": { "type": "integer" },
+            "latest_datafile_size": { "type": "integer" }
+          }
+        },
+        "digests": {
+          "type": "object",
+          "properties": {
+            "super_sha256": { "type": "string" },
+            "wal_sha256": { "type": "string" },
+            "data_sha256": { "type": "string" },
+            "tlog_sha256": { "type": "string" }
+          }
+        },
+        "invariants": {
+          "type": "object",
+          "properties": {
+            "data_lsn_le_wal_lsn": { "type": "boolean" },
+            "tlog_tail_valid": { "type": "boolean" }
+          }
+        },
+        "reconstructed_key_count": { "type": "integer" }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "recovery_mode": { "type": "string" },
+        "wal_replay_pending": { "type": "boolean" },
+        "inferred_path": { "type": "string" },
+        "unexpected_path_total": { "type": "integer" },
+        "stable_lsn": { "type": "integer" },
+        "shard_state": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "shard_id": { "type": "integer" },
+              "state": { "type": "string" },
+              "read_tier_hits": { "type": "object" }
+            }
+          }
+        },
+        "probes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "shard": { "type": "integer" },
+              "key": { "type": "string" },
+              "found": { "type": "boolean" },
+              "value_sha256": { "type": "string" },
+              "read_tier": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["visibility", "durable"] },
+        "key_set_source": { "type": "string" },
+        "durable_expected_count": { "type": "integer" },
+        "recovered_count": { "type": "integer" },
+        "missing": { "type": "array" },
+        "unexpected": { "type": "array" },
+        "pending_uncommitted": { "type": "array" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "recovery_max_missing": { "type": "integer", "minimum": 0 },
+        "allow_unexpected_keys": { "type": "boolean" },
+        "require_unexpected_path_zero": { "type": "boolean" }
+      }
+    }
+  }
+}

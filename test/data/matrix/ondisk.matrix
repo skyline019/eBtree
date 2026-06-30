@@ -1,0 +1,26 @@
+case: ondisk_checkpoint_reopen
+setup:
+  durability: sync
+  ops: put od1=odv1; put od2=odv2
+run: checkpoint_reopen
+expect: ok
+get: od2=odv2
+---
+case: ondisk_open_pages_touched
+setup:
+  durability: sync
+  ops: put op1=opv1; put op2=opv2
+run: checkpoint_reopen
+expect: ok
+get: op1=opv1
+assert_stat: pages_touched=1
+---
+case: ondisk_compress_pages_reopen
+setup:
+  durability: sync
+  compress_pages: true
+  ops: put cp1=cpv1; put cp2=cpv2
+run: checkpoint_reopen
+expect: ok
+get: cp2=cpv2
+---

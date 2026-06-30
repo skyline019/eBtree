@@ -1,0 +1,23 @@
+case: chaos_checkpoint_survives
+setup:
+  durability: sync
+  ops: put ch1=cv1; put ch2=cv2
+run: checkpoint_reopen
+expect: ok
+get: ch2=cv2
+---
+case: chaos_wal_reopen
+setup:
+  durability: sync
+  ops: put cw1=cwv1
+run: reopen
+expect: ok
+get: cw1=cwv1
+---
+case: chaos_flush_reopen
+setup:
+  durability: sync
+  ops: put cf1=cfv1
+run: flush_reopen
+expect: ok
+get: cf1=cfv1

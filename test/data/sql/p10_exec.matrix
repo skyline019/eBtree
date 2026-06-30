@@ -1,0 +1,840 @@
+﻿case: p10_exec_0
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k0', '0')"
+exec: "SELECT key FROM t WHERE key = 'k0'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_1
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k1', '1')"
+exec: "SELECT key FROM t WHERE key = 'k1'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_2
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k2', '2')"
+exec: "SELECT key FROM t WHERE key = 'k2'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_3
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k3', '3')"
+exec: "SELECT key FROM t WHERE key = 'k3'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_4
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k4', '4')"
+exec: "SELECT key FROM t WHERE key = 'k4'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_5
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k5', '5')"
+exec: "SELECT key FROM t WHERE key = 'k5'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_6
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k6', '6')"
+exec: "SELECT key FROM t WHERE key = 'k6'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_7
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k7', '7')"
+exec: "SELECT key FROM t WHERE key = 'k7'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_8
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k8', '8')"
+exec: "SELECT key FROM t WHERE key = 'k8'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_9
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k9', '9')"
+exec: "SELECT key FROM t WHERE key = 'k9'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_10
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k10', '10')"
+exec: "SELECT key FROM t WHERE key = 'k10'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_11
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k11', '11')"
+exec: "SELECT key FROM t WHERE key = 'k11'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_12
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k12', '12')"
+exec: "SELECT key FROM t WHERE key = 'k12'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_13
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k13', '13')"
+exec: "SELECT key FROM t WHERE key = 'k13'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_14
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k14', '14')"
+exec: "SELECT key FROM t WHERE key = 'k14'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_15
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k15', '15')"
+exec: "SELECT key FROM t WHERE key = 'k15'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_16
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k16', '16')"
+exec: "SELECT key FROM t WHERE key = 'k16'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_17
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k17', '17')"
+exec: "SELECT key FROM t WHERE key = 'k17'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_18
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k18', '18')"
+exec: "SELECT key FROM t WHERE key = 'k18'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_19
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k19', '19')"
+exec: "SELECT key FROM t WHERE key = 'k19'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_20
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k20', '20')"
+exec: "SELECT key FROM t WHERE key = 'k20'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_21
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k21', '21')"
+exec: "SELECT key FROM t WHERE key = 'k21'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_22
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k22', '22')"
+exec: "SELECT key FROM t WHERE key = 'k22'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_23
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k23', '23')"
+exec: "SELECT key FROM t WHERE key = 'k23'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_24
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k24', '24')"
+exec: "SELECT key FROM t WHERE key = 'k24'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_25
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k25', '25')"
+exec: "SELECT key FROM t WHERE key = 'k25'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_26
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k26', '26')"
+exec: "SELECT key FROM t WHERE key = 'k26'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_27
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k27', '27')"
+exec: "SELECT key FROM t WHERE key = 'k27'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_28
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k28', '28')"
+exec: "SELECT key FROM t WHERE key = 'k28'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_29
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k29', '29')"
+exec: "SELECT key FROM t WHERE key = 'k29'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_30
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k30', '30')"
+exec: "SELECT key FROM t WHERE key = 'k30'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_31
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k31', '31')"
+exec: "SELECT key FROM t WHERE key = 'k31'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_32
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k32', '32')"
+exec: "SELECT key FROM t WHERE key = 'k32'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_33
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k33', '33')"
+exec: "SELECT key FROM t WHERE key = 'k33'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_34
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k34', '34')"
+exec: "SELECT key FROM t WHERE key = 'k34'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_35
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k35', '35')"
+exec: "SELECT key FROM t WHERE key = 'k35'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_36
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k36', '36')"
+exec: "SELECT key FROM t WHERE key = 'k36'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_37
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k37', '37')"
+exec: "SELECT key FROM t WHERE key = 'k37'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_38
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k38', '38')"
+exec: "SELECT key FROM t WHERE key = 'k38'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_39
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k39', '39')"
+exec: "SELECT key FROM t WHERE key = 'k39'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_40
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k40', '40')"
+exec: "SELECT key FROM t WHERE key = 'k40'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_41
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k41', '41')"
+exec: "SELECT key FROM t WHERE key = 'k41'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_42
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k42', '42')"
+exec: "SELECT key FROM t WHERE key = 'k42'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_43
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k43', '43')"
+exec: "SELECT key FROM t WHERE key = 'k43'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_44
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k44', '44')"
+exec: "SELECT key FROM t WHERE key = 'k44'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_45
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k45', '45')"
+exec: "SELECT key FROM t WHERE key = 'k45'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_46
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k46', '46')"
+exec: "SELECT key FROM t WHERE key = 'k46'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_47
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k47', '47')"
+exec: "SELECT key FROM t WHERE key = 'k47'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_48
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k48', '48')"
+exec: "SELECT key FROM t WHERE key = 'k48'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_49
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k49', '49')"
+exec: "SELECT key FROM t WHERE key = 'k49'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_50
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k50', '50')"
+exec: "SELECT key FROM t WHERE key = 'k50'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_51
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k51', '51')"
+exec: "SELECT key FROM t WHERE key = 'k51'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_52
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k52', '52')"
+exec: "SELECT key FROM t WHERE key = 'k52'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_53
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k53', '53')"
+exec: "SELECT key FROM t WHERE key = 'k53'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_54
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k54', '54')"
+exec: "SELECT key FROM t WHERE key = 'k54'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_55
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k55', '55')"
+exec: "SELECT key FROM t WHERE key = 'k55'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_56
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k56', '56')"
+exec: "SELECT key FROM t WHERE key = 'k56'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_57
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k57', '57')"
+exec: "SELECT key FROM t WHERE key = 'k57'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_58
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k58', '58')"
+exec: "SELECT key FROM t WHERE key = 'k58'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_59
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k59', '59')"
+exec: "SELECT key FROM t WHERE key = 'k59'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_60
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k60', '60')"
+exec: "SELECT key FROM t WHERE key = 'k60'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_61
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k61', '61')"
+exec: "SELECT key FROM t WHERE key = 'k61'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_62
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k62', '62')"
+exec: "SELECT key FROM t WHERE key = 'k62'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_63
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k63', '63')"
+exec: "SELECT key FROM t WHERE key = 'k63'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_64
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k64', '64')"
+exec: "SELECT key FROM t WHERE key = 'k64'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_65
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k65', '65')"
+exec: "SELECT key FROM t WHERE key = 'k65'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_66
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k66', '66')"
+exec: "SELECT key FROM t WHERE key = 'k66'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_67
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k67', '67')"
+exec: "SELECT key FROM t WHERE key = 'k67'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_68
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k68', '68')"
+exec: "SELECT key FROM t WHERE key = 'k68'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_69
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k69', '69')"
+exec: "SELECT key FROM t WHERE key = 'k69'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_70
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k70', '70')"
+exec: "SELECT key FROM t WHERE key = 'k70'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_71
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k71', '71')"
+exec: "SELECT key FROM t WHERE key = 'k71'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_72
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k72', '72')"
+exec: "SELECT key FROM t WHERE key = 'k72'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_73
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k73', '73')"
+exec: "SELECT key FROM t WHERE key = 'k73'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_74
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k74', '74')"
+exec: "SELECT key FROM t WHERE key = 'k74'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_75
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k75', '75')"
+exec: "SELECT key FROM t WHERE key = 'k75'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_76
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k76', '76')"
+exec: "SELECT key FROM t WHERE key = 'k76'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_77
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k77', '77')"
+exec: "SELECT key FROM t WHERE key = 'k77'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_78
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k78', '78')"
+exec: "SELECT key FROM t WHERE key = 'k78'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_79
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k79', '79')"
+exec: "SELECT key FROM t WHERE key = 'k79'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_80
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k80', '80')"
+exec: "SELECT key FROM t WHERE key = 'k80'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_81
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k81', '81')"
+exec: "SELECT key FROM t WHERE key = 'k81'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_82
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k82', '82')"
+exec: "SELECT key FROM t WHERE key = 'k82'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_83
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k83', '83')"
+exec: "SELECT key FROM t WHERE key = 'k83'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_84
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k84', '84')"
+exec: "SELECT key FROM t WHERE key = 'k84'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_85
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k85', '85')"
+exec: "SELECT key FROM t WHERE key = 'k85'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_86
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k86', '86')"
+exec: "SELECT key FROM t WHERE key = 'k86'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_87
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k87', '87')"
+exec: "SELECT key FROM t WHERE key = 'k87'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_88
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k88', '88')"
+exec: "SELECT key FROM t WHERE key = 'k88'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_89
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k89', '89')"
+exec: "SELECT key FROM t WHERE key = 'k89'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_90
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k90', '90')"
+exec: "SELECT key FROM t WHERE key = 'k90'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_91
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k91', '91')"
+exec: "SELECT key FROM t WHERE key = 'k91'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_92
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k92', '92')"
+exec: "SELECT key FROM t WHERE key = 'k92'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_93
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k93', '93')"
+exec: "SELECT key FROM t WHERE key = 'k93'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_94
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k94', '94')"
+exec: "SELECT key FROM t WHERE key = 'k94'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_95
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k95', '95')"
+exec: "SELECT key FROM t WHERE key = 'k95'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_96
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k96', '96')"
+exec: "SELECT key FROM t WHERE key = 'k96'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_97
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k97', '97')"
+exec: "SELECT key FROM t WHERE key = 'k97'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_98
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k98', '98')"
+exec: "SELECT key FROM t WHERE key = 'k98'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_99
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k99', '99')"
+exec: "SELECT key FROM t WHERE key = 'k99'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_100
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k100', '100')"
+exec: "SELECT key FROM t WHERE key = 'k100'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_101
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k101', '101')"
+exec: "SELECT key FROM t WHERE key = 'k101'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_102
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k102', '102')"
+exec: "SELECT key FROM t WHERE key = 'k102'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_103
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k103', '103')"
+exec: "SELECT key FROM t WHERE key = 'k103'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_104
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k104', '104')"
+exec: "SELECT key FROM t WHERE key = 'k104'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_105
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k105', '105')"
+exec: "SELECT key FROM t WHERE key = 'k105'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_106
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k106', '106')"
+exec: "SELECT key FROM t WHERE key = 'k106'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_107
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k107', '107')"
+exec: "SELECT key FROM t WHERE key = 'k107'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_108
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k108', '108')"
+exec: "SELECT key FROM t WHERE key = 'k108'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_109
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k109', '109')"
+exec: "SELECT key FROM t WHERE key = 'k109'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_110
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k110', '110')"
+exec: "SELECT key FROM t WHERE key = 'k110'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_111
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k111', '111')"
+exec: "SELECT key FROM t WHERE key = 'k111'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_112
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k112', '112')"
+exec: "SELECT key FROM t WHERE key = 'k112'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_113
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k113', '113')"
+exec: "SELECT key FROM t WHERE key = 'k113'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_114
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k114', '114')"
+exec: "SELECT key FROM t WHERE key = 'k114'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_115
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k115', '115')"
+exec: "SELECT key FROM t WHERE key = 'k115'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_116
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k116', '116')"
+exec: "SELECT key FROM t WHERE key = 'k116'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_117
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k117', '117')"
+exec: "SELECT key FROM t WHERE key = 'k117'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_118
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k118', '118')"
+exec: "SELECT key FROM t WHERE key = 'k118'"
+expect: ok
+expect_rows: 1
+---
+case: p10_exec_119
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('k119', '119')"
+exec: "SELECT key FROM t WHERE key = 'k119'"
+expect: ok
+expect_rows: 1
+---

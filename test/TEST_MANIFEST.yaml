@@ -1,0 +1,114 @@
+# eB-Tree test manifest
+
+version: 1
+suites:
+  - name: unit
+    dll: ebtree_tests_unit
+    categories: [success, unit, invariant]
+    phase_gate: [P0, P1, P3-complete, P4-complete, P5-complete, P6-complete, P7-complete, P8-complete, P9-complete]
+  - name: failure
+    dll: ebtree_tests_failure
+    categories: [failure]
+    phase_gate: [P1, P3-complete, P4-complete, P5-complete, P6, P6-complete, P7, P7-complete, P8-complete, P9-complete]
+  - name: nested
+    dll: ebtree_tests_nested
+    categories: [nested, success]
+    phase_gate: [P2]
+  - name: complex
+    dll: ebtree_tests_complex
+    categories: [complex, success]
+    phase_gate: [P2, P4, P4-complete, P5, P5-complete, P6, P6-complete, P7, P7-complete, P8-complete, P9-complete]
+  - name: composite
+    dll: ebtree_tests_composite
+    categories: [composite, success]
+    phase_gate: [P1, P2, P4-complete, P5-complete, P6-complete, P7-complete, P8-complete, P9-complete]
+  - name: pipeline
+    dll: ebtree_tests_pipeline
+    categories: [pipeline, success]
+    phase_gate: [P1, P2, P3, P3-complete, P4, P4-complete, P5, P5-complete, P6, P6-complete, P7, P7-complete, P8-complete, P9, P9-complete, P9-perf]
+  - name: matrix
+    dll: ebtree_tests_matrix
+    categories: [matrix, semantic]
+    data: test/data/matrix/*.matrix
+    phase_gate: [P1, P3, P3-complete, P4, P4-complete, P5, P5-complete, P6, P6-complete, P7, P7-complete, P8-complete, P9-complete]
+  - name: sql
+    dll: ebtree_tests_sql
+    categories: [sql, success]
+    phase_gate: [P1, P3-complete, P3b-complete, P3c-complete, P3d-complete, P4-complete, P5-complete, P6-complete, P6-sql, P7-complete, P7-sql, P8-complete, P9-complete]
+    data: test/data/sql/*.matrix
+    min_sql_tests: 200
+    min_sql_exec_tests: 150
+  - name: audit
+    dll: ebtree_tests_audit
+    categories: [audit, failure]
+    phase_gate: [P1, P3-complete, P3b-complete, P3c-complete, P4-complete, P5-complete, P6-complete, P7-complete, P8-complete, P9-complete]
+    min_audit_tests: 24
+
+gates:
+  P0: [unit]
+  P1: [unit, failure, pipeline, composite, matrix]
+  P2: [complex, composite, nested, matrix, matrix/recovery, matrix/no_fallback]
+  P3: [pipeline, matrix/pipeline]
+  P3-complete: [unit, failure, pipeline, matrix, sql, audit]
+  P3b-complete: [unit, failure, pipeline, matrix, sql, audit]
+  P3c-complete: [unit, failure, pipeline, matrix, sql, audit]
+  P3d-complete: [unit, failure, pipeline, matrix, sql, audit]
+  P4: [pipeline, failure, complex, matrix/recovery]
+  P4-complete: [unit, failure, pipeline, complex, composite, matrix, sql, audit]
+  P5: [pipeline, failure, complex, matrix/recovery, matrix/flashback]
+  P5-complete: [unit, failure, pipeline, complex, composite, matrix, sql, audit]
+  P6: [pipeline, failure, complex, matrix/shard, matrix/chaos]
+  P6-complete: [unit, failure, pipeline, complex, composite, matrix, sql, audit]
+  P6-sql: [sql]
+  P6-compress: [unit, pipeline, complex]
+  P7: [pipeline, failure, complex, matrix/paged, matrix/concurrent]
+  P7-complete: [unit, failure, pipeline, complex, composite, matrix, sql, audit]
+  P7-sql: [sql]
+  P8: [unit, pipeline, failure, complex, matrix/paged, matrix/shard, matrix/flashback]
+  P8-complete: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
+  P8-program-complete: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
+  P10-compress: [unit, pipeline, complex]
+  P10-sql: [sql]
+  P10-program-honest: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
+  P11-real-sql: [sql]
+  P11-program-honest: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
+  P12-semantic-sql: [sql]
+  P9: [unit, pipeline, failure, complex, matrix/ondisk, matrix/wal_index, matrix/paged]
+  P9-complete: [unit, failure, pipeline, complex, composite, matrix, nested]
+  P9-perf: [pipeline]
+
+forbidden_coverage:
+  handler: stub: EbSyncManifest.NoStubHandlers
+  fallback_read_total: ">0": EbMatrix.NoFallbackMatrixTest.RunCase
+  unexpected_path_total: ">0": EbMatrix.NoFallbackMatrixTest.RunCase
+  committed_before_flush: EbForbiddenEnforcement.CommittedEmptyBeforeFlush
+  read_path_wal_full_replay: EbForbiddenEnforcement.FastOpenDoesNotFullReplayOnGet
+  read_path_wal_full_scan: EbForbiddenEnforcement.LazyGetNoWalFullScan
+  open_eager_loads_all_btree_pages: EbForbiddenEnforcement.OpenDoesNotEagerLoadAllPages
+  persist_from_delta_only: EbInvariantOndiskBtree.PersistFromCommittedPreservesKeys
+  tlog_tail_stale_after_checkpoint: EbForbiddenEnforcement.TlogTailAdvancesAfterCheckpoint
+  gc_stale_generation_visible: EbForbiddenEnforcement.GcStaleGenerationInvisible
+  flashback_uses_fallback_read: EbForbiddenEnforcement.FlashbackNoFallbackRead
+  mmap_read_uses_fallback: EbInvariantForbidden.MmapLoadMatchesStreamNoFallback
+  cross_shard_duplicate_key: EbInvariantForbidden.NoCrossShardDuplicateKey
+  paged_root_stale_without_heal: EbInvariantPagedBtree.CorruptRootHealedWithoutFallback
+  concurrent_read_triggers_wal_replay: EbInvariantConcurrency.ConcurrentReadDoesNotDeferWal
+
+min_total_tests: 200
+
+forbidden:
+  - handler: stub
+  - fallback_read_total: ">0"
+  - unexpected_path_total: ">0"
+  - committed_before_flush
+  - read_path_wal_full_replay
+  - read_path_wal_full_scan
+  - open_eager_loads_all_btree_pages
+  - persist_from_delta_only
+  - tlog_tail_stale_after_checkpoint
+  - gc_stale_generation_visible
+  - flashback_uses_fallback_read
+  - mmap_read_uses_fallback
+  - cross_shard_duplicate_key
+  - paged_root_stale_without_heal
+  - concurrent_read_triggers_wal_replay

@@ -1,0 +1,86 @@
+version: 1
+registration_order:
+  - RegisterCoreSyncRules
+  - RegisterDurabilitySyncRules
+  - RegisterReadSyncRules
+  - RegisterRecoverySyncRules
+
+rules:
+  - name: WriteMemTableSync
+    event: kWrite
+    file: cpp/src/sync/rules/core_rules.cc
+    handler: wal append + memtable put/delete
+  - name: WalAppendSync
+    event: kWrite
+    file: cpp/src/sync/rules/core_rules.cc
+    handler: embedded in WriteMemTableSync
+  - name: GroupCommitSync
+    event: kGroupCommit
+    file: cpp/src/sync/rules/durability_rules.cc
+    handler: GroupCommitter::Commit wal fsync + stable_lsn
+  - name: FlusherSync
+    event: kFlush
+    file: cpp/src/concept/flusher/flusher.cc
+    handler: Flusher::Flush frozen memtable to datafile
+  - name: FlushApplySync
+    event: kFlush
+    file: cpp/src/sync/rules/durability_rules.cc
+    handler: Engine::FlushInternal delegates Flusher
+  - name: SuperBlockCommitSync
+    event: kSuperBlockCommit
+    file: cpp/src/sync/rules/durability_rules.cc
+    handler: Engine::CommitSuperBlockInternal
+  - name: TLogSnapshotSync
+    event: kSuperBlockCommit
+    file: cpp/src/engine/engine.cc
+    handler: Engine::AppendTLogSnapshot on Checkpoint
+  - name: LazyRecoverySync
+    event: kRecovery
+    file: cpp/src/sync/rules/recovery_rules.cc
+    handler: Engine::RecoverFromSuperBlock FastOpen + lazy paths
+  - name: SummaryHealSync
+    event: kRead
+    file: cpp/src/engine/engine.cc
+    handler: Engine::RepairSummary on StaleSummary
+  - name: GcRegionSwapSync
+    event: kFlush
+    file: cpp/src/engine/engine.cc
+    handler: Engine::MaybeGcSwap after flush
+  - name: MemTablePipelineSync
+    event: kFlush
+    file: cpp/src/engine/engine.cc
+    handler: Engine::RotateMemTableForFlush + Flusher on flushing_
+  - name: FlashbackReadSync
+    event: kRead
+    file: cpp/src/engine/engine.cc
+    handler: Engine::GetAsOf / ScanAsOf via TLogReader
+  - name: CrashRecoverySync
+    event: kRecovery
+    file: cpp/src/sync/rules/recovery_rules.cc
+    handler: superblock elect + datafile + deferred wal
+  - name: PlanValidateSync
+    event: kPrepare
+    file: cpp/src/engine/shard_engine.cc
+    handler: ShardEngine::Prepare
+  - name: MmapReadSync
+    event: kRecovery
+    file: cpp/src/engine/shard_engine.cc
+    handler: ShardEngine LoadDatafileOnRecover via MmapWindowManager
+  - name: ShardRouteSync
+    event: kWrite
+    file: cpp/src/engine/engine.cc
+    handler: Engine::Put/Get/Delete RouteShard to ShardEngine
+  - name: BackgroundFlushSync
+    event: kFlush
+    file: cpp/src/engine/flush_worker.cc
+    handler: BackgroundFlushWorker triggers ShardEngine::Flush on threshold
+  - name: PagedBTreeSync
+    event: kSuperBlockCommit
+    file: cpp/src/engine/shard_engine.cc
+    handler: BTreeIndex::PersistRoot sets SuperBlock active_root
+  - name: ConcurrentReadSync
+    event: kRead
+    file: cpp/src/engine/shard_engine.cc
+    handler: ShardEngine read paths under shared_mutex + mmap Pin
+
+documented_bypasses: []

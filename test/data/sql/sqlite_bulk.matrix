@@ -1,0 +1,480 @@
+﻿case: bulk_select_000
+parse: "SELECT key FROM t0 WHERE key = 'k0'"
+expect_kind: kSelect
+---
+case: bulk_select_001
+parse: "SELECT key FROM t1 WHERE key = 'k1'"
+expect_kind: kSelect
+---
+case: bulk_select_002
+parse: "SELECT key FROM t2 WHERE key = 'k2'"
+expect_kind: kSelect
+---
+case: bulk_select_003
+parse: "SELECT key FROM t3 WHERE key = 'k3'"
+expect_kind: kSelect
+---
+case: bulk_select_004
+parse: "SELECT key FROM t4 WHERE key = 'k4'"
+expect_kind: kSelect
+---
+case: bulk_select_005
+parse: "SELECT key FROM t5 WHERE key = 'k5'"
+expect_kind: kSelect
+---
+case: bulk_select_006
+parse: "SELECT key FROM t6 WHERE key = 'k6'"
+expect_kind: kSelect
+---
+case: bulk_select_007
+parse: "SELECT key FROM t7 WHERE key = 'k7'"
+expect_kind: kSelect
+---
+case: bulk_select_008
+parse: "SELECT key FROM t8 WHERE key = 'k8'"
+expect_kind: kSelect
+---
+case: bulk_select_009
+parse: "SELECT key FROM t9 WHERE key = 'k9'"
+expect_kind: kSelect
+---
+case: bulk_select_010
+parse: "SELECT key FROM t10 WHERE key = 'k10'"
+expect_kind: kSelect
+---
+case: bulk_select_011
+parse: "SELECT key FROM t11 WHERE key = 'k11'"
+expect_kind: kSelect
+---
+case: bulk_select_012
+parse: "SELECT key FROM t12 WHERE key = 'k12'"
+expect_kind: kSelect
+---
+case: bulk_select_013
+parse: "SELECT key FROM t13 WHERE key = 'k13'"
+expect_kind: kSelect
+---
+case: bulk_select_014
+parse: "SELECT key FROM t14 WHERE key = 'k14'"
+expect_kind: kSelect
+---
+case: bulk_select_015
+parse: "SELECT key FROM t15 WHERE key = 'k15'"
+expect_kind: kSelect
+---
+case: bulk_select_016
+parse: "SELECT key FROM t16 WHERE key = 'k16'"
+expect_kind: kSelect
+---
+case: bulk_select_017
+parse: "SELECT key FROM t17 WHERE key = 'k17'"
+expect_kind: kSelect
+---
+case: bulk_select_018
+parse: "SELECT key FROM t18 WHERE key = 'k18'"
+expect_kind: kSelect
+---
+case: bulk_select_019
+parse: "SELECT key FROM t19 WHERE key = 'k19'"
+expect_kind: kSelect
+---
+case: bulk_select_020
+parse: "SELECT key FROM t20 WHERE key = 'k20'"
+expect_kind: kSelect
+---
+case: bulk_select_021
+parse: "SELECT key FROM t21 WHERE key = 'k21'"
+expect_kind: kSelect
+---
+case: bulk_select_022
+parse: "SELECT key FROM t22 WHERE key = 'k22'"
+expect_kind: kSelect
+---
+case: bulk_select_023
+parse: "SELECT key FROM t23 WHERE key = 'k23'"
+expect_kind: kSelect
+---
+case: bulk_select_024
+parse: "SELECT key FROM t24 WHERE key = 'k24'"
+expect_kind: kSelect
+---
+case: bulk_select_025
+parse: "SELECT key FROM t25 WHERE key = 'k25'"
+expect_kind: kSelect
+---
+case: bulk_select_026
+parse: "SELECT key FROM t26 WHERE key = 'k26'"
+expect_kind: kSelect
+---
+case: bulk_select_027
+parse: "SELECT key FROM t27 WHERE key = 'k27'"
+expect_kind: kSelect
+---
+case: bulk_select_028
+parse: "SELECT key FROM t28 WHERE key = 'k28'"
+expect_kind: kSelect
+---
+case: bulk_select_029
+parse: "SELECT key FROM t29 WHERE key = 'k29'"
+expect_kind: kSelect
+---
+case: bulk_select_030
+parse: "SELECT key FROM t30 WHERE key = 'k30'"
+expect_kind: kSelect
+---
+case: bulk_select_031
+parse: "SELECT key FROM t31 WHERE key = 'k31'"
+expect_kind: kSelect
+---
+case: bulk_select_032
+parse: "SELECT key FROM t32 WHERE key = 'k32'"
+expect_kind: kSelect
+---
+case: bulk_select_033
+parse: "SELECT key FROM t33 WHERE key = 'k33'"
+expect_kind: kSelect
+---
+case: bulk_select_034
+parse: "SELECT key FROM t34 WHERE key = 'k34'"
+expect_kind: kSelect
+---
+case: bulk_select_035
+parse: "SELECT key FROM t35 WHERE key = 'k35'"
+expect_kind: kSelect
+---
+case: bulk_select_036
+parse: "SELECT key FROM t36 WHERE key = 'k36'"
+expect_kind: kSelect
+---
+case: bulk_select_037
+parse: "SELECT key FROM t37 WHERE key = 'k37'"
+expect_kind: kSelect
+---
+case: bulk_select_038
+parse: "SELECT key FROM t38 WHERE key = 'k38'"
+expect_kind: kSelect
+---
+case: bulk_select_039
+parse: "SELECT key FROM t39 WHERE key = 'k39'"
+expect_kind: kSelect
+---
+case: bulk_select_040
+parse: "SELECT key FROM t40 WHERE key = 'k40'"
+expect_kind: kSelect
+---
+case: bulk_select_041
+parse: "SELECT key FROM t41 WHERE key = 'k41'"
+expect_kind: kSelect
+---
+case: bulk_select_042
+parse: "SELECT key FROM t42 WHERE key = 'k42'"
+expect_kind: kSelect
+---
+case: bulk_select_043
+parse: "SELECT key FROM t43 WHERE key = 'k43'"
+expect_kind: kSelect
+---
+case: bulk_select_044
+parse: "SELECT key FROM t44 WHERE key = 'k44'"
+expect_kind: kSelect
+---
+case: bulk_select_045
+parse: "SELECT key FROM t45 WHERE key = 'k45'"
+expect_kind: kSelect
+---
+case: bulk_select_046
+parse: "SELECT key FROM t46 WHERE key = 'k46'"
+expect_kind: kSelect
+---
+case: bulk_select_047
+parse: "SELECT key FROM t47 WHERE key = 'k47'"
+expect_kind: kSelect
+---
+case: bulk_select_048
+parse: "SELECT key FROM t48 WHERE key = 'k48'"
+expect_kind: kSelect
+---
+case: bulk_select_049
+parse: "SELECT key FROM t49 WHERE key = 'k49'"
+expect_kind: kSelect
+---
+case: bulk_select_050
+parse: "SELECT key FROM t50 WHERE key = 'k50'"
+expect_kind: kSelect
+---
+case: bulk_select_051
+parse: "SELECT key FROM t51 WHERE key = 'k51'"
+expect_kind: kSelect
+---
+case: bulk_select_052
+parse: "SELECT key FROM t52 WHERE key = 'k52'"
+expect_kind: kSelect
+---
+case: bulk_select_053
+parse: "SELECT key FROM t53 WHERE key = 'k53'"
+expect_kind: kSelect
+---
+case: bulk_select_054
+parse: "SELECT key FROM t54 WHERE key = 'k54'"
+expect_kind: kSelect
+---
+case: bulk_select_055
+parse: "SELECT key FROM t55 WHERE key = 'k55'"
+expect_kind: kSelect
+---
+case: bulk_select_056
+parse: "SELECT key FROM t56 WHERE key = 'k56'"
+expect_kind: kSelect
+---
+case: bulk_select_057
+parse: "SELECT key FROM t57 WHERE key = 'k57'"
+expect_kind: kSelect
+---
+case: bulk_select_058
+parse: "SELECT key FROM t58 WHERE key = 'k58'"
+expect_kind: kSelect
+---
+case: bulk_select_059
+parse: "SELECT key FROM t59 WHERE key = 'k59'"
+expect_kind: kSelect
+---
+case: bulk_select_060
+parse: "SELECT key FROM t60 WHERE key = 'k60'"
+expect_kind: kSelect
+---
+case: bulk_select_061
+parse: "SELECT key FROM t61 WHERE key = 'k61'"
+expect_kind: kSelect
+---
+case: bulk_select_062
+parse: "SELECT key FROM t62 WHERE key = 'k62'"
+expect_kind: kSelect
+---
+case: bulk_select_063
+parse: "SELECT key FROM t63 WHERE key = 'k63'"
+expect_kind: kSelect
+---
+case: bulk_select_064
+parse: "SELECT key FROM t64 WHERE key = 'k64'"
+expect_kind: kSelect
+---
+case: bulk_select_065
+parse: "SELECT key FROM t65 WHERE key = 'k65'"
+expect_kind: kSelect
+---
+case: bulk_select_066
+parse: "SELECT key FROM t66 WHERE key = 'k66'"
+expect_kind: kSelect
+---
+case: bulk_select_067
+parse: "SELECT key FROM t67 WHERE key = 'k67'"
+expect_kind: kSelect
+---
+case: bulk_select_068
+parse: "SELECT key FROM t68 WHERE key = 'k68'"
+expect_kind: kSelect
+---
+case: bulk_select_069
+parse: "SELECT key FROM t69 WHERE key = 'k69'"
+expect_kind: kSelect
+---
+case: bulk_select_070
+parse: "SELECT key FROM t70 WHERE key = 'k70'"
+expect_kind: kSelect
+---
+case: bulk_select_071
+parse: "SELECT key FROM t71 WHERE key = 'k71'"
+expect_kind: kSelect
+---
+case: bulk_select_072
+parse: "SELECT key FROM t72 WHERE key = 'k72'"
+expect_kind: kSelect
+---
+case: bulk_select_073
+parse: "SELECT key FROM t73 WHERE key = 'k73'"
+expect_kind: kSelect
+---
+case: bulk_select_074
+parse: "SELECT key FROM t74 WHERE key = 'k74'"
+expect_kind: kSelect
+---
+case: bulk_select_075
+parse: "SELECT key FROM t75 WHERE key = 'k75'"
+expect_kind: kSelect
+---
+case: bulk_select_076
+parse: "SELECT key FROM t76 WHERE key = 'k76'"
+expect_kind: kSelect
+---
+case: bulk_select_077
+parse: "SELECT key FROM t77 WHERE key = 'k77'"
+expect_kind: kSelect
+---
+case: bulk_select_078
+parse: "SELECT key FROM t78 WHERE key = 'k78'"
+expect_kind: kSelect
+---
+case: bulk_select_079
+parse: "SELECT key FROM t79 WHERE key = 'k79'"
+expect_kind: kSelect
+---
+case: bulk_select_080
+parse: "SELECT key FROM t80 WHERE key = 'k80'"
+expect_kind: kSelect
+---
+case: bulk_select_081
+parse: "SELECT key FROM t81 WHERE key = 'k81'"
+expect_kind: kSelect
+---
+case: bulk_select_082
+parse: "SELECT key FROM t82 WHERE key = 'k82'"
+expect_kind: kSelect
+---
+case: bulk_select_083
+parse: "SELECT key FROM t83 WHERE key = 'k83'"
+expect_kind: kSelect
+---
+case: bulk_select_084
+parse: "SELECT key FROM t84 WHERE key = 'k84'"
+expect_kind: kSelect
+---
+case: bulk_select_085
+parse: "SELECT key FROM t85 WHERE key = 'k85'"
+expect_kind: kSelect
+---
+case: bulk_select_086
+parse: "SELECT key FROM t86 WHERE key = 'k86'"
+expect_kind: kSelect
+---
+case: bulk_select_087
+parse: "SELECT key FROM t87 WHERE key = 'k87'"
+expect_kind: kSelect
+---
+case: bulk_select_088
+parse: "SELECT key FROM t88 WHERE key = 'k88'"
+expect_kind: kSelect
+---
+case: bulk_select_089
+parse: "SELECT key FROM t89 WHERE key = 'k89'"
+expect_kind: kSelect
+---
+case: bulk_select_090
+parse: "SELECT key FROM t90 WHERE key = 'k90'"
+expect_kind: kSelect
+---
+case: bulk_select_091
+parse: "SELECT key FROM t91 WHERE key = 'k91'"
+expect_kind: kSelect
+---
+case: bulk_select_092
+parse: "SELECT key FROM t92 WHERE key = 'k92'"
+expect_kind: kSelect
+---
+case: bulk_select_093
+parse: "SELECT key FROM t93 WHERE key = 'k93'"
+expect_kind: kSelect
+---
+case: bulk_select_094
+parse: "SELECT key FROM t94 WHERE key = 'k94'"
+expect_kind: kSelect
+---
+case: bulk_select_095
+parse: "SELECT key FROM t95 WHERE key = 'k95'"
+expect_kind: kSelect
+---
+case: bulk_select_096
+parse: "SELECT key FROM t96 WHERE key = 'k96'"
+expect_kind: kSelect
+---
+case: bulk_select_097
+parse: "SELECT key FROM t97 WHERE key = 'k97'"
+expect_kind: kSelect
+---
+case: bulk_select_098
+parse: "SELECT key FROM t98 WHERE key = 'k98'"
+expect_kind: kSelect
+---
+case: bulk_select_099
+parse: "SELECT key FROM t99 WHERE key = 'k99'"
+expect_kind: kSelect
+---
+case: bulk_select_100
+parse: "SELECT key FROM t100 WHERE key = 'k100'"
+expect_kind: kSelect
+---
+case: bulk_select_101
+parse: "SELECT key FROM t101 WHERE key = 'k101'"
+expect_kind: kSelect
+---
+case: bulk_select_102
+parse: "SELECT key FROM t102 WHERE key = 'k102'"
+expect_kind: kSelect
+---
+case: bulk_select_103
+parse: "SELECT key FROM t103 WHERE key = 'k103'"
+expect_kind: kSelect
+---
+case: bulk_select_104
+parse: "SELECT key FROM t104 WHERE key = 'k104'"
+expect_kind: kSelect
+---
+case: bulk_select_105
+parse: "SELECT key FROM t105 WHERE key = 'k105'"
+expect_kind: kSelect
+---
+case: bulk_select_106
+parse: "SELECT key FROM t106 WHERE key = 'k106'"
+expect_kind: kSelect
+---
+case: bulk_select_107
+parse: "SELECT key FROM t107 WHERE key = 'k107'"
+expect_kind: kSelect
+---
+case: bulk_select_108
+parse: "SELECT key FROM t108 WHERE key = 'k108'"
+expect_kind: kSelect
+---
+case: bulk_select_109
+parse: "SELECT key FROM t109 WHERE key = 'k109'"
+expect_kind: kSelect
+---
+case: bulk_select_110
+parse: "SELECT key FROM t110 WHERE key = 'k110'"
+expect_kind: kSelect
+---
+case: bulk_select_111
+parse: "SELECT key FROM t111 WHERE key = 'k111'"
+expect_kind: kSelect
+---
+case: bulk_select_112
+parse: "SELECT key FROM t112 WHERE key = 'k112'"
+expect_kind: kSelect
+---
+case: bulk_select_113
+parse: "SELECT key FROM t113 WHERE key = 'k113'"
+expect_kind: kSelect
+---
+case: bulk_select_114
+parse: "SELECT key FROM t114 WHERE key = 'k114'"
+expect_kind: kSelect
+---
+case: bulk_select_115
+parse: "SELECT key FROM t115 WHERE key = 'k115'"
+expect_kind: kSelect
+---
+case: bulk_select_116
+parse: "SELECT key FROM t116 WHERE key = 'k116'"
+expect_kind: kSelect
+---
+case: bulk_select_117
+parse: "SELECT key FROM t117 WHERE key = 'k117'"
+expect_kind: kSelect
+---
+case: bulk_select_118
+parse: "SELECT key FROM t118 WHERE key = 'k118'"
+expect_kind: kSelect
+---
+case: bulk_select_119
+parse: "SELECT key FROM t119 WHERE key = 'k119'"
+expect_kind: kSelect
+---
