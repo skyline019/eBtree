@@ -14,25 +14,28 @@ on:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   BUILD_DIR: build-ci
   CONFIG: Release
+  EBTREE_TEST_TMP_ROOT: ${{ github.workspace }}/.test-runs/tmp/ci
+  TEMP: ${{ github.workspace }}/.test-runs/tmp/ci
+  TMP: ${{ github.workspace }}/.test-runs/tmp/ci
 
 jobs:
   build-and-test:
     name: Windows MSVC
     runs-on: windows-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python
         id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -41,6 +44,7 @@ jobs:
         env:
           Python3_EXECUTABLE: ${{ steps.setup-python.outputs.python-path }}
         run: |
+          New-Item -ItemType Directory -Force -Path $env:EBTREE_TEST_TMP_ROOT | Out-Null
           Remove-Item Env:PYTHONHOME -ErrorAction SilentlyContinue
           Remove-Item Env:PYTHONPATH -ErrorAction SilentlyContinue
           Write-Host "Python: $env:Python3_EXECUTABLE"
@@ -69,6 +73,33 @@ jobs:
             -Config $env:CONFIG `
             -Gate P4-complete
 
+      - name: Gate P19-lsv
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Gate P19-lsv
+
+      - name: Gate P17-deep-core
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Gate P17-deep-core
+
+      - name: Gate P18-stability
+        shell: pwsh
+        run: |
+          & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
+            -RepoRoot "${{ github.workspace }}" `
+            -BuildDir "${{ github.workspace }}/$env:BUILD_DIR" `
+            -Config $env:CONFIG `
+            -Gate P18-stability
+
       - name: SQL smoke (semantic + label-110)
         shell: pwsh
         run: |
@@ -76,7 +107,7 @@ jobs:
           & $runner --gtest_filter="SemanticOracle.SemanticCorpusStrict100:SqllogicRunner.IndexBetweenLabel110*"
 
       - name: Gate P11 official 800/800
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
         shell: pwsh
         run: |
           & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
@@ -86,7 +117,7 @@ jobs:
             -Gate P11-real-sql
 
       - name: Gate P12 semantic
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
         shell: pwsh
         run: |
           & "${{ github.workspace }}/scripts/test/run_tests.ps1" `
@@ -96,8 +127,8 @@ jobs:
             -Gate P12-semantic-sql
 
       - name: Upload sqllogic baseline
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
+        uses: actions/upload-artifact@v5
         with:
           name: sqllogic-baseline
           path: .test-runs/**/reports/sqllogic_baseline.json

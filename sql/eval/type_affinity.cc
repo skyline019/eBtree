@@ -2,6 +2,8 @@
 
 #include <cctype>
 
+#include "like_match.h"
+
 namespace ebtree {
 namespace sql {
 
@@ -110,7 +112,23 @@ TruthValue CompareSqlValues(const SqlValue& lhs, const SqlValue& rhs,
   if (lhs.IsNull() || rhs.IsNull()) {
     if (op == BinaryOp::kEq) return TruthValue::kUnknown;
     if (op == BinaryOp::kNe) return TruthValue::kUnknown;
+    if (op == BinaryOp::kLike) return TruthValue::kUnknown;
+    if (op == BinaryOp::kGlob) return TruthValue::kUnknown;
     return TruthValue::kUnknown;
+  }
+
+  if (op == BinaryOp::kLike) {
+    const std::string text = lhs.ToLegacyString();
+    const std::string pattern = rhs.ToLegacyString();
+    const bool match = SqlLikeMatch(text, pattern);
+    return match ? TruthValue::kTrue : TruthValue::kFalse;
+  }
+
+  if (op == BinaryOp::kGlob) {
+    const std::string text = lhs.ToLegacyString();
+    const std::string pattern = rhs.ToLegacyString();
+    const bool match = SqlGlobMatch(text, pattern);
+    return match ? TruthValue::kTrue : TruthValue::kFalse;
   }
 
   if (op == BinaryOp::kEq || op == BinaryOp::kNe) {

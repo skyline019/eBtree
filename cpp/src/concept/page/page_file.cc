@@ -283,31 +283,81 @@ Status PageFile::ReadPages(const std::vector<uint64_t>& offsets,
   pages_out->clear();
   if (offsets.empty()) return Status::Ok();
 
-  pages_out->reserve(offsets.size());
-  for (uint64_t offset : offsets) {
+  pages_out->resize(offsets.size());
+  std::vector<size_t> pending;
+  pending.reserve(offsets.size());
+  for (size_t i = 0; i < offsets.size(); ++i) {
+    const uint64_t offset = offsets[i];
     if (cache_capacity_ > 0) {
       const auto it = cache_map_.find(offset);
       if (it != cache_map_.end()) {
         cache_lru_.splice(cache_lru_.begin(), cache_lru_, it->second);
-        pages_out->push_back(cache_pages_.at(offset));
+        (*pages_out)[i] = cache_pages_.at(offset);
         continue;
       }
     }
-    std::vector<uint8_t> page;
-    const Status rs = ReadStoredPage(offset, &page);
-    if (!rs.ok()) return rs;
-    if (cache_capacity_ > 0) {
-      if (cache_pages_.size() >= cache_capacity_) {
-        const uint64_t evict = cache_lru_.back();
-        cache_lru_.pop_back();
-        cache_pages_.erase(evict);
-        cache_map_.erase(evict);
-      }
-      cache_lru_.push_front(offset);
-      cache_map_[offset] = cache_lru_.begin();
-      cache_pages_[offset] = page;
+    pending.push_back(i);
+  }
+  if (pending.empty()) return Status::Ok();
+
+  std::sort(pending.begin(), pending.end(), [&offsets](size_t a, size_t b) {
+    return offsets[a] < offsets[b];
+  });
+
+  auto cache_page = [this](uint64_t offset, std::vector<uint8_t> page) {
+    if (cache_capacity_ == 0) return page;
+    if (cache_pages_.size() >= cache_capacity_) {
+      const uint64_t evict = cache_lru_.back();
+      cache_lru_.pop_back();
+      cache_pages_.erase(evict);
+      cache_map_.erase(evict);
     }
-    pages_out->push_back(std::move(page));
+    cache_lru_.push_front(offset);
+    cache_map_[offset] = cache_lru_.begin();
+    cache_pages_[offset] = page;
+    return page;
+  };
+
+  size_t run_start = 0;
+  while (run_start < pending.size()) {
+    size_t run_end = run_start + 1;
+    if (!wrapped_format_) {
+      while (run_end < pending.size()) {
+        const uint64_t prev = offsets[pending[run_end - 1]];
+        const uint64_t cur = offsets[pending[run_end]];
+        if (cur != prev + kPageSize) break;
+        ++run_end;
+      }
+    }
+    const size_t run_len = run_end - run_start;
+    const uint64_t run_offset = offsets[pending[run_start]];
+
+    if (!wrapped_format_ && run_len > 1) {
+      const Status open_st = EnsureReadFileOpen();
+      if (!open_st.ok()) return open_st;
+      const size_t blob_len = run_len * kPageSize;
+      std::vector<uint8_t> blob(blob_len);
+      read_file_.seekg(static_cast<std::streamoff>(run_offset));
+      read_file_.read(reinterpret_cast<char*>(blob.data()),
+                      static_cast<std::streamsize>(blob_len));
+      if (!read_file_) return Status::IoError("page run read failed");
+      for (size_t i = 0; i < run_len; ++i) {
+        std::vector<uint8_t> page(kPageSize);
+        std::memcpy(page.data(), blob.data() + i * kPageSize, kPageSize);
+        const size_t out_idx = pending[run_start + i];
+        (*pages_out)[out_idx] =
+            cache_page(run_offset + i * kPageSize, std::move(page));
+      }
+    } else {
+      for (size_t i = run_start; i < run_end; ++i) {
+        const uint64_t offset = offsets[pending[i]];
+        std::vector<uint8_t> page;
+        const Status rs = ReadStoredPage(offset, &page);
+        if (!rs.ok()) return rs;
+        (*pages_out)[pending[i]] = cache_page(offset, std::move(page));
+      }
+    }
+    run_start = run_end;
   }
   return Status::Ok();
 }

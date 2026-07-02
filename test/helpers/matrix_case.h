@@ -15,4 +15,5 @@ struct EbMatrixCase {
   std::string corrupt;
   std::string assert_stat;
   bool compress_pages{false};
+  bool product_default{false};
 };

@@ -22,6 +22,7 @@
 #include "sql/parse/core/stmt_classifier.h"
 #include "sql/parse/native/native_parser.h"
 #include "sql/plan/exec_plan.h"
+#include "sql/plan/index_match.h"
 #include "ebtree/common/digest.h"
 
 namespace ebtree {
@@ -115,7 +116,7 @@ Status SqlExecutorV3::SaveCatalog() const {
 Status SqlExecutorV3::ScanTableRows(
     const TableSchema& table,
     std::vector<std::pair<std::string, std::string>>* rows) {
-  PhysicalScan scan(engine_, catalog_);
+  PhysicalScan scan(engine_, catalog_, txn_);
   return scan.ScanTable(table, rows);
 }
 
@@ -156,8 +157,35 @@ Status SqlExecutorV3::ExecSelectRich(const SelectQuery& sq,
   const bool from_cte = cte_ctx && cte_ctx->Has(sq.from_table);
   std::vector<std::pair<std::string, std::string>> encoded;
   if (!from_cte) {
-    const Status ss = ScanTableRows(table, &encoded);
-    if (!ss.ok()) return ss;
+    bool used_index = false;
+    if (sq.joins.empty()) {
+      plan::ExecPlan exec_plan{};
+      const Status lp = plan::LowerSelectQuery(sq, catalog_, &exec_plan);
+      if (lp.ok() && !exec_plan.steps.empty() &&
+          exec_plan.steps[0].kind == plan::PlanStepKind::kIndexScan) {
+        const plan::PlanStep& step = exec_plan.steps[0];
+        const IndexDef* idx =
+            plan::FindLeadingIndex(catalog_, table.name, step.index_column);
+        if (idx) {
+          PhysicalScan ps(engine_, catalog_, txn_);
+          Status ss;
+          if (step.index_scan_mode == plan::IndexScanMode::kEq) {
+            ss = ps.ScanIndexEq(table, *idx, step.index_value, &encoded);
+            if (!ss.ok()) return ss;
+            used_index = true;
+          } else if (step.index_scan_mode == plan::IndexScanMode::kRange) {
+            ss = ps.ScanIndexRange(table, *idx, step.index_range_lo,
+                                   step.index_range_hi, &encoded);
+            if (!ss.ok()) return ss;
+            used_index = true;
+          }
+        }
+      }
+    }
+    if (!used_index) {
+      const Status ss = ScanTableRows(table, &encoded);
+      if (!ss.ok()) return ss;
+    }
     const Status mic = CheckMicPagesBudget(engine_, pages_before, sq.max_pages);
     if (!mic.ok()) return mic;
     const Status rows_mic = CheckMicRowBudget(encoded.size(), sq.max_pages);
@@ -652,12 +680,14 @@ Status SqlExecutorV3::ExecWindow(const QueryStatement& stmt, ExecuteResult* out)
     std::string last_partition;
     int64_t row_num = 0;
     int64_t dense_rank = 0;
+    int64_t sql_rank = 0;
     std::string last_order_val;
     for (const auto& r : rows) {
       const std::string pk = partition.empty() ? "" : FieldVal(r, partition);
       if (pk != last_partition) {
         row_num = 0;
         dense_rank = 0;
+        sql_rank = 0;
         last_order_val.clear();
         last_partition = pk;
       }
@@ -665,6 +695,7 @@ Status SqlExecutorV3::ExecWindow(const QueryStatement& stmt, ExecuteResult* out)
       const std::string ov = FieldVal(r, order_col);
       if (ov != last_order_val) {
         ++dense_rank;
+        sql_rank = row_num;
         last_order_val = ov;
       }
       SqlRow sr{};
@@ -674,7 +705,7 @@ Status SqlExecutorV3::ExecWindow(const QueryStatement& stmt, ExecuteResult* out)
       } else if (is_dense) {
         sr.value = std::to_string(dense_rank);
       } else {
-        sr.value = std::to_string(row_num);
+        sr.value = std::to_string(sql_rank);
       }
       out->rows.push_back(sr);
     }
@@ -702,14 +733,10 @@ Status SqlExecutorV3::ExecSelect(const QueryStatement& stmt, ExecuteResult* out)
     const Status depth_st = SubqueryRunner::ValidateWhereDepth(*view_where, 0);
     if (!depth_st.ok()) return depth_st;
   }
-  if (view && stmt.select_rich) {
-    return ExecSelectRich(*stmt.select_rich, *table, out, nullptr, view_where);
-  }
   if (stmt.select_rich) {
     return ExecSelectRich(*stmt.select_rich, *table, out, nullptr, view_where);
   }
-  SqlExecutorV2 v2(engine_, catalog_, catalog_store_, op_log_, tier_, txn_);
-  return v2.Execute(stmt, out);
+  return Status::InvalidArgument("SELECT requires rich parse path");
 }
 
 Status SqlExecutorV3::ExecExplain(const QueryStatement& stmt,
@@ -737,14 +764,20 @@ Status SqlExecutorV3::ExecExplain(const QueryStatement& stmt,
   const Status ps = parser.Parse(inner, &inner_stmt);
   if (!ps.ok()) return ps;
   plan::ExecPlan plan{};
-  const Status ls = plan::LowerQuery(inner_stmt, &plan);
+  const Status ls = plan::LowerQueryWithCatalog(inner_stmt, catalog_, &plan);
   if (!ls.ok()) return ls;
   std::string plan_text = "QUERY PLAN\n";
   for (const auto& step : plan.steps) {
     switch (step.kind) {
       case plan::PlanStepKind::kIndexScan:
-        plan_text += "SEARCH TABLE " + step.table + " USING INDEX " +
-                     step.index_column + " (= " + step.index_value + ")\n";
+        if (step.index_scan_mode == plan::IndexScanMode::kRange) {
+          plan_text += "SEARCH TABLE " + step.table + " USING INDEX " +
+                       step.index_column + " (>= " + step.index_range_lo +
+                       " AND <= " + step.index_range_hi + ")\n";
+        } else {
+          plan_text += "SEARCH TABLE " + step.table + " USING INDEX " +
+                       step.index_column + " (= " + step.index_value + ")\n";
+        }
         break;
       case plan::PlanStepKind::kFilter:
         plan_text += "FILTER\n";
@@ -770,6 +803,7 @@ Status SqlExecutorV3::ExecExplain(const QueryStatement& stmt,
 }
 
 Status SqlExecutorV3::Execute(const QueryStatement& stmt, ExecuteResult* out) {
+  if (out) out->rows.clear();
   switch (stmt.kind) {
     case QueryStmtKind::kWithCte:
       return ExecCte(stmt, out);

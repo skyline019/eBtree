@@ -4,6 +4,7 @@
 #include "ebtree/engine/read_tier.h"
 #include "ebtree/engine/shard_router.h"
 #include "ebtree/engine/routing_table.h"
+#include "ebtree/engine/snapshot.h"
 
 #include <algorithm>
 #include <atomic>
@@ -150,6 +151,7 @@ void Engine::AccumulateStats(const EngineStats& src, EngineStats* dst) {
   dst->summary_repair_total += src.summary_repair_total;
   dst->tlog_snapshot_total += src.tlog_snapshot_total;
   dst->gc_region_swap_total += src.gc_region_swap_total;
+  dst->gc_deferred_swap_total += src.gc_deferred_swap_total;
   dst->wal_replay_deferred_total += src.wal_replay_deferred_total;
   dst->pages_touched += src.pages_touched;
   dst->wal_full_scan_total += src.wal_full_scan_total;
@@ -159,6 +161,10 @@ void Engine::AccumulateStats(const EngineStats& src, EngineStats* dst) {
   }
   dst->fsync_batch_total += src.fsync_batch_total;
   dst->fsync_waiter_total += src.fsync_waiter_total;
+  dst->compress_bytes_in += src.compress_bytes_in;
+  dst->compress_bytes_out += src.compress_bytes_out;
+  dst->decompress_fail_total += src.decompress_fail_total;
+  dst->rar_chain_drop_total += src.rar_chain_drop_total;
   if (dst->fsync_batch_total > 0) {
     dst->fsync_merge_ratio = dst->fsync_waiter_total / dst->fsync_batch_total;
   }
@@ -191,18 +197,27 @@ bool Engine::wal_replay_pending() const {
   return false;
 }
 
-Status Engine::Put(const std::string& key, const std::string& value) {
+Status Engine::Put(const std::string& key, const std::string& value,
+                   uint32_t txn_id) {
   if (!opened_) return Status::Internal("engine not open");
+  if (write_guard_) {
+    const Status guard_st = write_guard_();
+    if (!guard_st.ok()) return guard_st;
+  }
   ShardEngine* s = ShardForKey(key);
   if (!s) return Status::Internal("shard missing");
-  return s->Put(key, value);
+  return s->Put(key, value, txn_id);
 }
 
-Status Engine::Delete(const std::string& key) {
+Status Engine::Delete(const std::string& key, uint32_t txn_id) {
   if (!opened_) return Status::Internal("engine not open");
+  if (write_guard_) {
+    const Status guard_st = write_guard_();
+    if (!guard_st.ok()) return guard_st;
+  }
   ShardEngine* s = ShardForKey(key);
   if (!s) return Status::Internal("shard missing");
-  return s->Delete(key);
+  return s->Delete(key, txn_id);
 }
 
 Status Engine::Get(const std::string& key, std::string* value) {
@@ -290,6 +305,125 @@ Status Engine::ScanAsOf(const TypedPlan& plan, uint32_t timestamp_sec,
   return Status::Ok();
 }
 
+SnapshotToken Engine::CaptureSnapshot() {
+  SnapshotToken token;
+  token.shard_lsns.resize(shards_.size(), 0);
+  for (size_t i = 0; i < shards_.size(); ++i) {
+    if (shards_[i]) token.shard_lsns[i] = shards_[i]->stable_lsn();
+  }
+  return token;
+}
+
+Status Engine::PinSnapshot(const SnapshotToken& token) {
+  for (size_t i = 0; i < shards_.size(); ++i) {
+    if (!shards_[i]) continue;
+    shards_[i]->PinSnapshot(token.ForShard(static_cast<uint32_t>(i)));
+  }
+  return Status::Ok();
+}
+
+void Engine::ReleaseSnapshot(const SnapshotToken& token) {
+  for (size_t i = 0; i < shards_.size(); ++i) {
+    if (!shards_[i]) continue;
+    shards_[i]->ReleaseSnapshot(token.ForShard(static_cast<uint32_t>(i)));
+  }
+}
+
+Status Engine::GetAtSnapshot(const std::string& key, const SnapshotToken& token,
+                             uint32_t reader_txn_id, std::string* value) {
+  ShardEngine* s = ShardForKey(key);
+  if (!s) return Status::Internal("shard missing");
+  uint32_t shard_id = RouteShard(key, opts_.shard_count);
+  if (opts_.shard_count == 256 && key.size() == 1) {
+    shard_id = routing_table_.slots[static_cast<unsigned char>(key[0])];
+  }
+  SnapshotReadContext ctx{token.ForShard(shard_id), reader_txn_id};
+  return s->GetAtSnapshot(key, ctx, value);
+}
+
+Status Engine::ResolveLsnAtSnapshot(const std::string& key,
+                                    const SnapshotToken& token,
+                                    uint32_t reader_txn_id,
+                                    uint64_t* lsn_out) {
+  ShardEngine* s = ShardForKey(key);
+  if (!s) return Status::Internal("shard missing");
+  uint32_t shard_id = RouteShard(key, opts_.shard_count);
+  if (opts_.shard_count == 256 && key.size() == 1) {
+    shard_id = routing_table_.slots[static_cast<unsigned char>(key[0])];
+  }
+  SnapshotReadContext ctx{token.ForShard(shard_id), reader_txn_id};
+  return s->ResolveLsnAtSnapshot(key, ctx, lsn_out);
+}
+
+Status Engine::ResolveCurrentCommittedLsn(const std::string& key,
+                                            uint64_t* lsn_out) {
+  ShardEngine* s = ShardForKey(key);
+  if (!s) return Status::Internal("shard missing");
+  return s->ResolveCurrentCommittedLsn(key, lsn_out);
+}
+
+Status Engine::RefreshExternalWalForOCC() {
+  Status last = Status::Ok();
+  for (auto& s : shards_) {
+    if (!s) continue;
+    const Status st = s->RefreshExternalWalIfPending();
+    if (!st.ok()) last = st;
+  }
+  return last;
+}
+
+Status Engine::ScanAtSnapshot(const TypedPlan& plan, const SnapshotToken& token,
+                              uint32_t reader_txn_id,
+                              std::vector<std::pair<std::string, std::string>>* rows) {
+  if (!rows) return Status::InvalidArgument("rows is null");
+  if (shards_.size() == 1) {
+    if (EnsureShard(0).ok() && shards_[0]) {
+      SnapshotReadContext ctx{token.ForShard(0), reader_txn_id};
+      return shards_[0]->ScanAtSnapshot(plan, ctx, rows);
+    }
+    return Status::Internal("shard missing");
+  }
+
+  std::vector<std::vector<std::pair<std::string, std::string>>> per_shard;
+  per_shard.resize(shards_.size());
+  std::vector<Status> statuses(shards_.size(), Status::Ok());
+  const unsigned workers =
+      std::max(1u, std::min(static_cast<unsigned>(shards_.size()),
+                            std::thread::hardware_concurrency()));
+  std::atomic<size_t> next{0};
+  std::vector<std::thread> pool;
+  pool.reserve(workers);
+  for (unsigned w = 0; w < workers; ++w) {
+    pool.emplace_back([&, plan]() {
+      for (;;) {
+        const size_t i = next.fetch_add(1);
+        if (i >= shards_.size()) break;
+        if (!EnsureShardForScan(static_cast<uint32_t>(i)).ok()) {
+          statuses[i] = Status::Internal("ensure shard failed");
+          continue;
+        }
+        if (!shards_[i]) continue;
+        SnapshotReadContext ctx{token.ForShard(static_cast<uint32_t>(i)),
+                                reader_txn_id};
+        statuses[i] = shards_[i]->ScanAtSnapshot(plan, ctx, &per_shard[i]);
+      }
+    });
+  }
+  for (auto& t : pool) t.join();
+  for (const auto& st : statuses) {
+    if (!st.ok()) return st;
+  }
+  MergeScanRows(std::move(per_shard), rows);
+  return Status::Ok();
+}
+
+Status Engine::GetAsOfLsn(const std::string& key, uint64_t lsn,
+                          std::string* value) {
+  ShardEngine* s = ShardForKey(key);
+  if (!s) return Status::Internal("shard missing");
+  return s->GetAsOfLsn(key, lsn, value);
+}
+
 Status Engine::Prepare(const TypedPlan& plan) const {
   if (shards_.size() == 1) {
     if (shards_[0]) return shards_[0]->Prepare(plan);
@@ -329,6 +463,9 @@ Status Engine::Checkpoint() {
     }
   }
   EndCheckpointTimestampScope();
+  if (overall.ok() && checkpoint_observer_) {
+    checkpoint_observer_(this, stats().stable_lsn);
+  }
   return overall;
 }
 
@@ -394,6 +531,11 @@ Status Engine::TruncateWalForTest(uint32_t shard_id) {
   ShardEngine* s = shard(shard_id);
   if (!s) return Status::InvalidArgument("invalid shard");
   return s->TruncateWalForTest();
+}
+
+void Engine::ClearVcsForTest(uint32_t shard_id) {
+  ShardEngine* s = shard(shard_id);
+  if (s) s->ClearVcsForTest();
 }
 
 void Engine::SetCheckpointHookForTest(CheckpointHook hook) {
@@ -489,6 +631,14 @@ RecoverySnapshot Engine::GetRecoverySnapshot() const {
 
 void Engine::SetGroupCommitObserver(GroupCommitObserver observer) {
   group_commit_observer_ = std::move(observer);
+}
+
+void Engine::SetCheckpointObserver(CheckpointObserver observer) {
+  checkpoint_observer_ = std::move(observer);
+}
+
+void Engine::SetWriteGuard(WriteGuard guard) {
+  write_guard_ = std::move(guard);
 }
 
 }  // namespace ebtree

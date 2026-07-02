@@ -36,13 +36,17 @@ if(EBTREE_BUILD_SQL)
   add_subdirectory(sql)
 endif()
 
+if(EBTREE_BUILD_TOOLS AND EBTREE_BUILD_SQL)
+  add_subdirectory(demo)
+endif()
+
+if(EBTREE_BUILD_BENCH OR EBTREE_BUILD_TESTS)
+  add_subdirectory(bench)
+endif()
+
 if(EBTREE_BUILD_TESTS)
   enable_testing()
   include(EbtreePython)
   include(EbtreeTestSuite)
   add_subdirectory(test)
-endif()
-
-if(EBTREE_BUILD_BENCH)
-  add_subdirectory(bench)
 endif()

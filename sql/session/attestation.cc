@@ -35,6 +35,7 @@ bool AnyBadWal(const audit::RarReport& report) {
 bool AttestationAllowsOpen(AttestationMode mode, AttestationVerdict verdict) {
   switch (mode) {
     case AttestationMode::kOff:
+    case AttestationMode::kMonitor:
       return true;
     case AttestationMode::kRequirePass:
       return verdict == AttestationVerdict::kPass;

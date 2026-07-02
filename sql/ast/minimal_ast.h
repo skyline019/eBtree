@@ -18,13 +18,13 @@ enum class StmtKind {
   kUnknown,
 };
 
-enum class AttestationMode { kOff, kRequirePass, kAllowWarn };
+enum class AttestationMode { kOff, kMonitor, kRequirePass, kAllowWarn };
 
 struct OpenStmt {
   std::string path;
   std::string durability{"balanced"};
   uint64_t recovery_max_missing{0};
-  AttestationMode attestation{AttestationMode::kOff};
+  AttestationMode attestation{AttestationMode::kMonitor};
 };
 
 struct CreateTableStmt {
@@ -41,6 +41,7 @@ struct InsertStmt {
   std::string select_sql;
   std::string key;
   std::string value;
+  std::string conflict_action;
 };
 
 struct SelectStmt {

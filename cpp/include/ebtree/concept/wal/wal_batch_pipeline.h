@@ -23,6 +23,7 @@ struct WalBatchCommitItem {
   const std::string* key{nullptr};
   const std::string* value{nullptr};
   uint64_t lsn{0};
+  uint32_t txn_id{0};
 };
 
 using WalBatchCommitHook = std::function<Status(
@@ -37,8 +38,9 @@ class WalBatchPipeline {
   WalBatchPipeline& operator=(const WalBatchPipeline&) = delete;
 
   Status Put(const std::string& key, const std::string& value, uint64_t* lsn,
-             EngineStats* stats);
-  Status Delete(const std::string& key, uint64_t* lsn, EngineStats* stats);
+             EngineStats* stats, uint32_t txn_id = 0);
+  Status Delete(const std::string& key, uint64_t* lsn, EngineStats* stats,
+                uint32_t txn_id = 0);
   Status FlushPending(EngineStats* stats);
 
   void SetCommitHook(WalBatchCommitHook hook);
@@ -48,6 +50,7 @@ class WalBatchPipeline {
     WalOp op{WalOp::kPut};
     std::string key;
     std::string value;
+    uint32_t txn_id{0};
     uint64_t assigned_lsn{0};
     bool durable{false};
     Status append_status{Status::Ok()};

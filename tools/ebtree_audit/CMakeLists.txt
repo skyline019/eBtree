@@ -13,6 +13,15 @@ add_library(ebtree_audit_lib STATIC
   catalog_expect.cc
   expect_loader.cc
   rar_sign.cc
+  tier_consistency_attestor.cc
+  rar_chain.cc
+  rar_chain_anchor.cc
+  rar_merkle.cc
+  op_log_head_hash.cc
+  rar_snapshot_builder.cc
+  rar_chain_worker.cc
+  rar_monitor.cc
+  rar_chain_rotate.cc
 )
 
 if(EBTREE_RAR_SIGNING)

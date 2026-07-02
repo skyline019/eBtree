@@ -25,7 +25,7 @@ suites:
   - name: pipeline
     dll: ebtree_tests_pipeline
     categories: [pipeline, success]
-    phase_gate: [P1, P2, P3, P3-complete, P4, P4-complete, P5, P5-complete, P6, P6-complete, P7, P7-complete, P8-complete, P9, P9-complete, P9-perf]
+    phase_gate: [P1, P2, P3, P3-complete, P4, P4-complete, P5, P5-complete, P6, P6-complete, P7, P7-complete, P8-complete, P9-complete, P9-perf, P9-perf-read, P9-perf-write, P10-compress-v2]
   - name: matrix
     dll: ebtree_tests_matrix
     categories: [matrix, semantic]
@@ -34,15 +34,15 @@ suites:
   - name: sql
     dll: ebtree_tests_sql
     categories: [sql, success]
-    phase_gate: [P1, P3-complete, P3b-complete, P3c-complete, P3d-complete, P4-complete, P5-complete, P6-complete, P6-sql, P7-complete, P7-sql, P8-complete, P9-complete]
+    phase_gate: [P1, P3-complete, P3b-complete, P3c-complete, P3d-complete, P4-complete, P5-complete, P6-complete, P6-sql, P7-complete, P7-sql, P8-complete, P8-program-complete, P9-complete, P10-sql, P11-real-sql, P12-semantic-sql, P13-expr-sql, P13-constraints-sql]
     data: test/data/sql/*.matrix
     min_sql_tests: 200
     min_sql_exec_tests: 150
   - name: audit
     dll: ebtree_tests_audit
     categories: [audit, failure]
-    phase_gate: [P1, P3-complete, P3b-complete, P3c-complete, P4-complete, P5-complete, P6-complete, P7-complete, P8-complete, P9-complete]
-    min_audit_tests: 24
+    phase_gate: [P1, P3-complete, P3b-complete, P3c-complete, P4-complete, P5-complete, P6-complete, P7-complete, P8-complete, P9-complete, P9-audit-complete, P9-program-complete, P10-sql, P11-real-sql, P12-semantic-sql, P13-expr-sql, P13-constraints-sql]
+    min_audit_tests: 35
 
 gates:
   P0: [unit]
@@ -73,14 +73,41 @@ gates:
   P11-real-sql: [sql]
   P11-program-honest: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
   P12-semantic-sql: [sql]
+  P13-expr-sql: [sql]
+  P13-constraints-sql: [sql]
   P9: [unit, pipeline, failure, complex, matrix/ondisk, matrix/wal_index, matrix/paged]
   P9-complete: [unit, failure, pipeline, complex, composite, matrix, nested]
+  P9-nofallback-hard: [unit, failure, matrix/no_fallback, complex, audit]
+  P9-perf-read: [pipeline]
+  P9-perf-write: [pipeline]
+  P9-audit-complete: [audit]
+  P9-program-complete: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
   P9-perf: [pipeline]
+  P10-compress-v2: [unit, pipeline, complex]
+  P14-standard-product: [unit, failure, matrix/no_fallback, pipeline, sql]
+  P14-standard-perf: [pipeline]
+  P14-powerfail-compress: [failure]
+  P14-program-complete: [unit, failure, pipeline, complex, composite, matrix, nested, sql, audit]
+  P14-rar-dynamic: [audit, sql]
+  P14-rar-product: [sql, audit, pipeline]
+  P15-carl-complete: [audit, sql]
+  P16-carl-eval: [audit]
+  P16-demo-e2e: [sql]
+  P17-deep-core: [unit, failure, matrix/no_fallback, complex, audit, sql, pipeline]
+  P18-stability: [unit, failure, audit]
+  P19-lsv: [unit, failure, matrix/no_fallback, sql, pipeline]
+  P20-lsv-tso: [unit, failure, matrix/no_fallback, sql, pipeline]
+
+watchdog:
+  default_stale_sec: 180
+  failure_stale_sec: 420
+  concurrent_stale_sec: 600
+  cpu_stale_threshold: 0.25
 
 forbidden_coverage:
   handler: stub: EbSyncManifest.NoStubHandlers
-  fallback_read_total: ">0": EbMatrix.NoFallbackMatrixTest.RunCase
-  unexpected_path_total: ">0": EbMatrix.NoFallbackMatrixTest.RunCase
+  fallback_read_total: ">0": NoFallbackMatrixTest.RunCase
+  unexpected_path_total: ">0": NoFallbackMatrixTest.RunCase
   committed_before_flush: EbForbiddenEnforcement.CommittedEmptyBeforeFlush
   read_path_wal_full_replay: EbForbiddenEnforcement.FastOpenDoesNotFullReplayOnGet
   read_path_wal_full_scan: EbForbiddenEnforcement.LazyGetNoWalFullScan

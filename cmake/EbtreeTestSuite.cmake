@@ -33,6 +33,9 @@ target_include_directories(${_target} PRIVATE
     GTEST_LINKED_AS_SHARED_LIBRARY=1
     EBTEST_SUITE_NAME="${EBTREE_SUITE_NAME}"
   )
+  if(DEFINED ENV{GITHUB_ACTIONS})
+    target_compile_definitions(${_target} PRIVATE EBTEST_CI=1)
+  endif()
 
   if(EBTREE_SUITE_CATEGORIES)
     string(JOIN "," _cats "${EBTREE_SUITE_CATEGORIES}")

@@ -7,6 +7,9 @@
 #include "catalog_expect.h"
 #include "op_log_expect.h"
 #include "rar_builder.h"
+#include "rar_chain.h"
+#include "rar_chain_anchor.h"
+#include "rar_merkle.h"
 #include "rar_sign.h"
 #include "rar_types.h"
 #include "shard_paths.h"
@@ -26,7 +29,12 @@ void PrintUsage() {
       << "         [--mode durable|visibility] [--tier balanced|sync|group]\n"
       << "         [--max-missing N] [--output <file>] [--require-signature]\n"
       << "  ebtree_audit sign --input <file> --key <seed|file> [--output <file>]\n"
-      << "  ebtree_audit verify-sig --input <file> --key <pubkey|secret> [--pubkey <file>]\n";
+      << "  ebtree_audit verify-sig --input <file> --key <pubkey|secret> [--pubkey <file>]\n"
+      << "  ebtree_audit chain-verify --path <dir> [--chain <file>] [--require-signature]\n"
+      << "         [--require-anchor] [--anchor-dir <dir>]\n"
+      << "  ebtree_audit chain-anchor --path <dir> [--chain <file>] [--anchor-dir <dir>]\n"
+      << "         [--publish]\n"
+      << "  ebtree_audit chain-proof --path <dir> [--chain <file>] --seq <N>\n";
 }
 
 bool WriteOutput(const std::string& path, const std::string& content) {
@@ -223,6 +231,97 @@ int main(int argc, char** argv) {
       if (json.find("\"signature\"") == std::string::npos) return 1;
     }
     if (report.verdict == RarVerdict::kRefuseStart) return 1;
+    return 0;
+  }
+
+  if (command == "chain-verify") {
+    const std::string chain_path =
+        GetArg(argc, argv, "--chain",
+               path + "/ebtree.rar.chain.jsonl");
+    RarChainVerifyReport report{};
+    const ebtree::Status st = VerifyRarChain(chain_path, &report);
+    if (!st.ok()) {
+      std::cerr << st.message() << "\n";
+      return 2;
+    }
+    std::cout << "entries=" << report.entry_count
+              << " last_sequence=" << report.last_sequence
+              << " consistent=" << (report.consistent ? "true" : "false")
+              << "\n";
+    for (const auto& err : report.errors) {
+      std::cerr << err << "\n";
+    }
+    if (GetArg(argc, argv, "--require-signature") == "1" ||
+        GetArg(argc, argv, "--require-signature") == "true") {
+      std::vector<RarChainEntry> entries;
+      if (!ReadRarChainEntries(chain_path, &entries).ok()) return 2;
+      for (const auto& entry : entries) {
+        if (entry.signature.empty()) return 1;
+      }
+    }
+    if (GetArg(argc, argv, "--require-anchor") == "1" ||
+        GetArg(argc, argv, "--require-anchor") == "true") {
+      const std::string anchor_dir =
+          GetArg(argc, argv, "--anchor-dir", DefaultCarlAnchorDir(path));
+      const bool require_anchor_sig =
+          GetArg(argc, argv, "--require-signature") == "1" ||
+          GetArg(argc, argv, "--require-signature") == "true";
+      const ebtree::Status av =
+          VerifyCarlAnchorRequired(chain_path, anchor_dir, require_anchor_sig);
+      if (!av.ok()) {
+        std::cerr << "anchor verify failed: " << av.message() << "\n";
+        return 1;
+      }
+      std::cout << "anchor=ok\n";
+    }
+    return report.consistent ? 0 : 1;
+  }
+
+  if (command == "chain-anchor") {
+    const std::string chain_path =
+        GetArg(argc, argv, "--chain",
+               path + "/ebtree.rar.chain.jsonl");
+    const std::string anchor_dir =
+        GetArg(argc, argv, "--anchor-dir", DefaultCarlAnchorDir(path));
+    if (GetArg(argc, argv, "--publish") == "1" ||
+        GetArg(argc, argv, "--publish") == "true") {
+      CarlSignedTreeHead sth{};
+      const ebtree::Status ps = PublishCarlAnchor(chain_path, anchor_dir, &sth);
+      if (!ps.ok()) {
+        std::cerr << ps.message() << "\n";
+        return 2;
+      }
+      std::cout << "published sequence=" << sth.chain_sequence
+                << " root_hash=" << sth.root_hash << "\n";
+      return 0;
+    }
+    PrintUsage();
+    return 2;
+  }
+
+  if (command == "chain-proof") {
+    const std::string chain_path =
+        GetArg(argc, argv, "--chain",
+               path + "/ebtree.rar.chain.jsonl");
+    const std::string seq_str = GetArg(argc, argv, "--seq");
+    if (seq_str.empty()) {
+      PrintUsage();
+      return 2;
+    }
+    const uint64_t seq = static_cast<uint64_t>(std::stoull(seq_str));
+    std::vector<std::string> proof;
+    std::string root;
+    const ebtree::Status ps =
+        GenerateCarlMerkleProof(CarlMerkleSidecarPath(chain_path), seq, &proof,
+                                &root);
+    if (!ps.ok()) {
+      std::cerr << ps.message() << "\n";
+      return 2;
+    }
+    std::cout << "root=" << root << " proof_steps=" << proof.size() << "\n";
+    for (size_t i = 0; i < proof.size(); ++i) {
+      std::cout << "proof[" << i << "]=" << proof[i] << "\n";
+    }
     return 0;
   }
 

@@ -60,7 +60,7 @@ const char* MatrixSubGtestFilter(const std::string& sub) {
     return "RecoveryMatrixTest.*:EbMatrixSchema.RecoveryCasesNonEmpty";
   }
   if (sub == "no_fallback") {
-    return "NoFallbackMatrixTest.*:EbMatrixSchema.NoFallbackCasesNonEmpty";
+    return "EbMatrix/NoFallbackMatrixTest.*:EbMatrixSchema.NoFallbackCasesNonEmpty";
   }
   if (sub == "pipeline") {
     return "PipelineMatrixTest.*:EbMatrixSchema.PipelineCasesNonEmpty";
@@ -183,7 +183,10 @@ int RunDll(const std::string& path, const Options& opt) {
   }
   const int rc = run();
   const int fails = failed_count ? failed_count() : rc;
-  FreeLibrary(mod);
+  std::cout << std::flush;
+  // Do not FreeLibrary: ebtree_core background workers can deadlock DllMain
+  // detach on MSVC. Process exit reclaims the module; tests already finished.
+  (void)mod;
   return fails != 0 ? 1 : 0;
 }
 #endif

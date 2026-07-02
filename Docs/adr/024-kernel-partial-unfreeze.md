@@ -40,7 +40,7 @@ Phase 3d SQL work (CTE/SET OP/WINDOW exec, session txn journal, subquery hardeni
 | `BackgroundSummaryValidator` | `summary_validator.h` | Post-open async summary drift check + `RepairSummary()` |
 | `BTreeIndex::SummaryDrifted()` | `btree.h` | Read-only summary probe |
 
-Rationale: `text.txt` requires post-open async internal-node summary validation. Validator reuses existing `SummaryHealer` repair path; does not alter WAL/memtable/flush ordering.
+Rationale: `Docs/archive/planning/text.txt` requires post-open async internal-node summary validation. Validator reuses existing `SummaryHealer` repair path; does not alter WAL/memtable/flush ordering.
 
 Regression: `EbSummaryAsyncHeal.*`, `EbPipelineRto.FastOpenBadBlockFallback`.
 

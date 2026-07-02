@@ -226,6 +226,27 @@ Status ExprParse::ParsePrimary(TokenCursor* cur, std::unique_ptr<ExprNode>* out)
     return Status::Ok();
   }
   if (cur->Peek() == "(") {
+    if (Upper(ident) == "CAST") {
+      cur->Consume(nullptr);
+      std::unique_ptr<ExprNode> val;
+      const Status pv = ParseAdd(cur, &val);
+      if (!pv.ok()) return pv;
+      if (cur->PeekUpper() != "AS") {
+        return Status::InvalidArgument("CAST missing AS");
+      }
+      cur->Consume(nullptr);
+      std::string type_tok;
+      cur->Consume(&type_tok);
+      if (cur->Peek() == ")") cur->Consume(nullptr);
+      auto fn = std::make_unique<ExprNode>();
+      fn->kind = ExprKind::kFunction;
+      fn->func_name = "CAST";
+      fn->children.push_back(std::move(val));
+      auto type_lit = MakeLiteral(Upper(type_tok));
+      fn->children.push_back(std::move(type_lit));
+      *out = std::move(fn);
+      return Status::Ok();
+    }
     cur->Consume(nullptr);
     auto fn = std::make_unique<ExprNode>();
     fn->kind = ExprKind::kFunction;
@@ -394,6 +415,24 @@ Status ExprParse::ParseComparison(TokenCursor* cur, std::unique_ptr<ExprNode>* o
   if (cur->PeekUpper() == "IN") {
     cur->Consume(nullptr);
     return ParseInOrExists(cur, std::move(left), false, out);
+  }
+
+  if (cur->PeekUpper() == "LIKE") {
+    cur->Consume(nullptr);
+    std::unique_ptr<ExprNode> pat;
+    const Status pp = ParsePrimary(cur, &pat);
+    if (!pp.ok()) return pp;
+    *out = MakeBinary(BinaryOp::kLike, std::move(left), std::move(pat));
+    return Status::Ok();
+  }
+
+  if (cur->PeekUpper() == "GLOB") {
+    cur->Consume(nullptr);
+    std::unique_ptr<ExprNode> pat;
+    const Status pp = ParsePrimary(cur, &pat);
+    if (!pp.ok()) return pp;
+    *out = MakeBinary(BinaryOp::kGlob, std::move(left), std::move(pat));
+    return Status::Ok();
   }
 
   if (cur->PeekUpper() == "BETWEEN") {

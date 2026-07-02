@@ -183,6 +183,24 @@ TEST(RarOracleEquivalence, FourShardProductionSmoke) {
   EXPECT_TRUE(report.contract.missing.empty());
 }
 
+TEST(RarOracleEquivalence, StandardDefaultsPowerfailNoUnexpected) {
+  const std::string dir = test::TempDir("rar_standard_pf");
+  EngineOptions opts = EngineOptions::StandardDefaults(dir);
+  test::RunRandomPowerfailOnce(opts, 9101, 120, 60, false, true, true);
+
+  BuildRarOptions rar_opts{};
+  rar_opts.engine_path = opts.path;
+  rar_opts.durability_tier = DurabilityClass::kBalanced;
+  rar_opts.engine_options = opts;
+  rar_opts.policy.require_unexpected_path_zero = true;
+  rar_opts.policy.require_tier_consistent = true;
+
+  RarReport report{};
+  ASSERT_TRUE(BuildRar(rar_opts, &report).ok());
+  EXPECT_EQ(report.recovery.unexpected_path_total, 0u);
+  EXPECT_EQ(report.verdict, RarVerdict::kPass);
+}
+
 }  // namespace
 }  // namespace audit
 }  // namespace ebtree

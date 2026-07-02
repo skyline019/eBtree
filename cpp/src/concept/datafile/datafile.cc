@@ -8,7 +8,9 @@
 #include <vector>
 
 #include "ebtree/common/crc32.h"
+#include "ebtree/concept/codec/codec_registry.h"
 #include "ebtree/concept/codec/value_codec.h"
+#include "ebtree/common/config.h"
 #include "ebtree/concept/mmap/mmap_window.h"
 
 namespace ebtree {
@@ -16,13 +18,14 @@ namespace ebtree {
 namespace {
 
 uint8_t RecordCodec(const DataRecordHeader& hdr) {
-  if (hdr.reserved[0] <= 1 || hdr.reserved[0] == 3) return hdr.reserved[0];
+  const uint8_t wire = hdr.reserved[0];
+  if (wire <= 1 || wire == 2 || wire == 3 || wire == 4) return wire;
   return 0;
 }
 
 uint8_t RecordGeneration(const DataRecordHeader& hdr) {
   const uint8_t codec = RecordCodec(hdr);
-  if (codec <= 1 || codec == 3) {
+  if (codec <= 1 || codec == 2 || codec == 3 || codec == 4) {
     if (hdr.reserved[1] != 0 || hdr.reserved[2] != 0) return hdr.reserved[1];
   }
   if (codec <= 1) return 0;
@@ -30,26 +33,45 @@ uint8_t RecordGeneration(const DataRecordHeader& hdr) {
 }
 
 Status DecodeRecordValue(const DataRecordHeader& hdr, std::string payload,
-                         std::string* out) {
+                         std::string* out, EngineStats* stats) {
   if (!out) return Status::InvalidArgument("out is null");
   const uint8_t wire = RecordCodec(hdr);
+  auto fail = [stats]() -> Status {
+    if (stats) ++stats->decompress_fail_total;
+    return Status::CorruptPage("datafile decompress failed");
+  };
   if (!payload.empty() && wire == 1) {
-    if (payload.size() < 4) return Status::CorruptPage("compressed value trunc");
+    if (payload.size() < 4) return fail();
     const auto* u = reinterpret_cast<const unsigned char*>(payload.data());
     const uint32_t usize = static_cast<uint32_t>(u[0]) |
                            (static_cast<uint32_t>(u[1]) << 8) |
                            (static_cast<uint32_t>(u[2]) << 16) |
                            (static_cast<uint32_t>(u[3]) << 24);
-    return DecompressValue(ValueCodec::kLegacyRle, payload.substr(4), usize, out);
+    const Status st =
+        DecompressValue(ValueCodec::kLegacyRle, payload.substr(4), usize, out);
+    return st.ok() ? st : fail();
   }
   if (!payload.empty() && wire == 3) {
-    if (payload.size() < 4) return Status::CorruptPage("compressed value trunc");
+    if (payload.size() < 4) return fail();
     const auto* u = reinterpret_cast<const unsigned char*>(payload.data());
     const uint32_t usize = static_cast<uint32_t>(u[0]) |
                            (static_cast<uint32_t>(u[1]) << 8) |
                            (static_cast<uint32_t>(u[2]) << 16) |
                            (static_cast<uint32_t>(u[3]) << 24);
-    return DecompressValue(ValueCodec::kLzma7z, payload, usize, out);
+    const Status st = DecompressValue(ValueCodec::kLzma7z, payload, usize, out);
+    return st.ok() ? st : fail();
+  }
+  if (!payload.empty() && (wire == 2 || wire == 4)) {
+    if (payload.size() < 4) return fail();
+    const auto* u = reinterpret_cast<const unsigned char*>(payload.data());
+    const uint32_t usize = static_cast<uint32_t>(u[0]) |
+                           (static_cast<uint32_t>(u[1]) << 8) |
+                           (static_cast<uint32_t>(u[2]) << 16) |
+                           (static_cast<uint32_t>(u[3]) << 24);
+    const ValueCodec codec =
+        wire == 2 ? ValueCodec::kLz4Fast : ValueCodec::kZstdFast;
+    const Status st = DecompressValue(codec, payload, usize, out);
+    return st.ok() ? st : fail();
   }
   *out = std::move(payload);
   return Status::Ok();
@@ -58,6 +80,10 @@ Status DecodeRecordValue(const DataRecordHeader& hdr, std::string payload,
 }  // namespace
 
 void DataFile::SetCompressValues(bool enable) { compress_values_ = enable; }
+void DataFile::SetCompressPolicy(CompressPolicy policy) {
+  compress_policy_ = policy;
+}
+void DataFile::SetCompressStats(EngineStats* stats) { compress_stats_ = stats; }
 DataFile::DataFile(std::string path) : path_(std::move(path)) {
   std::filesystem::create_directories(
       std::filesystem::path(path_).parent_path());
@@ -87,10 +113,21 @@ Status DataFile::Append(uint64_t lsn, const std::string& key,
   uint8_t codec = 0;
   if (!deleted && compress_values_ && !value.empty()) {
     ValueCodecResult cr{};
-    const Status cs = CompressValue(value, true, &cr);
-    if (cs.ok() && cr.codec == ValueCodec::kLzma7z) {
-      codec = 3;
+    const Status cs = CodecRegistry::CompressValue(value, compress_policy_,
+                                                   compress_values_, &cr);
+    if (cs.ok() && cr.codec != ValueCodec::kRaw) {
+      if (cr.codec == ValueCodec::kLz4Fast) {
+        codec = 2;
+      } else if (cr.codec == ValueCodec::kLzma7z) {
+        codec = 3;
+      } else if (cr.codec == ValueCodec::kZstdFast) {
+        codec = 4;
+      }
       stored_value = cr.payload;
+      if (compress_stats_) {
+        compress_stats_->compress_bytes_in += value.size();
+        compress_stats_->compress_bytes_out += stored_value.size();
+      }
     }
   }
 
@@ -127,7 +164,8 @@ Status DataFile::EnsureReadOpen() const {
 Status DataFile::ParseRecordAt(const uint8_t* base, size_t len,
                                uint64_t record_offset, std::string* key,
                                std::string* value, uint64_t* lsn, bool* deleted,
-                               uint8_t reclaim_generation) {
+                               uint8_t reclaim_generation,
+                               EngineStats* decompress_stats) {
   if (record_offset + sizeof(DataRecordHeader) > len) {
     return Status::IoError("datafile record out of view");
   }
@@ -148,7 +186,8 @@ Status DataFile::ParseRecordAt(const uint8_t* base, size_t len,
   pos += hdr.key_len;
   if (hdr.value_len) std::memcpy(payload.data(), base + pos, hdr.value_len);
   std::string v;
-  const Status ds = DecodeRecordValue(hdr, std::move(payload), &v);
+  const Status ds =
+      DecodeRecordValue(hdr, std::move(payload), &v, decompress_stats);
   if (!ds.ok()) return ds;
   if (key) *key = std::move(k);
   if (value) *value = std::move(v);
@@ -180,7 +219,7 @@ Status DataFile::ReadRecordFromView(const uint8_t* base, size_t len,
                                     uint8_t reclaim_generation) const {
   if (!base) return Status::InvalidArgument("null view");
   return ParseRecordAt(base, len, record_offset, key, value, lsn, deleted,
-                       reclaim_generation);
+                       reclaim_generation, compress_stats_);
 }
 
 Status DataFile::ReadRecordAt(uint64_t offset, std::string* key,
@@ -205,7 +244,7 @@ Status DataFile::ReadRecordAt(uint64_t offset, std::string* key,
   if (hdr.key_len) read_stream_.read(k.data(), hdr.key_len);
   if (hdr.value_len) read_stream_.read(payload.data(), hdr.value_len);
   std::string v;
-  const Status ds = DecodeRecordValue(hdr, std::move(payload), &v);
+  const Status ds = DecodeRecordValue(hdr, std::move(payload), &v, compress_stats_);
   if (!ds.ok()) return ds;
   if (key) *key = std::move(k);
   if (value) *value = std::move(v);
@@ -214,22 +253,42 @@ Status DataFile::ReadRecordAt(uint64_t offset, std::string* key,
   return Status::Ok();
 }
 
+Status DataFile::ReadHeaderAtLsn(uint64_t lsn, DataRecordHeader* hdr) const {
+  if (!hdr) return Status::InvalidArgument("hdr is null");
+  uint64_t offset = 0;
+  if (!lsn_index_.Lookup(lsn, &offset)) {
+    return Status::NotFound("lsn not indexed");
+  }
+  if (append_open_) append_stream_.flush();
+  const Status open_st = EnsureReadOpen();
+  if (!open_st.ok()) return open_st;
+  read_stream_.clear();
+  read_stream_.seekg(static_cast<std::streamoff>(offset));
+  read_stream_.read(reinterpret_cast<char*>(hdr), sizeof(*hdr));
+  if (!read_stream_) return Status::IoError("datafile header read failed");
+  const uint32_t expected = Crc32(&hdr, sizeof(hdr) - sizeof(hdr->record_crc));
+  if (hdr->record_crc != expected) return Status::CorruptPage("datafile crc mismatch");
+  return Status::Ok();
+}
+
 Status DataFile::ReadRecordsAtOffsets(
     MmapWindowManager* mmap_mgr,
     const std::vector<std::pair<uint64_t, size_t>>& offset_hit_indices,
     std::vector<std::string>* values_out,
     uint8_t reclaim_generation) const {
-  (void)mmap_mgr;
   if (!values_out) return Status::InvalidArgument("invalid batch read");
-  const Status open_st = EnsureReadOpen();
-  if (!open_st.ok()) return open_st;
+  if (offset_hit_indices.empty()) return Status::Ok();
 
   auto sorted = offset_hit_indices;
   std::sort(sorted.begin(), sorted.end(),
             [](const auto& a, const auto& b) { return a.first < b.first; });
-  for (const auto& entry : sorted) {
+
+  const Status open_st = EnsureReadOpen();
+  if (!open_st.ok()) return open_st;
+
+  auto read_one_stream = [&](uint64_t offset, size_t out_idx) -> Status {
     read_stream_.clear();
-    read_stream_.seekg(static_cast<std::streamoff>(entry.first));
+    read_stream_.seekg(static_cast<std::streamoff>(offset));
     DataRecordHeader hdr{};
     read_stream_.read(reinterpret_cast<char*>(&hdr), sizeof(hdr));
     if (!read_stream_) return Status::IoError("datafile batch record read failed");
@@ -237,24 +296,147 @@ Status DataFile::ReadRecordsAtOffsets(
     if (hdr.record_crc != expected) return Status::CorruptPage("datafile crc mismatch");
     if (reclaim_generation != 0xFF &&
         RecordGeneration(hdr) == reclaim_generation) {
-      continue;
+      return Status::Ok();
     }
     std::string key(hdr.key_len, '\0');
     std::string payload(hdr.value_len, '\0');
-    if (hdr.key_len) {
-      read_stream_.read(key.data(), hdr.key_len);
-    }
-    if (hdr.value_len) {
-      read_stream_.read(payload.data(), hdr.value_len);
-    }
+    if (hdr.key_len) read_stream_.read(key.data(), hdr.key_len);
+    if (hdr.value_len) read_stream_.read(payload.data(), hdr.value_len);
     if (!read_stream_) return Status::IoError("datafile batch payload read failed");
-    if (hdr.deleted) continue;
+    if (hdr.deleted) return Status::Ok();
     std::string value;
-    const Status ds = DecodeRecordValue(hdr, std::move(payload), &value);
+    const Status ds =
+        DecodeRecordValue(hdr, std::move(payload), &value, compress_stats_);
     if (!ds.ok()) return ds;
-    if (entry.second < values_out->size()) {
-      (*values_out)[entry.second] = std::move(value);
+    if (out_idx < values_out->size()) {
+      (*values_out)[out_idx] = std::move(value);
     }
+    return Status::Ok();
+  };
+
+  auto try_parse_in_view = [&](const MmapView& view, uint64_t window_start,
+                               uint64_t offset, size_t out_idx) -> bool {
+    if (offset < window_start) return false;
+    const size_t rel = static_cast<size_t>(offset - window_start);
+    if (rel + sizeof(DataRecordHeader) > view.size) return false;
+    DataRecordHeader hdr{};
+    std::memcpy(&hdr, view.base + rel, sizeof(hdr));
+    const size_t rec_size =
+        sizeof(DataRecordHeader) + hdr.key_len + hdr.value_len;
+    if (rel + rec_size > view.size) return false;
+    const uint32_t expected = Crc32(&hdr, sizeof(hdr) - sizeof(hdr.record_crc));
+    if (hdr.record_crc != expected) return false;
+    if (reclaim_generation != 0xFF &&
+        RecordGeneration(hdr) == reclaim_generation) {
+      return true;
+    }
+    if (hdr.deleted) return true;
+    std::string value;
+    const Status ds = ParseRecordAt(view.base, view.size, offset - window_start,
+                                    nullptr, &value, nullptr, nullptr,
+                                    reclaim_generation, compress_stats_);
+    if (!ds.ok()) return false;
+    if (out_idx < values_out->size()) {
+      (*values_out)[out_idx] = std::move(value);
+    }
+    return true;
+  };
+
+  bool use_mmap = mmap_mgr != nullptr;
+  if (use_mmap && mmap_mgr->path() != path_) {
+    const Status ms = mmap_mgr->OpenReadOnly(path_);
+    if (!ms.ok()) use_mmap = false;
+  }
+
+  if (use_mmap) {
+    size_t i = 0;
+    while (i < sorted.size()) {
+      const uint64_t win_start = sorted[i].first;
+      MmapView view{};
+      const Status pin_st = mmap_mgr->PinWindow(win_start, &view);
+      if (!pin_st.ok() || view.size == 0) {
+        if (pin_st.ok()) mmap_mgr->Unpin();
+        const Status rs = read_one_stream(sorted[i].first, sorted[i].second);
+        if (!rs.ok()) return rs;
+        ++i;
+        continue;
+      }
+
+      size_t j = i;
+      for (; j < sorted.size(); ++j) {
+        if (!try_parse_in_view(view, win_start, sorted[j].first,
+                               sorted[j].second)) {
+          break;
+        }
+      }
+      mmap_mgr->Unpin();
+
+      if (j == i) {
+        const Status rs = read_one_stream(sorted[i].first, sorted[i].second);
+        if (!rs.ok()) return rs;
+        ++i;
+      } else {
+        i = j;
+      }
+    }
+    return Status::Ok();
+  }
+
+  constexpr size_t kStreamBlobCap = 256 * 1024;
+  size_t i = 0;
+  while (i < sorted.size()) {
+    const uint64_t blob_start = sorted[i].first;
+    uint64_t blob_end = blob_start + sizeof(DataRecordHeader);
+    size_t j = i;
+    while (j < sorted.size()) {
+      read_stream_.clear();
+      read_stream_.seekg(static_cast<std::streamoff>(sorted[j].first));
+      DataRecordHeader hdr{};
+      read_stream_.read(reinterpret_cast<char*>(&hdr), sizeof(hdr));
+      if (!read_stream_) break;
+      const size_t rec_end =
+          sorted[j].first + sizeof(DataRecordHeader) + hdr.key_len + hdr.value_len;
+      if (j > i && (rec_end - blob_start > kStreamBlobCap ||
+                    sorted[j].first > blob_end + 4096)) {
+        read_stream_.clear();
+        break;
+      }
+      blob_end = std::max(blob_end, rec_end);
+      ++j;
+    }
+
+    if (j - i <= 1 || blob_end - blob_start > kStreamBlobCap) {
+      const Status rs = read_one_stream(sorted[i].first, sorted[i].second);
+      if (!rs.ok()) return rs;
+      ++i;
+      continue;
+    }
+
+    std::vector<char> blob(static_cast<size_t>(blob_end - blob_start));
+    read_stream_.clear();
+    read_stream_.seekg(static_cast<std::streamoff>(blob_start));
+    read_stream_.read(blob.data(), static_cast<std::streamsize>(blob.size()));
+    if (!read_stream_) {
+      const Status rs = read_one_stream(sorted[i].first, sorted[i].second);
+      if (!rs.ok()) return rs;
+      ++i;
+      continue;
+    }
+
+    for (size_t k = i; k < j; ++k) {
+      const uint64_t rel = sorted[k].first - blob_start;
+      std::string value;
+      const Status ps = ParseRecordAt(
+          reinterpret_cast<const uint8_t*>(blob.data()), blob.size(), rel,
+          nullptr, &value, nullptr, nullptr, reclaim_generation, compress_stats_);
+      if (ps.ok() && !value.empty() && sorted[k].second < values_out->size()) {
+        (*values_out)[sorted[k].second] = std::move(value);
+      } else if (!ps.ok()) {
+        const Status rs = read_one_stream(sorted[k].first, sorted[k].second);
+        if (!rs.ok()) return rs;
+      }
+    }
+    i = j;
   }
   return Status::Ok();
 }
@@ -335,7 +517,7 @@ Status ParseRecordsIncremental(
       continue;
     }
     std::string decoded;
-    const Status ds = DecodeRecordValue(hdr, std::move(value), &decoded);
+    const Status ds = DecodeRecordValue(hdr, std::move(value), &decoded, nullptr);
     if (!ds.ok()) return ds;
     if (hdr.deleted) {
       out->erase(key);

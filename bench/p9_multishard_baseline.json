@@ -1,0 +1,16 @@
+{
+  "version": "p14-2026-q3",
+  "targets": {
+    "kBalanced_write_100k_ops_per_sec": 100000,
+    "standard_write_100k_ops_per_sec": 92000,
+    "standard_lazy_scan_10k_p50_ms": 17,
+    "kSync_write_10k_ms": 500,
+    "committed_scan_10k_p50_ms": 15,
+    "lazy_scan_10k_p50_ms": 45,
+    "fast_open_10k_ms": 80,
+    "multishard_4_open_ms": 200,
+    "multishard_4_write_ops_per_sec": 80000,
+    "multishard_16_scan_merge_p50_ms": 50
+  },
+  "notes": "ProductionDefaults=raw bench; StandardDefaults=product compressed-normal. Local NVMe Release only."
+}

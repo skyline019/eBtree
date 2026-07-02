@@ -11,6 +11,7 @@
 #include "engine_test_util.h"
 #include "matrix_case.h"
 #include "ebtree/concept/tlog/tlog.h"
+#include "ebtree/engine/snapshot.h"
 
 namespace ebtree {
 namespace test {
@@ -23,7 +24,14 @@ inline DurabilityClass ParseDurability(const std::string& d) {
 }
 
 inline void ApplyMatrixOp(Engine* engine, const std::string& op) {
-  if (op.rfind("put ", 0) == 0) {
+  if (op.rfind("put_large ", 0) == 0) {
+    const auto eq = op.find('=');
+    ASSERT_NE(eq, std::string::npos);
+    const std::string key = op.substr(10, eq - 10);
+    std::string value(320, 'z');
+    value[0] = op[eq + 1];
+    ASSERT_TRUE(engine->Put(key, value).ok());
+  } else if (op.rfind("put ", 0) == 0) {
     const auto eq = op.find('=');
     ASSERT_NE(eq, std::string::npos);
     const std::string key = op.substr(4, eq - 4);
@@ -79,6 +87,16 @@ inline uint32_t ParseAsofTs(const EbMatrixCase& c, uint32_t default_ts = 7000u) 
   return default_ts;
 }
 
+inline void ExpectMatrixGetValue(const EbMatrixCase& c, const std::string& value) {
+  if (c.get_value == "LARGE") {
+    EXPECT_GE(value.size(), 64u) << c.id;
+    return;
+  }
+  if (!c.get_value.empty()) {
+    EXPECT_EQ(value, c.get_value) << c.id;
+  }
+}
+
 inline void RunFlashbackGetAsOf(Engine* engine, const EbMatrixCase& c,
                                 uint32_t asof_ts) {
   ASSERT_NE(engine, nullptr);
@@ -90,7 +108,7 @@ inline void RunFlashbackGetAsOf(Engine* engine, const EbMatrixCase& c,
     return;
   }
   ASSERT_TRUE(st.ok()) << c.id;
-  EXPECT_EQ(value, c.get_value);
+  ExpectMatrixGetValue(c, value);
 }
 
 inline void RunMatrixCase(const EbMatrixCase& c) {
@@ -98,6 +116,14 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
   const auto durability = ParseDurability(c.durability);
 
   const auto make_engine = [&]() {
+    if (c.product_default) {
+      EngineOptions opts = EngineOptions::StandardDefaults(dir);
+      opts.durability = durability;
+      opts.background_summary_validate = false;
+      opts.background_flush = false;
+      opts.compress_pages = c.compress_pages;
+      return OpenEngineWithOptions(dir, opts);
+    }
     return OpenEngine(dir, durability, c.compress_pages);
   };
 
@@ -213,7 +239,7 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
         std::string value;
         const Status st = full->Get(c.get_key, &value);
         ASSERT_TRUE(st.ok()) << c.id;
-        EXPECT_EQ(value, c.get_value);
+        ExpectMatrixGetValue(c, value);
       }
       ebtree::ResetTimestampSourceForTest();
       return;
@@ -248,7 +274,7 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
         std::string value;
         const Status st = lazy->Get(c.get_key, &value);
         ASSERT_TRUE(st.ok()) << c.id;
-        EXPECT_EQ(value, c.get_value);
+        ExpectMatrixGetValue(c, value);
       }
       AssertMatrixStat(lazy.get(), c.assert_stat);
       return;
@@ -262,7 +288,7 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
       std::string value;
       const Status st = engine->Get(c.get_key, &value);
       ASSERT_TRUE(st.ok()) << c.id;
-      EXPECT_EQ(value, c.get_value);
+      ExpectMatrixGetValue(c, value);
     }
     if (!c.assert_stat.empty() && c.run == "checkpoint_reopen") {
       AssertMatrixStat(engine.get(), c.assert_stat);
@@ -273,9 +299,43 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
   if (c.run == "get missing") {
     auto engine = make_engine();
     ASSERT_NE(engine, nullptr);
+    for (const auto& op : c.setup_ops) ApplyMatrixOp(engine.get(), op);
     std::string value;
     const Status st = engine->Get(c.get_key, &value);
     EXPECT_TRUE(IsNotFound(st));
+    AssertMatrixStat(engine.get(), c.assert_stat);
+    return;
+  }
+
+  if (c.run == "get_only") {
+    auto engine = make_engine();
+    ASSERT_NE(engine, nullptr);
+    for (const auto& op : c.setup_ops) ApplyMatrixOp(engine.get(), op);
+    std::string value;
+    const Status st = engine->Get(c.get_key, &value);
+    ASSERT_TRUE(st.ok()) << c.id;
+    ExpectMatrixGetValue(c, value);
+    AssertMatrixStat(engine.get(), c.assert_stat);
+    return;
+  }
+
+  if (c.run == "lazy_range_scan") {
+    EngineOptions opts = EngineOptions::StandardDefaults(dir);
+    opts.background_summary_validate = false;
+    opts.background_flush = false;
+    auto engine = OpenEngineWithOptions(dir, opts);
+    ASSERT_NE(engine, nullptr);
+    for (const auto& op : c.setup_ops) ApplyMatrixOp(engine.get(), op);
+    ASSERT_TRUE(engine->Checkpoint().ok());
+    TypedPlan plan;
+    plan.op = PredicateOp::kRange;
+    plan.key = "lrk0";
+    plan.range_end = "lrk9";
+    plan.snapshot_lsn = engine->stable_lsn();
+    std::vector<std::pair<std::string, std::string>> rows;
+    ASSERT_TRUE(engine->Scan(plan, &rows).ok()) << c.id;
+    EXPECT_GE(rows.size(), 3u) << c.id;
+    AssertMatrixStat(engine.get(), c.assert_stat);
     return;
   }
 
@@ -315,7 +375,7 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
     if (!c.get_key.empty()) {
       std::string value;
       ASSERT_TRUE(engine->Get(c.get_key, &value).ok());
-      EXPECT_EQ(value, c.get_value);
+      ExpectMatrixGetValue(c, value);
     }
     AssertMatrixStat(engine.get(), c.assert_stat);
     return;
@@ -380,6 +440,44 @@ inline void RunMatrixCase(const EbMatrixCase& c) {
     ASSERT_NE(engine, nullptr);
     std::string value;
     EXPECT_TRUE(IsNotFound(engine->Get(c.get_key, &value)));
+    return;
+  }
+
+  if (c.run == "snapshot_vcs_get") {
+    auto engine = make_engine();
+    ASSERT_NE(engine, nullptr);
+    for (const auto& op : c.setup_ops) ApplyMatrixOp(engine.get(), op);
+    ASSERT_TRUE(engine->Flush().ok());
+    ASSERT_TRUE(engine->Checkpoint().ok());
+    const SnapshotToken snap = engine->CaptureSnapshot();
+    ASSERT_TRUE(engine->Put(c.get_key, "new").ok());
+    ASSERT_TRUE(engine->Flush().ok());
+    std::string value;
+    ASSERT_TRUE(engine->GetAtSnapshot(c.get_key, snap, 0, &value).ok()) << c.id;
+    ExpectMatrixGetValue(c, value);
+    AssertMatrixStat(engine.get(), c.assert_stat);
+    return;
+  }
+
+  if (c.run == "snapshot_vcs_scan") {
+    auto engine = make_engine();
+    ASSERT_NE(engine, nullptr);
+    for (const auto& op : c.setup_ops) ApplyMatrixOp(engine.get(), op);
+    ASSERT_TRUE(engine->Flush().ok());
+    ASSERT_TRUE(engine->Checkpoint().ok());
+    const SnapshotToken snap = engine->CaptureSnapshot();
+    ASSERT_TRUE(engine->Put("sk0", "new0").ok());
+    ASSERT_TRUE(engine->Put("sk1", "new1").ok());
+    ASSERT_TRUE(engine->Flush().ok());
+    TypedPlan plan;
+    plan.op = PredicateOp::kRange;
+    plan.key = c.get_key.empty() ? "sk0" : c.get_key;
+    plan.range_end = "sk9";
+    std::vector<std::pair<std::string, std::string>> rows;
+    ASSERT_TRUE(engine->ScanAtSnapshot(plan, snap, 0, &rows).ok()) << c.id;
+    ASSERT_GE(rows.size(), 2u) << c.id;
+    ExpectMatrixGetValue(c, rows[0].second);
+    AssertMatrixStat(engine.get(), c.assert_stat);
     return;
   }
 

@@ -127,7 +127,7 @@ TEST(EbFailureRandomPowerfail, MidCheckpointRandomDestroy) {
   const std::string dir = ebtree::test::TempDir("rand_pf_mid_cp");
   ebtree::EngineOptions opts = ebtree::EngineOptions::ProductionDefaults(dir);
   std::mt19937 rng(6006);
-  std::uniform_int_distribution<int> phase_dist(0, 3);
+  std::uniform_int_distribution<int> phase_dist(0, 5);
   std::uniform_int_distribution<int> key_dist(0, 99);
 
   for (int t = 0; t < MidCheckpointTrials(); ++t) {
@@ -148,9 +148,11 @@ TEST(EbFailureRandomPowerfail, MidCheckpointRandomDestroy) {
       const int target = phase_dist(rng);
       const ebtree::CheckpointPhase phases[] = {
           ebtree::CheckpointPhase::AfterFlush,
+          ebtree::CheckpointPhase::AfterVcsFold,
           ebtree::CheckpointPhase::AfterTLog,
           ebtree::CheckpointPhase::BeforeSuperBlock,
           ebtree::CheckpointPhase::AfterSuperBlock,
+          ebtree::CheckpointPhase::BeforeWalTruncate,
       };
       const ebtree::CheckpointPhase phase = phases[target];
       engine->SetCheckpointHookForTest([phase](ebtree::CheckpointPhase p) {
@@ -173,4 +175,66 @@ TEST(EbFailureRandomPowerfail, FourShardProductionRandomDestroy) {
   opts.shard_count = 4;
   ebtree::test::RunRandomPowerfailFuzz(opts, 7007, FourShardTrials(),
                                          FourShardOpCount());
+}
+
+TEST(EbFailureRandomPowerfail, StandardRandomDestroyFuzz) {
+  const std::string dir = ebtree::test::TempDir("rand_pf_standard");
+  ebtree::EngineOptions opts = ebtree::EngineOptions::StandardDefaults(dir);
+  ebtree::test::RunRandomPowerfailFuzz(opts, 8001, FuzzTrials(), FuzzOpCount(),
+                                         true, true);
+}
+
+TEST(EbFailureRandomPowerfail, StandardMidCheckpointRandomDestroy) {
+  const std::string dir = ebtree::test::TempDir("rand_pf_standard_mid_cp");
+  ebtree::EngineOptions opts = ebtree::EngineOptions::StandardDefaults(dir);
+  std::mt19937 rng(8002);
+  std::uniform_int_distribution<int> phase_dist(0, 5);
+  std::uniform_int_distribution<int> key_dist(0, 99);
+
+  for (int t = 0; t < MidCheckpointTrials(); ++t) {
+    const auto subdir = dir + "/t" + std::to_string(t);
+    ebtree::EngineOptions trial = opts;
+    trial.path = subdir;
+
+    ebtree::test::CommittedOracle oracle(trial.durability);
+    const std::string key = "smc" + std::to_string(key_dist(rng));
+    std::string value(320, 'z');
+
+    {
+      std::unique_ptr<ebtree::Engine> engine;
+      ASSERT_TRUE(ebtree::Engine::Open(trial, &engine).ok());
+      ASSERT_TRUE(engine->Put(key, value).ok());
+      oracle.OnPutOk(engine.get(), key, value);
+
+      const int target = phase_dist(rng);
+      const ebtree::CheckpointPhase phases[] = {
+          ebtree::CheckpointPhase::AfterFlush,
+          ebtree::CheckpointPhase::AfterVcsFold,
+          ebtree::CheckpointPhase::AfterTLog,
+          ebtree::CheckpointPhase::BeforeSuperBlock,
+          ebtree::CheckpointPhase::AfterSuperBlock,
+          ebtree::CheckpointPhase::BeforeWalTruncate,
+      };
+      const ebtree::CheckpointPhase phase = phases[target];
+      engine->SetCheckpointHookForTest([phase](ebtree::CheckpointPhase p) {
+        return p == phase;
+      });
+      const ebtree::Status cp = engine->Checkpoint();
+      EXPECT_FALSE(cp.ok());
+    }
+
+    std::unique_ptr<ebtree::Engine> reopened;
+    ASSERT_TRUE(ebtree::Engine::Open(trial, &reopened).ok());
+    const auto verify = oracle.VerifyEngine(reopened.get());
+    ASSERT_TRUE(verify) << verify.message();
+    EXPECT_EQ(reopened->stats().unexpected_path_total, 0u);
+  }
+}
+
+TEST(EbFailureRandomPowerfail, StandardFourShardRandomDestroy) {
+  const std::string dir = ebtree::test::TempDir("rand_pf_standard_4shard");
+  ebtree::EngineOptions opts = ebtree::EngineOptions::StandardDefaults(dir);
+  opts.shard_count = 4;
+  ebtree::test::RunRandomPowerfailFuzz(opts, 8003, FourShardTrials(),
+                                         FourShardOpCount(), true, true);
 }

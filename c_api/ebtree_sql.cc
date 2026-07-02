@@ -10,6 +10,8 @@
 #include "ebtree_sql.h"
 #include "sql/session/database.h"
 
+using ebtree::audit::RarStatusSnapshot;
+
 using ebtree::DurabilityClass;
 using ebtree::sql::AttestationMode;
 using ebtree::sql::Database;
@@ -41,12 +43,16 @@ DurabilityClass ParseDurability(const char* durability) {
 
 AttestationMode ParseAttestation(int mode) {
   switch (mode) {
+    case EBTREE_SQL_ATTEST_OFF:
+      return AttestationMode::kOff;
     case EBTREE_SQL_ATTEST_REQUIRE_PASS:
       return AttestationMode::kRequirePass;
     case EBTREE_SQL_ATTEST_ALLOW_WARN:
       return AttestationMode::kAllowWarn;
+    case EBTREE_SQL_ATTEST_DEFAULT:
+      return AttestationMode::kMonitor;
     default:
-      return AttestationMode::kOff;
+      return AttestationMode::kMonitor;
   }
 }
 
@@ -130,4 +136,37 @@ extern "C" const char* ebtree_sql_last_error(ebtree_sql_db* db) {
   if (!db) return "";
   auto* handle = reinterpret_cast<EbtreeSqlDb*>(db);
   return handle->db->last_error().c_str();
+}
+
+namespace {
+
+struct RarStatusStrings {
+  std::string verdict;
+  std::string reason;
+  std::string anchor_hash;
+};
+
+}  // namespace
+
+extern "C" int ebtree_sql_rar_status(ebtree_sql_db* db,
+                                     ebtree_sql_rar_status_t* out) {
+  if (!db || !out) return EBTREE_SQL_ERROR;
+  auto* handle = reinterpret_cast<EbtreeSqlDb*>(db);
+  const RarStatusSnapshot snap = handle->db->rar_monitor().StatusSnapshot();
+  static thread_local RarStatusStrings cached;
+  cached.verdict = snap.last_chain_verdict;
+  cached.reason = snap.last_chain_reason;
+  cached.anchor_hash = snap.last_anchor_hash;
+  out->allows_write = snap.allows_write ? 1 : 0;
+  out->unexpected_path_total = snap.unexpected_path_total;
+  out->decompress_fail_total = snap.decompress_fail_total;
+  out->rar_chain_drop_total = snap.rar_chain_drop_total;
+  out->last_chain_sequence = snap.last_chain_sequence;
+  out->last_anchor_sequence = snap.last_anchor_sequence;
+  out->last_anchor_hash = cached.anchor_hash.c_str();
+  out->last_chain_verdict = cached.verdict.c_str();
+  out->last_chain_reason = cached.reason.c_str();
+  out->startup_chain_consistent = snap.startup_chain_consistent ? 1 : 0;
+  out->worker_running = snap.worker_running ? 1 : 0;
+  return EBTREE_SQL_OK;
 }

@@ -382,26 +382,37 @@ void PagedBTree::ScanLeafChain(
   }
   if (chain.empty()) return;
 
+  constexpr size_t kReadWindow = 64;
   std::vector<std::vector<uint8_t>> pages;
-  if (page_file_) {
-    const Status ws = page_file_->ReadPages(chain, &pages);
-    if (!ws.ok()) return;
-  } else {
-    pages.reserve(chain.size());
-    for (uint64_t off : chain) {
-      std::vector<uint8_t> page;
-      if (!ReadPageBytes(off, &page).ok()) return;
-      pages.push_back(std::move(page));
+  pages.reserve(chain.size());
+  for (size_t start = 0; start < chain.size(); start += kReadWindow) {
+    const size_t end = std::min(start + kReadWindow, chain.size());
+    std::vector<uint64_t> window(chain.begin() + static_cast<std::ptrdiff_t>(start),
+                                 chain.begin() + static_cast<std::ptrdiff_t>(end));
+    std::vector<std::vector<uint8_t>> window_pages;
+    if (page_file_) {
+      const Status ws = page_file_->ReadPages(window, &window_pages);
+      if (!ws.ok()) return;
+    } else {
+      window_pages.reserve(window.size());
+      for (uint64_t off : window) {
+        std::vector<uint8_t> page;
+        if (!ReadPageBytes(off, &page).ok()) return;
+        window_pages.push_back(std::move(page));
+      }
     }
+    pages.insert(pages.end(),
+                 std::make_move_iterator(window_pages.begin()),
+                 std::make_move_iterator(window_pages.end()));
   }
 
   for (const auto& page : pages) {
     if (page.size() < sizeof(PageHeader)) continue;
-    LeafPageCursor cur{};
-    if (!InitLeafCursor(page.data(), &cur)) continue;
+    LeafPageCursor leaf_cur{};
+    if (!InitLeafCursor(page.data(), &leaf_cur)) continue;
     std::string entry_key;
     uint64_t lsn = 0;
-    while (NextLeafEntry(&cur, &entry_key, &lsn)) {
+    while (NextLeafEntry(&leaf_cur, &entry_key, &lsn)) {
       if (plan.op == PredicateOp::kEq) {
         if (entry_key == plan.key) out->emplace_back(entry_key, lsn);
       } else if (plan.op == PredicateOp::kRange) {

@@ -34,8 +34,8 @@ void TuneWorkerThread() {}
 #endif
 
 constexpr uint32_t kMinSparseQueue = 1;
-constexpr uint32_t kMinThroughputQueue = 16;
-constexpr int kMaxBurstDrains = 32;
+constexpr uint32_t kMinThroughputQueue = 8;
+constexpr int kMaxBurstDrains = 48;
 
 }  // namespace
 
@@ -73,12 +73,14 @@ bool WalBatchPipeline::ShouldFlushLocked(int64_t now_us) const {
   if (queue_.empty()) return false;
   if (queue_.size() >= config_.max_batch_size) return true;
   if (wal_->UnflushedBytes() >= config_.wal_batch_bytes) return true;
+  // Lone Put should not wait max_wait_us; batch only when multiple jobs queue.
+  if (queue_.size() == 1) return true;
   if (batch_start_us_ == 0) return false;
   const bool timed_out =
       now_us >= batch_start_us_ + static_cast<int64_t>(config_.max_wait_us);
   if (!timed_out) return false;
   if (queue_.size() >= kMinThroughputQueue) return true;
-  return queue_.size() >= kMinSparseQueue && queue_.size() < kMinThroughputQueue;
+  return queue_.size() >= kMinSparseQueue;
 }
 
 void WalBatchPipeline::CompleteJobs(const std::vector<std::shared_ptr<Job>>& jobs,
@@ -128,6 +130,7 @@ void WalBatchPipeline::DrainAndFlush(EngineStats* stats,
     batch[i].key = &jobs[i]->key;
     batch[i].value = &jobs[i]->value;
     batch[i].out_lsn = &jobs[i]->assigned_lsn;
+    batch[i].txn_id = jobs[i]->txn_id;
   }
 
   (void)wal_->AppendMany(&batch);
@@ -157,6 +160,7 @@ void WalBatchPipeline::DrainAndFlush(EngineStats* stats,
       item.key = &job->key;
       item.value = &job->value;
       item.lsn = job->assigned_lsn;
+      item.txn_id = job->txn_id;
       items.push_back(item);
     }
     const Status apply = commit_hook_(items, stats, commit_lock_held_by_caller);
@@ -209,11 +213,13 @@ void WalBatchPipeline::WorkerLoop() {
 }
 
 Status WalBatchPipeline::Put(const std::string& key, const std::string& value,
-                             uint64_t* lsn, EngineStats* stats) {
+                             uint64_t* lsn, EngineStats* stats,
+                             uint32_t txn_id) {
   auto job = std::make_shared<Job>();
   job->op = WalOp::kPut;
   job->key = key;
   job->value = value;
+  job->txn_id = txn_id;
   stats_target_.store(stats);
   {
     std::lock_guard<std::mutex> lock(queue_mu_);
@@ -230,10 +236,11 @@ Status WalBatchPipeline::Put(const std::string& key, const std::string& value,
 }
 
 Status WalBatchPipeline::Delete(const std::string& key, uint64_t* lsn,
-                                EngineStats* stats) {
+                                EngineStats* stats, uint32_t txn_id) {
   auto job = std::make_shared<Job>();
   job->op = WalOp::kDelete;
   job->key = key;
+  job->txn_id = txn_id;
   stats_target_.store(stats);
   {
     std::lock_guard<std::mutex> lock(queue_mu_);

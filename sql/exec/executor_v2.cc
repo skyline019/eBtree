@@ -11,6 +11,7 @@
 #include "sql/eval/expr_eval.h"
 #include "sql/eval/schema_context.h"
 #include "sql/exec/subquery_runner.h"
+#include "sql/exec/txn_read_policy.h"
 #include "sql/plan/lower.h"
 #include "ebtree/common/digest.h"
 
@@ -155,7 +156,10 @@ Status SqlExecutorV2::TryExecIndexScanSelect(const QueryStatement& stmt,
   const Status ps = engine_->Prepare(plan);
   if (!ps.ok()) return ps;
   std::vector<std::pair<std::string, std::string>> index_rows;
-  const Status ss = engine_->Scan(plan, &index_rows);
+  const Status ss = txn_ && txn_->active()
+                        ? engine_->ScanAtSnapshot(plan, txn_->snapshot(),
+                                                  txn_->txn_id(), &index_rows)
+                        : engine_->Scan(plan, &index_rows);
   if (!ss.ok()) return ss;
 
   if (out) {
@@ -167,7 +171,7 @@ Status SqlExecutorV2::TryExecIndexScanSelect(const QueryStatement& stmt,
       }
       const std::string encoded = catalog_->EncodeRowKey(table->id, pk);
       std::string raw;
-      const Status gs = engine_->Get(encoded, &raw);
+      const Status gs = TxnGet(engine_, txn_, encoded, &raw);
       if (!gs.ok()) continue;
       std::unordered_map<std::string, std::string> fields;
       (void)DecodeRowFields(raw, &fields);
@@ -216,13 +220,15 @@ Status SqlExecutorV2::ExecDelete(const QueryStatement& stmt) {
   }
   const std::string encoded =
       catalog_->EncodeRowKey(table->id, *stmt.delete_stmt.where_value);
+  if (txn_) txn_->RecordWriteIntent(engine_, encoded);
   if (txn_) txn_->RecordBeforeDelete(engine_, encoded);
   std::string existing;
   std::unordered_map<std::string, std::string> fields;
-  if (const Status gs = engine_->Get(encoded, &existing); gs.ok()) {
+  if (const Status gs = TxnGet(engine_, txn_, encoded, &existing); gs.ok()) {
     (void)DecodeRowFields(existing, &fields);
   }
-  const Status st = engine_->Delete(encoded);
+  const uint32_t txn_id = txn_ && txn_->active() ? txn_->txn_id() : 0;
+  const Status st = engine_->Delete(encoded, txn_id);
   if (!st.ok()) return st;
   if (!fields.empty()) {
     const Status is = SyncIndexEntries(engine_, catalog_, *table,

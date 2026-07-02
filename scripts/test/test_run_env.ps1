@@ -1,6 +1,7 @@
 param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path,
-    [string]$RunLabel = ""
+    [string]$RunLabel = "",
+    [switch]$ClearLegacySystemTemp
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,7 +10,19 @@ function Stop-EbtreeTestProcesses {
     Get-Process -Name "ebtree_test_runner" -ErrorAction SilentlyContinue | Stop-Process -Force
 }
 
-function Clear-EbtreeCTestCache {
+function Clear-EbtreeLegacyTemp {
+    param([string]$Root)
+
+    $repoDefault = Join-Path (Join-Path (Join-Path $Root ".test-runs") "tmp") "default"
+    if (Test-Path $repoDefault) {
+        Remove-Item -LiteralPath $repoDefault -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host "cleared repo tmp cache: $repoDefault"
+    }
+
+    if (-not $ClearLegacySystemTemp) {
+        return
+    }
+
     $paths = @(
         (Join-Path $env:TEMP "ebtree_test"),
         (Join-Path $env:LOCALAPPDATA "Temp\ebtree_test"),
@@ -18,7 +31,7 @@ function Clear-EbtreeCTestCache {
     foreach ($p in $paths) {
         if (Test-Path $p) {
             Remove-Item -LiteralPath $p -Recurse -Force -ErrorAction SilentlyContinue
-            Write-Host "cleared C temp cache: $p"
+            Write-Host "cleared legacy system temp cache: $p"
         }
     }
 }
@@ -36,7 +49,7 @@ function New-EbtreeTestRunDir {
 }
 
 Stop-EbtreeTestProcesses
-Clear-EbtreeCTestCache
+Clear-EbtreeLegacyTemp -Root $RepoRoot
 
 $runDir = New-EbtreeTestRunDir -Root $RepoRoot -Label $RunLabel
 $tmpRoot = Join-Path $runDir "tmp"

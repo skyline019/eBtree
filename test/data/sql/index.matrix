@@ -201,3 +201,30 @@ setup: "CREATE INDEX idx_val ON t (value)"
 exec: "SELECT key FROM t WHERE value = 'nineteen'"
 expect: ok
 expect_rows: 1
+---
+case: index_scan_range
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "INSERT INTO t (key, value) VALUES ('a', '10')"
+setup: "INSERT INTO t (key, value) VALUES ('b', '20')"
+setup: "INSERT INTO t (key, value) VALUES ('c', '30')"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "SELECT key FROM t WHERE value >= '15' AND value <= '25' ORDER BY key"
+expect: ok
+expect_rows: 1
+expect_value: b
+---
+case: explain_matches_runtime
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, value TEXT)"
+setup: "CREATE INDEX idx_val ON t (value)"
+exec: "EXPLAIN QUERY PLAN SELECT key FROM t WHERE value = 'z'"
+expect: ok
+expect_rows: 1
+---
+case: composite_index_leading_eq
+setup: "CREATE TABLE t (key TEXT PRIMARY KEY, a TEXT, b TEXT)"
+setup: "INSERT INTO t (key, a, b) VALUES ('k1', 'x', '1')"
+setup: "INSERT INTO t (key, a, b) VALUES ('k2', 'x', '2')"
+setup: "CREATE INDEX idx_ab ON t (a, b)"
+exec: "SELECT key FROM t WHERE a = 'x'"
+expect: ok
+expect_rows: 2

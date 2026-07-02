@@ -10,7 +10,7 @@ inline Status SyncIndexEntries(Engine* engine, Catalog* catalog,
                                const TableSchema& table,
                                const std::string& pk,
                                const std::unordered_map<std::string, std::string>& fields,
-                               bool remove) {
+                               bool remove, uint32_t txn_id = 0) {
   if (!engine || !catalog) return Status::InvalidArgument("null engine/catalog");
   for (const auto& idx : catalog->IndexesForTable(table.name)) {
     if (idx.columns.empty()) continue;
@@ -20,10 +20,10 @@ inline Status SyncIndexEntries(Engine* engine, Catalog* catalog,
     const std::string ikey =
         catalog->EncodeIndexKey(table.id, idx.id, it->second, pk);
     if (remove) {
-      const Status st = engine->Delete(ikey);
+      const Status st = engine->Delete(ikey, txn_id);
       if (!st.ok() && st.code() != StatusCode::kNotFound) return st;
     } else {
-      const Status st = engine->Put(ikey, pk);
+      const Status st = engine->Put(ikey, pk, txn_id);
       if (!st.ok()) return st;
     }
   }

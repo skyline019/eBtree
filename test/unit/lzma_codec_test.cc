@@ -3,6 +3,7 @@
 #include <string>
 
 #include "ebtree/concept/codec/lzma_codec.h"
+#include "ebtree/concept/codec/codec_registry.h"
 #include "ebtree/concept/codec/value_codec.h"
 
 namespace ebtree {
@@ -34,7 +35,8 @@ TEST(ValueCodec, RoundTripLzma7z) {
   std::string input(200, 'a');
   for (int i = 0; i < 50; ++i) input.push_back(static_cast<char>('0' + (i % 10)));
   ValueCodecResult cr{};
-  ASSERT_TRUE(CompressValue(input, true, &cr).ok());
+  ASSERT_TRUE(
+      CodecRegistry::CompressValue(input, CompressPolicy::kDense, true, &cr).ok());
   EXPECT_EQ(cr.codec, ValueCodec::kLzma7z);
   std::string out;
   ASSERT_TRUE(DecompressValue(cr.codec, cr.payload, cr.uncompressed_size, &out).ok());

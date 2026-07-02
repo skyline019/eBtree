@@ -17,6 +17,20 @@ std::uintmax_t DataFileSize(const std::string& dir) {
   return std::filesystem::file_size(path);
 }
 
+TEST(EbPipelineCompressPerf, ProductionCompressDefaultsRoundtrip) {
+  const std::string dir = ebtree::test::TempDir("compress_prod_defaults");
+  const std::string payload(512, 'z');
+  EngineOptions opts = EngineOptions::ProductionCompressDefaults(dir);
+  std::unique_ptr<Engine> engine;
+  ASSERT_TRUE(Engine::Open(opts, &engine).ok());
+  ASSERT_TRUE(engine->Put("ck", payload).ok());
+  ASSERT_TRUE(engine->Checkpoint().ok());
+  std::string value;
+  ASSERT_TRUE(engine->Get("ck", &value).ok());
+  EXPECT_EQ(value, payload);
+  EXPECT_GT(engine->stats().compress_bytes_in, 0u);
+}
+
 TEST(EbPipelineCompressPerf, CompressValuesReducesDataFileSize) {
   const std::string raw_dir = TempDir("compress_raw");
   const std::string cmp_dir = TempDir("compress_on");

@@ -70,7 +70,7 @@ Tables without PRIMARY KEY use **implicit rowid** keys (`Catalog::implicit_rowid
 | Gate | Requirement |
 |------|-------------|
 | **P12-semantic-sql** | `SemanticOracle` test + `semantic.test` **100%** strict vs expected (oracle script validates corpus vs `sqlite3` when available) |
-| **P11-real-sql** | official 800 **strict** **100%** |
+| **P11-real-sql** | sql functional tests (excludes `RealSqliteBaselineReport` / duplicate `RealSqliteOfficialPassRate`) + official 800 **strict** **100%** via `run_sqllogictest.ps1` |
 | **P11-program-honest** | full suite + curated **strict** ≥ 90% + official **100%** |
 
 `IntTruncateMatch` removed from `sqllogic_common.h`. Integer display uses
@@ -86,7 +86,7 @@ Tables without PRIMARY KEY use **implicit rowid** keys (`Catalog::implicit_rowid
 ## Consequences
 
 - P11 may dip briefly after strict matching; recovery tracked per milestone (P12 hard-blocks core semantics).
-- `sqlite3` CLI optional in CI; `run_semantic_oracle.ps1` skips with warning if missing.
+- `RealSqliteBaselineReport` is **not** a CI gate; use `scripts/test/run_sqllogic_baseline.ps1` for trend JSON.
 - EXPLAIN/plan (`plan/lower.cc`) unchanged; runtime index choice via physical scan heuristics.
 
 ## References

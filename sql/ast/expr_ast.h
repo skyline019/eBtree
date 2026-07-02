@@ -31,6 +31,7 @@ enum class BinaryOp {
   kGt,
   kGe,
   kLike,
+  kGlob,
   kAdd,
   kSub,
   kMul,

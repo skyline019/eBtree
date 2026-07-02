@@ -7,10 +7,12 @@
 #include <vector>
 
 #include "ebtree/common/status.h"
+#include "ebtree/concept/codec/codec_registry.h"
 #include "ebtree/concept/datafile/datafile_lsn_index.h"
 
 namespace ebtree {
 
+struct EngineStats;
 class MmapWindowManager;
 
 #pragma pack(push, 1)
@@ -83,16 +85,21 @@ class DataFile {
   Status LoadLsnIndexSidecar();
   const DataFileLsnIndex& lsn_index() const { return lsn_index_; }
   DataFileLsnIndex* lsn_index_mut() { return &lsn_index_; }
+  Status ReadHeaderAtLsn(uint64_t lsn, DataRecordHeader* hdr) const;
 
   std::uintmax_t FileSize() const;
 
   void SetCompressValues(bool enable);
+  void SetCompressPolicy(CompressPolicy policy);
+  void SetCompressStats(EngineStats* stats);
 
   const std::string& path() const { return path_; }
 
  private:
   std::string path_;
   bool compress_values_{false};
+  CompressPolicy compress_policy_{CompressPolicy::kOff};
+  EngineStats* compress_stats_{nullptr};
   mutable std::fstream append_stream_;
   mutable std::ifstream read_stream_;
   mutable bool append_open_{false};
@@ -104,7 +111,8 @@ class DataFile {
   static Status ParseRecordAt(const uint8_t* base, size_t len,
                               uint64_t record_offset, std::string* key,
                               std::string* value, uint64_t* lsn, bool* deleted,
-                              uint8_t reclaim_generation);
+                              uint8_t reclaim_generation,
+                              EngineStats* decompress_stats);
 };
 
 }  // namespace ebtree

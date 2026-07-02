@@ -6,6 +6,8 @@
 
 #include "type_affinity.h"
 
+#include "function_registry.h"
+
 namespace ebtree {
 namespace sql {
 
@@ -146,37 +148,7 @@ SqlValue ExprEval::EvalValue(const ExprNode& node, const RowMap& row) const {
     case ExprKind::kColumn:
       return SqlValue::FromLegacyString(LookupColumn(node, row));
     case ExprKind::kFunction:
-      if (node.func_name == "LENGTH" && !node.children.empty()) {
-        return SqlValue::Integer(
-            static_cast<int64_t>(EvalScalar(*node.children[0], row).size()));
-      }
-      if (node.func_name == "SUBSTR" && node.children.size() >= 2) {
-        const std::string s = EvalScalar(*node.children[0], row);
-        const int64_t start = AsInt(EvalScalar(*node.children[1], row));
-        const size_t pos = start < 0 ? 0 : static_cast<size_t>(start);
-        if (pos >= s.size()) return SqlValue::Null();
-        return SqlValue::Text(s.substr(pos));
-      }
-      if (node.func_name == "TYPEOF" && !node.children.empty()) {
-        const SqlValue v = EvalValue(*node.children[0], row);
-        if (v.IsNull()) return SqlValue::Text("null");
-        if (v.kind == SqlValueKind::kInteger) return SqlValue::Text("integer");
-        if (v.kind == SqlValueKind::kReal) return SqlValue::Text("real");
-        return SqlValue::Text("text");
-      }
-      if (node.func_name == "ABS" && !node.children.empty()) {
-        const SqlValue v = EvalValue(*node.children[0], row);
-        if (v.IsNull()) return SqlValue::Null();
-        return SqlValue::Integer(std::llabs(AsInt(v.ToLegacyString())));
-      }
-      if (node.func_name == "COALESCE") {
-        for (const auto& c : node.children) {
-          const SqlValue v = EvalValue(*c, row);
-          if (!v.IsNull()) return v;
-        }
-        return SqlValue::Null();
-      }
-      return SqlValue::Null();
+      return FunctionRegistry::Eval(node.func_name, node, row, this);
     case ExprKind::kBinary:
       if (node.bin_op == BinaryOp::kAdd || node.bin_op == BinaryOp::kSub ||
           node.bin_op == BinaryOp::kMul || node.bin_op == BinaryOp::kDiv) {

@@ -881,3 +881,20 @@ DROP VIEW viewX;
 SELECT y FROM t WHERE x=1;
 ----
 b
+
+-- name: semantic_like_prefix
+-- source: semantic/like
+-- setup: CREATE TABLE t(x TEXT);
+-- setup: INSERT INTO t VALUES('alpha');
+-- setup: INSERT INTO t VALUES('beta');
+SELECT x FROM t WHERE x LIKE 'a%' ORDER BY x;
+----
+alpha
+
+-- name: semantic_cast_int
+-- source: semantic/cast
+-- setup: CREATE TABLE t(x TEXT);
+-- setup: INSERT INTO t VALUES('7');
+SELECT CAST(x AS INTEGER) FROM t;
+----
+7

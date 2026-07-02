@@ -14,6 +14,8 @@ class WalKeyIndex {
   void Update(uint64_t offset, const std::string& key, uint64_t lsn);
   bool Lookup(const std::string& key, uint64_t after_lsn,
               uint64_t* offset_out) const;
+  bool LatestLsn(const std::string& key, uint64_t after_lsn,
+                 uint64_t* lsn_out) const;
   Status BuildFromFile(const std::string& path);
 
   size_t size() const { return index_.size(); }

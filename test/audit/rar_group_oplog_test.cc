@@ -75,7 +75,7 @@ TEST(RarSchemaConformance, V2FieldsPresent) {
   RarReport report{};
   ASSERT_TRUE(BuildRar(opts, &report).ok());
   const std::string json = RarReportToJson(report);
-  EXPECT_NE(json.find("\"rar_version\": \"2.0\""), std::string::npos);
+  EXPECT_NE(json.find("\"rar_version\": \"3.0\""), std::string::npos);
   EXPECT_NE(json.find("\"attest_export_version\": 1"), std::string::npos);
   EXPECT_NE(json.find("\"catalog\""), std::string::npos);
   EXPECT_NE(json.find("\"op_log\""), std::string::npos);

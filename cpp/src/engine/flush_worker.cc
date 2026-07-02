@@ -33,9 +33,11 @@ void BackgroundFlushWorker::Run() {
     if (stop_) break;
     if (!shard_) continue;
     lock.unlock();
+    if (!shard_) continue;
+    if (shard_->snapshot_pin_count() > 0) continue;
     const size_t count = shard_->memtable()->Snapshot().size();
     if (count < shard_->options().memtable_flush_threshold_keys) continue;
-    (void)shard_->Flush();
+    (void)shard_->TryFlushBackground();
   }
 }
 

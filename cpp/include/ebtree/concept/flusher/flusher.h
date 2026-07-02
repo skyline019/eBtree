@@ -8,6 +8,7 @@
 #include "ebtree/concept/btree/btree.h"
 #include "ebtree/concept/datafile/datafile.h"
 #include "ebtree/concept/memtable/memtable.h"
+#include "ebtree/concept/vcs/version_chain_store.h"
 #include "ebtree/concept/wal/wal.h"
 
 namespace ebtree {
@@ -17,6 +18,7 @@ struct FlusherContext {
   MemTable* frozen{nullptr};
   DataFile* datafile{nullptr};
   BTreeIndex* btree{nullptr};
+  VersionChainStore* vcs{nullptr};
   std::unordered_map<std::string, std::pair<std::string, uint64_t>>* committed{
       nullptr};
   EngineStats* stats{nullptr};

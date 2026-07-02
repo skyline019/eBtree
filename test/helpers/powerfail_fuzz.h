@@ -179,7 +179,8 @@ class CommittedOracle {
 
 inline std::vector<ChaosOp> GeneratePowerfailOps(uint32_t seed, size_t count,
                                                  DurabilityClass tier,
-                                                 bool with_control_ops) {
+                                                 bool with_control_ops,
+                                                 bool large_payload = false) {
   std::mt19937 rng(seed);
   std::uniform_int_distribution<int> key_dist(0, 99);
   std::vector<ChaosOp> ops;
@@ -204,7 +205,12 @@ inline std::vector<ChaosOp> GeneratePowerfailOps(uint32_t seed, size_t count,
       op.type = static_cast<ChaosOpType>(data_op_dist(rng));
     }
     op.key = "pf" + std::to_string(key_dist(rng));
-    op.value = "v" + std::to_string(static_cast<int>(i));
+    if (large_payload && op.type == ChaosOpType::kPut) {
+      op.value.assign(320, 'x');
+      op.value[0] = static_cast<char>('a' + static_cast<int>(i % 26));
+    } else {
+      op.value = "v" + std::to_string(static_cast<int>(i));
+    }
     ops.push_back(op);
   }
   return ops;
@@ -256,7 +262,9 @@ struct PowerfailFuzzResult {
 inline PowerfailFuzzResult RunRandomPowerfailOnce(const EngineOptions& opts_in,
                                                   uint32_t seed, size_t op_count,
                                                   size_t destroy_index,
-                                                  bool with_control_ops = false) {
+                                                  bool with_control_ops = false,
+                                                  bool require_no_fallback = false,
+                                                  bool large_payload = false) {
   PowerfailFuzzResult result;
   result.seed = seed;
   result.destroy_index = destroy_index;
@@ -265,8 +273,8 @@ inline PowerfailFuzzResult RunRandomPowerfailOnce(const EngineOptions& opts_in,
   const std::string dir = opts.path.empty() ? TempDir("pf_fuzz") : opts.path;
   opts.path = dir;
 
-  const auto ops =
-      GeneratePowerfailOps(seed, op_count, opts.durability, with_control_ops);
+  const auto ops = GeneratePowerfailOps(seed, op_count, opts.durability,
+                                        with_control_ops, large_payload);
   CommittedOracle oracle(opts.durability);
   const size_t limit = std::min(destroy_index, ops.size());
   std::unordered_map<std::string, std::string> pre_destroy;
@@ -282,6 +290,9 @@ inline PowerfailFuzzResult RunRandomPowerfailOnce(const EngineOptions& opts_in,
       }
       result.ops_executed = i + 1;
     }
+    if (large_payload) {
+      (void)engine->Flush();
+    }
     pre_destroy = oracle.SnapshotVisible(engine.get());
   }
 
@@ -294,12 +305,18 @@ inline PowerfailFuzzResult RunRandomPowerfailOnce(const EngineOptions& opts_in,
                        : oracle.VerifySnapshot(reopened.get(), pre_destroy);
   EXPECT_TRUE(verify) << verify.message() << " seed=" << seed
                       << " destroy_index=" << destroy_index;
+  if (require_no_fallback) {
+    EXPECT_EQ(reopened->stats().unexpected_path_total, 0u)
+        << " seed=" << seed;
+  }
   return result;
 }
 
 inline void RunRandomPowerfailFuzz(const EngineOptions& opts_in,
                                    uint32_t base_seed, int trials,
-                                   size_t op_count) {
+                                   size_t op_count,
+                                   bool require_no_fallback = false,
+                                   bool large_payload = false) {
   std::mt19937 rng(base_seed);
   std::uniform_int_distribution<size_t> destroy_dist(1, op_count);
   for (int t = 0; t < trials; ++t) {
@@ -311,7 +328,8 @@ inline void RunRandomPowerfailFuzz(const EngineOptions& opts_in,
     } else {
       opts.path = opts.path + "/trial_" + std::to_string(t);
     }
-    RunRandomPowerfailOnce(opts, seed, op_count, destroy_index, false);
+    RunRandomPowerfailOnce(opts, seed, op_count, destroy_index, false,
+                           require_no_fallback, large_payload);
   }
 }
 

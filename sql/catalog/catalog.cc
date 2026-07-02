@@ -165,8 +165,14 @@ std::optional<TableSchema> Catalog::FindTable(const std::string& name) const {
 
 bool Catalog::IsIndexEncodedKey(const std::string& encoded) {
   const auto pos = encoded.find(':');
-  if (pos == std::string::npos || pos + 1 >= encoded.size()) return false;
-  return encoded[pos + 1] == 'i';
+  if (pos == std::string::npos || pos + 2 >= encoded.size()) return false;
+  if (encoded[pos + 1] != 'i') return false;
+  size_t i = pos + 2;
+  if (encoded[i] < '0' || encoded[i] > '9') return false;
+  while (i < encoded.size() && encoded[i] >= '0' && encoded[i] <= '9') {
+    ++i;
+  }
+  return i < encoded.size() && encoded[i] == ':';
 }
 
 std::string Catalog::EncodeRowKey(uint32_t table_id,

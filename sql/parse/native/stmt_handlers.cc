@@ -40,6 +40,7 @@ AttestationMode ParseAttestation(const std::string& token) {
   const std::string u = Upper(token);
   if (u == "REQUIRE_PASS") return AttestationMode::kRequirePass;
   if (u == "ALLOW_WARN") return AttestationMode::kAllowWarn;
+  if (u == "MONITOR") return AttestationMode::kMonitor;
   return AttestationMode::kOff;
 }
 
@@ -110,7 +111,8 @@ Status ParseOpen(ParseContext* ctx) {
     if (u == "BALANCED") ctx->out->open.durability = "balanced";
     else if (u == "SYNC") ctx->out->open.durability = "sync";
     else if (u == "GROUP") ctx->out->open.durability = "group";
-    else if (u == "REQUIRE_PASS" || u == "ALLOW_WARN" || u == "OFF") {
+    else if (u == "REQUIRE_PASS" || u == "ALLOW_WARN" || u == "MONITOR" ||
+             u == "OFF") {
       ctx->out->open.attestation = ParseAttestation(tok);
     }
   }
@@ -199,6 +201,18 @@ Status ParseCreateTable(ParseContext* ctx) {
         cd.not_null = true;
       }
     }
+    std::string col_upper = col_line;
+    for (char& c : col_upper) {
+      c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+    }
+    const auto check_pos = col_upper.find("CHECK");
+    if (check_pos != std::string::npos) {
+      const auto p1 = col_line.find('(', check_pos);
+      const auto p2 = col_line.rfind(')');
+      if (p1 != std::string::npos && p2 != std::string::npos && p2 > p1) {
+        cd.check_expr = Trim(col_line.substr(p1 + 1, p2 - p1 - 1));
+      }
+    }
     ctx->out->create_table.columns.push_back(cd);
     if (cd.primary_key) {
       ctx->out->create_table.key_column = cd.name;
@@ -226,8 +240,12 @@ Status ParseInsert(ParseContext* ctx) {
     ctx->cursor.Consume(nullptr);
     std::string action;
     ctx->cursor.Consume(&action);
-    if (Upper(action) == "REPLACE") {
+    const std::string act = Upper(action);
+    if (act == "REPLACE") {
       ctx->out->kind = QueryStmtKind::kUpsert;
+    } else if (act == "IGNORE" || act == "ABORT" || act == "FAIL") {
+      ctx->out->kind = QueryStmtKind::kInsert;
+      ctx->out->insert.conflict_action = act;
     } else {
       return Status::InvalidArgument("unsupported INSERT OR");
     }

@@ -5,6 +5,18 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+if ([string]::IsNullOrWhiteSpace($env:EBTREE_TEST_TMP_ROOT)) {
+    . (Join-Path $PSScriptRoot "test_run_env.ps1") -RepoRoot $RepoRoot -RunLabel "semantic-oracle" | Out-Null
+}
+$tmpRoot = $env:EBTREE_TEST_TMP_ROOT
+if ([string]::IsNullOrWhiteSpace($tmpRoot)) {
+    $tmpRoot = Join-Path (Join-Path $RepoRoot ".test-runs") "tmp/semantic-oracle"
+    New-Item -ItemType Directory -Force -Path $tmpRoot | Out-Null
+    $env:EBTREE_TEST_TMP_ROOT = $tmpRoot
+    $env:TEMP = $tmpRoot
+    $env:TMP = $tmpRoot
+}
+
 $sqlite3 = Get-Command sqlite3 -ErrorAction SilentlyContinue
 if (-not $sqlite3) {
     Write-Warning "sqlite3 not in PATH; oracle diff skipped (CI may bundle sqlite3.exe)"
@@ -13,7 +25,7 @@ if (-not $sqlite3) {
 
 function Invoke-SqliteCase {
     param([string[]]$Setup, [string]$Query)
-    $db = Join-Path $env:TEMP ("semantic_oracle_" + [guid]::NewGuid().ToString("N") + ".db")
+    $db = Join-Path $tmpRoot ("semantic_oracle_" + [guid]::NewGuid().ToString("N") + ".db")
     try {
         foreach ($s in $Setup) {
             & sqlite3 $db $s | Out-Null

@@ -18,12 +18,24 @@ using sqllogic::SqllogicCase;
 
 int RunCorpusCases(const std::vector<SqllogicCase>& cases, double min_rate) {
   int passed = 0;
+  std::vector<std::string> failed_names;
   for (const auto& c : cases) {
-    if (RunCase(c).kind == sqllogic::FailKind::kPass) ++passed;
+    if (RunCase(c).kind == sqllogic::FailKind::kPass) {
+      ++passed;
+    } else {
+      failed_names.push_back(c.name);
+    }
   }
   const double rate = cases.empty() ? 0.0
                                     : static_cast<double>(passed) /
                                           static_cast<double>(cases.size());
+  if (rate < min_rate) {
+    ADD_FAILURE() << "failed cases (" << failed_names.size() << "): "
+                  << (failed_names.empty() ? "none" : failed_names[0]);
+    for (size_t i = 1; i < failed_names.size() && i < 20; ++i) {
+      ADD_FAILURE() << "  " << failed_names[i];
+    }
+  }
   EXPECT_GE(rate, min_rate) << "passed=" << passed << " total=" << cases.size();
   return passed;
 }

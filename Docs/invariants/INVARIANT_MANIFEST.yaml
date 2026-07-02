@@ -90,3 +90,21 @@ invariants:
   - id: I-NF4
     test: EbMatrix.NoFallbackMatrixTest.RunCase
     adr: Docs/adr/019-explicit-read-tiers.md
+  - id: I-VCS-FWD
+    test: VcsInvariantTest.ForwardPointerMatchesHead
+    adr: Docs/adr/046-lsn-native-snapshot-read-view.md
+  - id: I-VCS-WAL
+    test: SnapshotResolverTest.IncompleteVcsUsesWalSnapshotTier
+    adr: Docs/adr/046-lsn-native-snapshot-read-view.md
+  - id: I-VCS-TOMB
+    test: SnapshotResolverTest.DeleteTombstoneInvisibleAtSnapshot
+    adr: Docs/adr/046-lsn-native-snapshot-read-view.md
+  - id: I-LSV-OCC
+    test: SnapshotOccSql.ConcurrentUpdateSecondCommitConflicts
+    adr: Docs/adr/047-lsv-tso-commit-occ.md
+  - id: I-LSV-TXN-WAL
+    test: TxnWalRecovery.CommittedVisibleAfterReopen
+    adr: Docs/adr/047-lsv-tso-commit-occ.md
+  - id: I-LSV-PHANTOM
+    test: SnapshotPhantomSql.InsertDuringActiveRangeScanConflicts
+    adr: Docs/adr/047-lsv-tso-commit-occ.md

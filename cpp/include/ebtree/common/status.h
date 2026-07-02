@@ -13,6 +13,7 @@ enum class StatusCode {
   kCorruptPage,
   kIoError,
   kInternal,
+  kConflict,
 };
 
 class Status {
@@ -41,6 +42,9 @@ class Status {
   }
   static Status Internal(std::string msg) {
     return Status(StatusCode::kInternal, std::move(msg));
+  }
+  static Status Conflict(std::string msg) {
+    return Status(StatusCode::kConflict, std::move(msg));
   }
 
   bool ok() const { return code_ == StatusCode::kOk; }

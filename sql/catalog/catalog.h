@@ -20,7 +20,7 @@ struct TableSchema {
   std::string value_column{"value"};
   std::vector<ColumnDef> columns;
   uint32_t schema_version{1};
-  bool compress_values{false};
+  bool compress_values{true};
   bool implicit_rowid{false};
   uint64_t next_rowid{1};
 };

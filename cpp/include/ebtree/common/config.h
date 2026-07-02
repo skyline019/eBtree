@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 
+#include "ebtree/concept/codec/codec_registry.h"
 #include "ebtree/engine/read_tier.h"
 
 #include <functional>
@@ -11,9 +12,11 @@ namespace ebtree {
 
 enum class CheckpointPhase {
   AfterFlush,
+  AfterVcsFold,
   AfterTLog,
   BeforeSuperBlock,
   AfterSuperBlock,
+  BeforeWalTruncate,
 };
 
 using CheckpointHook = std::function<bool(CheckpointPhase)>;
@@ -49,11 +52,15 @@ struct EngineOptions {
   bool eager_shard_open{false};
   bool compress_values{false};
   bool compress_pages{false};
+  CompressPolicy compress_policy{CompressPolicy::kOff};
+  bool attestation_async{true};
 
-  static EngineOptions ProductionDefaults(const std::string& path);
-  static EngineOptions StandardDefaults(const std::string& path);
+  static EngineOptions ProductionDefaults(const std::string& path);  // raw bench baseline
+  static EngineOptions StandardDefaults(const std::string& path);    // product compressed-normal
   static EngineOptions EnterpriseDefaults(const std::string& path);
   static EngineOptions BenchmarkGroupDefaults(const std::string& path);
+  static EngineOptions ProductionCompressDefaults(const std::string& path);
+  static EngineOptions EnterpriseCompressDefaults(const std::string& path);
 };
 
 struct EngineStats {
@@ -69,6 +76,7 @@ struct EngineStats {
   uint64_t summary_repair_total{0};
   uint64_t tlog_snapshot_total{0};
   uint64_t gc_region_swap_total{0};
+  uint64_t gc_deferred_swap_total{0};
   uint64_t wal_replay_deferred_total{0};
   uint64_t pages_touched{0};
   uint64_t wal_full_scan_total{0};
@@ -79,6 +87,8 @@ struct EngineStats {
   uint64_t fsync_merge_ratio{0};
   uint64_t compress_bytes_in{0};
   uint64_t compress_bytes_out{0};
+  uint64_t decompress_fail_total{0};
+  uint64_t rar_chain_drop_total{0};
 };
 
 }  // namespace ebtree

@@ -15,6 +15,7 @@
 #include "sql/session/open_options.h"
 #include "ebtree/common/status.h"
 #include "ebtree/engine/engine.h"
+#include "rar_monitor.h"
 
 namespace ebtree {
 namespace sql {
@@ -31,12 +32,14 @@ class Database {
   Engine* engine() { return engine_.get(); }
   const OpenOptions& options() const { return options_; }
   Catalog* catalog() { return &catalog_; }
+  const audit::RarMonitor& rar_monitor() const { return rar_monitor_; }
 
   void Close();
 
  private:
   Database(OpenOptions opts, std::unique_ptr<Engine> engine);
   void InstallGroupCommitObserver();
+  void InstallRarMonitor();
 
   OpenOptions options_;
   std::unique_ptr<Engine> engine_;
@@ -46,6 +49,7 @@ class Database {
   parse::RegistryParser parser_;
   TransactionState txn_;
   UnifiedExecutor executor_;
+  audit::RarMonitor rar_monitor_;
   std::unordered_map<std::string, std::string> prepared_;
   std::string last_error_;
 };

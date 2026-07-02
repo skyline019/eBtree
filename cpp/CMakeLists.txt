@@ -14,6 +14,8 @@ set(EBTREE_CORE_SOURCES
   src/concept/datafile/datafile_lsn_index.cc
   src/concept/codec/value_codec.cc
   src/concept/codec/lzma_codec.cc
+  src/concept/codec/lz4_fast_codec.cc
+  src/concept/codec/codec_registry.cc
   src/concept/mmap/mmap_window.cc
   src/concept/flusher/flusher.cc
   src/concept/group_commit/group_committer.cc
@@ -26,11 +28,15 @@ set(EBTREE_CORE_SOURCES
   src/concept/recovery/recovery_state.cc
   src/concept/datafile/datafile_reader.cc
   src/concept/wal/wal_segment.cc
+  src/concept/wal/txidx.cc
   src/concept/wal/wal_fsync_coordinator.cc
   src/concept/wal/wal_batch_pipeline.cc
+  src/concept/vcs/version_chain_store.cc
+  src/concept/vcs/vcs_pager.cc
   src/engine/read_tier.cc
   src/engine/read_resolver.cc
   src/engine/scan_resolver.cc
+  src/engine/snapshot_resolver.cc
   src/sync/sync_executor.cc
   src/sync/rules/core_rules.cc
   src/sync/rules/durability_rules.cc
@@ -38,6 +44,11 @@ set(EBTREE_CORE_SOURCES
   src/engine/engine.cc
   src/engine/engine_attest.cc
   src/engine/shard_engine.cc
+  src/engine/snapshot_fair_rw_lock.cc
+  src/engine/range_ticket.cc
+  src/engine/sfs_read_cache.cc
+  src/engine/engine_txn_lsv.cc
+  src/engine/shard_scan_values.cc
   src/engine/shard_router.cc
   src/engine/routing_table.cc
   src/engine/flush_worker.cc

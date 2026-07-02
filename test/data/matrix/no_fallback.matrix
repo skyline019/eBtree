@@ -5,7 +5,7 @@ setup:
 run: checkpoint_scan
 expect: ok
 get: k=v
-assert_stat: fallback_read_total=0
+assert_stat: unexpected_path_total=0
 ---
 case: missing_key_scan_no_fallback
 setup:
@@ -14,4 +14,198 @@ setup:
 run: scan_missing
 expect: ok
 get: z
-assert_stat: fallback_read_total=0
+assert_stat: unexpected_path_total=0
+---
+case: memtable_get_no_fallback
+setup:
+  durability: sync
+  ops: put mk=mv
+run: get_only
+expect: ok
+get: mk=mv
+assert_stat: unexpected_path_total=0
+---
+case: checkpoint_reopen_no_fallback
+setup:
+  durability: sync
+  ops: put crk=crv
+run: checkpoint_reopen
+expect: ok
+get: crk=crv
+assert_stat: unexpected_path_total=0
+---
+case: fast_open_reopen_no_fallback
+setup:
+  durability: balanced
+  ops: put fok=fov
+run: fast_open_reopen
+expect: ok
+get: fok=fov
+assert_stat: unexpected_path_total=0
+---
+case: lazy_root_reopen_no_fallback
+setup:
+  durability: sync
+  ops: put lr1=lv1
+run: lazy_root_reopen
+expect: ok
+get: lr1=lv1
+assert_stat: unexpected_path_total=0
+---
+case: flashback_no_fallback
+setup:
+  durability: sync
+  ops: put fnf1=fnfv
+run: flashback_checkpoint
+expect: ok
+get: fnf1=fnfv
+assert_stat: unexpected_path_total=0
+---
+case: lazy_range_scan_no_fallback
+setup:
+  durability: balanced
+  ops: put lrk0=v0; put lrk1=v1; put lrk2=v2
+run: lazy_range_scan
+expect: ok
+get: lrk0=v0
+assert_stat: unexpected_path_total=0
+---
+case: flush_reopen_no_fallback
+setup:
+  durability: sync
+  ops: put frk=frv
+run: flush_reopen
+expect: ok
+get: frk=frv
+assert_stat: unexpected_path_total=0
+---
+case: group_commit_reopen_no_fallback
+setup:
+  durability: group
+  ops: put gck=gcv
+run: group_commit_reopen
+expect: ok
+get: gck=gcv
+assert_stat: unexpected_path_total=0
+---
+case: corrupt_wal_reopen_no_fallback
+setup:
+  durability: sync
+  ops: put cwk=cwv
+run: checkpoint_corrupt_wal_reopen
+expect: ok
+get: cwk=cwv
+assert_stat: unexpected_path_total=0
+---
+case: memtable_3stage_no_fallback
+setup:
+  durability: sync
+  ops: put ms1=msv1
+run: memtable_3stage_reopen
+expect: ok
+get: ms1=msv1
+assert_stat: unexpected_path_total=0
+---
+case: full_replay_no_fallback
+setup:
+  durability: sync
+  ops: put frp=frpv
+run: full_replay_reopen
+expect: ok
+get: frp=frpv
+assert_stat: unexpected_path_total=0
+---
+case: async_stable_no_fallback
+setup:
+  durability: async
+  ops: put ask=asv
+run: async_stable_check
+expect: ok
+get: ask=asv
+assert_stat: unexpected_path_total=0
+---
+case: balanced_puts_no_fallback
+setup:
+  durability: balanced
+  ops: put bp0=v
+run: balanced_concurrent_puts
+expect: ok
+get:
+assert_stat: unexpected_path_total=0
+---
+case: get_missing_no_fallback
+setup:
+  durability: sync
+  ops: put gmk=gmv
+run: get missing
+expect: not_found
+get: missing_key
+assert_stat: unexpected_path_total=0
+---
+case: snapshot_vcs_get
+setup:
+  durability: sync
+  ops: put sk=sv1
+run: snapshot_vcs_get
+expect: ok
+get: sk=sv1
+assert_stat: unexpected_path_total=0
+---
+case: snapshot_vcs_scan
+setup:
+  durability: sync
+  ops: put sk0=sv0; put sk1=sv1
+run: snapshot_vcs_scan
+expect: ok
+get: sk0=sv0
+assert_stat: unexpected_path_total=0
+---
+case: compress_checkpoint_reopen
+setup:
+  durability: balanced
+  compress: true
+  ops: put_large ck=z
+run: checkpoint_reopen
+expect: ok
+get: ck=LARGE
+assert_stat: unexpected_path_total=0
+---
+case: compress_lazy_scan
+setup:
+  durability: balanced
+  compress: true
+  ops: put_large lrk0=z; put_large lrk1=z; put_large lrk2=z
+run: lazy_range_scan
+expect: ok
+get: lrk0=z
+assert_stat: unexpected_path_total=0
+---
+case: compress_fast_open
+setup:
+  durability: balanced
+  compress: true
+  ops: put_large fok=z
+run: fast_open_reopen
+expect: ok
+get: fok=LARGE
+assert_stat: unexpected_path_total=0
+---
+case: compress_flush_reopen
+setup:
+  durability: balanced
+  compress: true
+  ops: put_large frk=z
+run: flush_reopen
+expect: ok
+get: frk=LARGE
+assert_stat: unexpected_path_total=0
+---
+case: compress_get_only
+setup:
+  durability: balanced
+  compress: true
+  ops: put mk=mv
+run: get_only
+expect: ok
+get: mk=mv
+assert_stat: unexpected_path_total=0

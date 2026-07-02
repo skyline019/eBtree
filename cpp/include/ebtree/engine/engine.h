@@ -4,6 +4,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "ebtree/common/config.h"
@@ -18,6 +19,8 @@
 #include "ebtree/engine/shard_engine.h"
 #include "ebtree/engine/routing_table.h"
 #include "ebtree/engine/engine_attest.h"
+#include "ebtree/engine/range_ticket.h"
+#include "ebtree/engine/snapshot.h"
 #include "ebtree/sync/sync_executor.h"
 
 namespace ebtree {
@@ -26,9 +29,36 @@ class Engine {
  public:
   static Status Open(const EngineOptions& opts, std::unique_ptr<Engine>* out);
 
-  Status Put(const std::string& key, const std::string& value);
-  Status Delete(const std::string& key);
+  Status Put(const std::string& key, const std::string& value,
+             uint32_t txn_id = 0);
+  Status Delete(const std::string& key, uint32_t txn_id = 0);
   Status Get(const std::string& key, std::string* value);
+  SnapshotToken CaptureSnapshot();
+  Status PinSnapshot(const SnapshotToken& token);
+  void ReleaseSnapshot(const SnapshotToken& token);
+  Status GetAtSnapshot(const std::string& key, const SnapshotToken& token,
+                       uint32_t reader_txn_id, std::string* value);
+  Status ScanAtSnapshot(const TypedPlan& plan, const SnapshotToken& token,
+                        uint32_t reader_txn_id,
+                        std::vector<std::pair<std::string, std::string>>* rows);
+
+  Status ResolveLsnAtSnapshot(const std::string& key,
+                              const SnapshotToken& token,
+                              uint32_t reader_txn_id, uint64_t* lsn_out);
+  Status ResolveCurrentCommittedLsn(const std::string& key, uint64_t* lsn_out);
+  Status RefreshExternalWalForOCC();
+  Status AppendTxnBegin(uint32_t txn_id, const SnapshotToken& token);
+  Status AppendTxnCommit(uint32_t txn_id);
+  Status AppendTxnAbort(uint32_t txn_id);
+  void RegisterRangeTicket(uint32_t txn_id, uint64_t snapshot_lsn,
+                           const std::string& key_lo, const std::string& key_hi);
+  void UnregisterRangeTickets(uint32_t txn_id);
+  Status ValidateRangeTicketCommit(
+      uint32_t txn_id, uint64_t snapshot_lsn, const std::string& key_lo,
+      const std::string& key_hi,
+      const std::unordered_map<std::string, uint64_t>& write_set) const;
+
+  Status GetAsOfLsn(const std::string& key, uint64_t lsn, std::string* value);
   Status Scan(const TypedPlan& plan,
               std::vector<std::pair<std::string, std::string>>* rows);
   Status GetAsOf(const std::string& key, uint32_t timestamp_sec,
@@ -51,6 +81,7 @@ class Engine {
   Status CorruptWalForTest(uint32_t shard_id = 0);
   Status CorruptDataFileForTest(uint64_t record_offset, uint32_t shard_id = 0);
   Status TruncateWalForTest(uint32_t shard_id = 0);
+  void ClearVcsForTest(uint32_t shard_id = 0);
 
   void SetCheckpointHookForTest(CheckpointHook hook);
 
@@ -100,6 +131,8 @@ class Engine {
 
   RecoverySnapshot GetRecoverySnapshot() const;
   void SetGroupCommitObserver(GroupCommitObserver observer);
+  void SetCheckpointObserver(CheckpointObserver observer);
+  void SetWriteGuard(WriteGuard guard);
 
  private:
   explicit Engine(EngineOptions opts);
@@ -113,6 +146,8 @@ class Engine {
   RoutingTable routing_table_{};
   std::vector<std::unique_ptr<ShardEngine>> shards_;
   GroupCommitObserver group_commit_observer_{};
+  CheckpointObserver checkpoint_observer_{};
+  WriteGuard write_guard_{};
   mutable std::mutex mu_;
   bool opened_{false};
 };

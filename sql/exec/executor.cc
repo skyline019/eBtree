@@ -5,9 +5,10 @@
 #include "ebtree/common/digest.h"
 #include "sql/session/transaction_state.h"
 #include "sql/catalog/row_codec.h"
-#include "sql/exec/constraint_check.h"
+#include "sql/exec/constraint_engine.h"
 #include "sql/exec/index_maintenance.h"
 #include "sql/exec/mic_guard.h"
+#include "sql/exec/txn_read_policy.h"
 
 namespace ebtree {
 namespace sql {
@@ -21,6 +22,21 @@ SqlExecutor::SqlExecutor(Engine* engine, Catalog* catalog,
 bool SqlExecutor::DurableAtReturn() const {
   return tier_ == DurabilityClass::kSync ||
          tier_ == DurabilityClass::kBalanced;
+}
+
+Status SqlExecutor::EngineGet(const std::string& key, std::string* value) const {
+  return TxnGet(engine_, txn_, key, value);
+}
+
+Status SqlExecutor::EngineScan(
+    const TypedPlan& plan,
+    std::vector<std::pair<std::string, std::string>>* rows) const {
+  const Status st = TxnScan(engine_, txn_, plan, rows);
+  if (!st.ok()) return st;
+  if (txn_ && txn_->active() && plan.op == PredicateOp::kRange) {
+    txn_->RegisterRangeScan(engine_, plan.key, plan.range_end);
+  }
+  return st;
 }
 
 Status SqlExecutor::AppendOpLogPut(const std::string& encoded_key,
@@ -100,6 +116,18 @@ Status SqlExecutor::ExecInsert(const InsertStmt& stmt) {
   const Status bs = BuildInsertFields(catalog_, *table, stmt, &fields, &row_key);
   if (!bs.ok()) return bs;
 
+  std::string encoded = catalog_->EncodeRowKey(table->id, row_key);
+  if (!stmt.conflict_action.empty()) {
+    std::string existing;
+    const Status gs = TxnGet(engine_, txn_, encoded, &existing);
+    if (gs.ok()) {
+      if (stmt.conflict_action == "IGNORE") {
+        return Status::Ok();
+      }
+      return Status::InvalidArgument("UNIQUE constraint failed: " + stmt.table);
+    }
+  }
+
   std::string stored;
   if (table->schema_version >= 2) {
     const Status vs = ValidateRowConstraints(*table, fields);
@@ -111,9 +139,11 @@ Status SqlExecutor::ExecInsert(const InsertStmt& stmt) {
     stored = fields.count(table->value_column) ? fields.at(table->value_column)
                                                : stmt.value;
   }
-  const std::string encoded = catalog_->EncodeRowKey(table->id, row_key);
+  encoded = catalog_->EncodeRowKey(table->id, row_key);
+  if (txn_) txn_->RecordWriteIntent(engine_, encoded);
   if (txn_) txn_->RecordBeforePut(engine_, encoded);
-  const Status st = engine_->Put(encoded, stored);
+  const uint32_t txn_id = txn_ && txn_->active() ? txn_->txn_id() : 0;
+  const Status st = engine_->Put(encoded, stored, txn_id);
   if (!st.ok()) {
     return Status::Internal("engine put failed: " + st.message());
   }
@@ -123,7 +153,7 @@ Status SqlExecutor::ExecInsert(const InsertStmt& stmt) {
       (void)DecodeRowFields(stored, &index_fields);
     }
     const Status is = SyncIndexEntries(engine_, catalog_, *table, row_key,
-                                       index_fields, false);
+                                       index_fields, false, txn_id);
     if (!is.ok()) return is;
   }
   if (!op_log_) return Status::Ok();
@@ -164,7 +194,7 @@ Status SqlExecutor::ExecSelect(const SelectStmt& stmt, ExecuteResult* out) {
     if (!st.ok()) return st;
 
     std::vector<std::pair<std::string, std::string>> rows;
-    st = engine_->Scan(plan, &rows);
+    st = EngineScan(plan, &rows);
     if (!st.ok()) return st;
 
     st = CheckMicPagesBudget(engine_, pages_before, stmt.max_pages);
@@ -196,7 +226,7 @@ Status SqlExecutor::ExecSelect(const SelectStmt& stmt, ExecuteResult* out) {
   if (!st.ok()) return st;
 
   std::string value;
-  st = engine_->Get(encoded, &value);
+  st = EngineGet(encoded, &value);
   if (!st.ok()) {
     if (st.code() == StatusCode::kNotFound) return Status::Ok();
     return st;

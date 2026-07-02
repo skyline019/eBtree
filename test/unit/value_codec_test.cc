@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "ebtree/concept/codec/codec_registry.h"
 #include "ebtree/concept/codec/value_codec.h"
 
 namespace ebtree {
@@ -21,7 +22,8 @@ TEST(ValueCodec, RoundTripLzmaBlock) {
   std::string input(128, 'x');
   input += std::string(64, 'y');
   ValueCodecResult cr{};
-  ASSERT_TRUE(CompressValue(input, true, &cr).ok());
+  ASSERT_TRUE(
+      CodecRegistry::CompressValue(input, CompressPolicy::kDense, true, &cr).ok());
   EXPECT_EQ(cr.codec, ValueCodec::kLzma7z);
   std::string out;
   ASSERT_TRUE(DecompressValue(cr.codec, cr.payload, cr.uncompressed_size, &out).ok());

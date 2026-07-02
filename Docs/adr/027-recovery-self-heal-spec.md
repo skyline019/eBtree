@@ -6,7 +6,7 @@ Accepted — Phase 4 recovery hardening, async summary validation, gate alignmen
 
 ## Context
 
-Phase 3d completed SQL OLTP exec. Phase 4 closes kernel recovery/self-heal debt from `text.txt` Week 7–8: lazy recovery, summary drift repair, GC generation visibility, RTO < 80ms (including bad-block reopen).
+Phase 3d completed SQL OLTP exec. Phase 4 closes kernel recovery/self-heal debt from `Docs/archive/planning/text.txt` Week 7–8: lazy recovery, summary drift repair, GC generation visibility, RTO < 80ms (including bad-block reopen).
 
 ## Decision
 

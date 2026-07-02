@@ -1,0 +1,11 @@
+{
+  "status": "ACCEPT",
+  "pass_count": 10,
+  "completed": 10,
+  "min_pass": 9,
+  "trials": 10,
+  "gate": "P19-lsv",
+  "acceptance": "strict",
+  "updated_at": "2026-07-02T21:11:01.6889090+08:00",
+  "source_run": ".test-runs/streak-20260702-200714"
+}

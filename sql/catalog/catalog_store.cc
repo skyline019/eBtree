@@ -124,7 +124,10 @@ void LoadTablesFromJson(const std::string& content, Catalog* catalog) {
           std::string col_type{"TEXT"};
           if (ExtractJsonString(col_obj, "name", &col_name)) {
             ExtractJsonString(col_obj, "type", &col_type);
-            cols.push_back({col_name, col_type.empty() ? "TEXT" : col_type});
+            ColumnDef cd{col_name, col_type.empty() ? "TEXT" : col_type};
+            ExtractJsonBool(col_obj, "not_null", &cd.not_null);
+            ExtractJsonString(col_obj, "check_expr", &cd.check_expr);
+            cols.push_back(cd);
           }
           col_pos = col_end + 1;
         }
@@ -222,7 +225,12 @@ Status CatalogStore::Save(const Catalog& catalog) const {
       if (!col_first) out << ',';
       col_first = false;
       out << "{\"name\":" << JsonEscape(col.name) << ","
-          << "\"type\":" << JsonEscape(col.type) << "}";
+          << "\"type\":" << JsonEscape(col.type) << ","
+          << "\"not_null\":" << (col.not_null ? "true" : "false");
+      if (!col.check_expr.empty()) {
+        out << ",\"check_expr\":" << JsonEscape(col.check_expr);
+      }
+      out << "}";
     }
     out << "]}";
   }

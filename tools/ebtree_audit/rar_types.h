@@ -29,6 +29,8 @@ struct RarPolicy {
   uint64_t recovery_max_missing{0};
   bool allow_unexpected_keys{false};
   bool require_unexpected_path_zero{true};
+  bool require_tier_consistent{false};
+  uint64_t max_decompress_fail{0};
 };
 
 struct PhysicalSuperBlockInfo {
@@ -158,6 +160,39 @@ struct ExpectSnapshot {
   std::vector<std::string> touched_keys;
 };
 
+struct KernelSectionReport {
+  uint64_t checkpoint_lsn{0};
+  uint64_t pages_touched{0};
+  uint64_t unexpected_path_total{0};
+  uint64_t stable_lsn{0};
+  std::string recovery_mode;
+  std::string inferred_path;
+  uint64_t compress_raw_total{0};
+  uint64_t compress_bytes_saved{0};
+  uint64_t decompress_fail{0};
+  std::vector<std::string> forbidden_violations;
+};
+
+struct TierConsistencyIssue {
+  uint32_t shard{0};
+  std::string recovery_state;
+  std::string probe_key;
+  std::string expected_tier;
+  std::string actual_tier;
+};
+
+struct TierContractSection {
+  bool consistent{true};
+  std::vector<TierConsistencyIssue> issues;
+};
+
+struct SidecarChainSection {
+  uint64_t sequence{0};
+  std::string prev_rar_sha256;
+  std::string rar_sha256;
+  std::string op_log_head_sha256;
+};
+
 struct RarReport {
   std::string rar_version{"1.0"};
   int64_t generated_at_unix{0};
@@ -172,6 +207,9 @@ struct RarReport {
   std::string verdict_reason;
   CatalogSidecarReport catalog{};
   OpLogSidecarReport op_log{};
+  KernelSectionReport kernel{};
+  TierContractSection tier_contract{};
+  SidecarChainSection sidecar_chain{};
   std::string signature;
 };
 

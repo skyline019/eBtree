@@ -21,6 +21,15 @@ bool WalKeyIndex::Lookup(const std::string& key, uint64_t after_lsn,
   return true;
 }
 
+bool WalKeyIndex::LatestLsn(const std::string& key, uint64_t after_lsn,
+                            uint64_t* lsn_out) const {
+  const auto it = index_.find(key);
+  if (it == index_.end()) return false;
+  if (it->second.lsn <= after_lsn) return false;
+  if (lsn_out) *lsn_out = it->second.lsn;
+  return true;
+}
+
 Status WalKeyIndex::BuildFromFile(const std::string& path) {
   Clear();
   std::ifstream in(path, std::ios::binary);

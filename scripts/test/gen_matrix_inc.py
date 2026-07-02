@@ -33,6 +33,7 @@ def parse_case(chunk: str) -> dict:
         "corrupt": "",
         "assert_stat": "",
         "compress_pages": False,
+        "product_default": False,
     }
     section = None
     section_lines: list[str] = []
@@ -84,6 +85,11 @@ def parse_case(chunk: str) -> dict:
                 "yes",
             )
             continue
+        if stripped.startswith("compress:") or stripped.startswith("product_default:"):
+            key = stripped.split(":", 1)[0]
+            val = stripped.split(":", 1)[1].strip().lower()
+            case["product_default"] = val in ("1", "true", "yes")
+            continue
         if section == "setup":
             section_lines.append(line)
     if section == "setup":
@@ -114,7 +120,8 @@ def emit_cases(cases: list[dict], out_path: Path, stem: str) -> None:
             f'"{c["run"]}", "{c["expect"]}", '
             f'"{c["get_key"]}", "{c["get_value"]}", '
             f'"{c["error_contains"]}", "{c["corrupt"]}", '
-            f'"{c["assert_stat"]}", {str(c["compress_pages"]).lower()}}},'
+            f'"{c["assert_stat"]}", {str(c["compress_pages"]).lower()}, '
+            f'{str(c["product_default"]).lower()}}},'
         )
     lines.extend(
         [

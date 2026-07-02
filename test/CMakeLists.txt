@@ -27,12 +27,24 @@ ebtree_add_test_suite(
     unit/invariant_ondisk_btree_test.cc
     unit/lazy_committed_get_test.cc
     unit/datafile_lsn_index_test.cc
+    unit/vcs_chain_test.cc
+    unit/invariant_vcs_test.cc
+    unit/vcs_gc_pin_test.cc
+    unit/snapshot_resolver_test.cc
+    unit/tsl3_lock_test.cc
+    unit/sfs_read_test.cc
     unit/value_codec_test.cc
     unit/lzma_codec_test.cc
     unit/balanced_durability_test.cc
     unit/recovery_state_test.cc
     unit/read_resolver_test.cc
+    unit/catalog_key_encoding_test.cc
   CATEGORIES success unit invariant
+)
+
+target_link_libraries(ebtree_tests_unit PRIVATE ebtree_sql)
+target_include_directories(ebtree_tests_unit PRIVATE
+  "${CMAKE_SOURCE_DIR}/sql"
 )
 
 target_compile_definitions(ebtree_tests_unit PRIVATE
@@ -52,6 +64,10 @@ ebtree_add_test_suite(
     failure/chaos_harness_test.cc
     failure/concurrent_chaos_test.cc
     failure/random_powerfail_test.cc
+    failure/vcs_powerfail_test.cc
+    failure/vcs_snapshot_powerfail_test.cc
+    failure/txn_wal_recovery_test.cc
+    failure/snapshot_occ_engine_test.cc
   CATEGORIES failure
 )
 
@@ -96,10 +112,17 @@ ebtree_add_test_suite(
     pipeline/background_flush_test.cc
     pipeline/lazy_get_test.cc
     pipeline/perf_regression_test.cc
+    pipeline/lsv_perf_regression_test.cc
     pipeline/compress_datafile_test.cc
     pipeline/compress_perf_test.cc
+    pipeline/histogram_summary_test.cc
   CATEGORIES pipeline success
 )
+
+target_include_directories(ebtree_tests_pipeline PRIVATE
+  "${CMAKE_SOURCE_DIR}/tools/ebtree_audit"
+)
+target_link_libraries(ebtree_tests_pipeline PRIVATE ebtree_audit_lib)
 
 ebtree_add_test_suite(
   NAME matrix
@@ -134,6 +157,13 @@ ebtree_add_test_suite(
     audit/rar_canonical_sign_test.cc
     audit/rar_capi_verify_test.cc
     audit/rar_require_signature_test.cc
+    audit/rar_v3_attest_test.cc
+    audit/rar_chain_dynamic_test.cc
+    audit/carl_complete_test.cc
+    audit/carl_benchmark_test.cc
+    audit/carl_eval_gate_test.cc
+    audit/rar_kv_write_guard_test.cc
+    audit/rar_stability_test.cc
   CATEGORIES audit failure
 )
 
@@ -143,6 +173,7 @@ if(EBTREE_BUILD_SQL)
     SOURCES
       ../test_sql/sql_smoke_test.cc
       ../test_sql/sql_open_attestation_test.cc
+      ../test_sql/sql_rar_monitor_test.cc
       ../test_sql/sql_mic_test.cc
       ../test_sql/sql_op_log_test.cc
       ../test_sql/sql_parse_matrix_test.cc
@@ -159,8 +190,13 @@ if(EBTREE_BUILD_SQL)
       ../test_sql/semantic_oracle_test.cc
       ../test_sql/exec/sql_perf_matrix_test.cc
       ../test_sql/sql_txn_test.cc
+      ../test_sql/snapshot_si_test.cc
+      ../test_sql/snapshot_occ_test.cc
+      ../test_sql/snapshot_phantom_test.cc
+      ../test_sql/sql_subset_b_test.cc
       ../test_sql/sql_advanced_exec_test.cc
       ../test_sql/c_api_smoke_test.cc
+      demo/demo_e2e_gate_test.cc
     CATEGORIES sql success
   )
 
@@ -170,7 +206,7 @@ if(EBTREE_BUILD_SQL)
     "${CMAKE_CURRENT_BINARY_DIR}"
     "${CMAKE_SOURCE_DIR}/test_sql"
   )
-  target_link_libraries(ebtree_tests_sql PRIVATE ebtree_sql ebtree_sql_capi)
+  target_link_libraries(ebtree_tests_sql PRIVATE ebtree_sql ebtree_sql_capi ebtree_demo_flows)
 
   set(SQL_MATRIX_DATA_DIR "${CMAKE_SOURCE_DIR}/test/data/sql")
   set(SQL_MATRIX_INC "${EBTEST_GENERATED_INC_DIR}/sql_matrix_inc.h")
@@ -192,8 +228,9 @@ endif()
 
 target_include_directories(ebtree_tests_audit PRIVATE
   "${CMAKE_SOURCE_DIR}/tools/ebtree_audit"
+  "${CMAKE_SOURCE_DIR}"
 )
-target_link_libraries(ebtree_tests_audit PRIVATE ebtree_audit_lib ebtree_audit_capi)
+target_link_libraries(ebtree_tests_audit PRIVATE ebtree_audit_lib ebtree_audit_capi ebtree_carl_eval_lib)
 if(EBTREE_RAR_SIGNING)
   target_compile_definitions(ebtree_tests_audit PRIVATE
     EBTREE_RAR_SIGNING=1

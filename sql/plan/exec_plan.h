@@ -7,10 +7,14 @@
 
 #include "sql/ast/select_ast.h"
 #include "sql/ast/query_ast.h"
+#include "sql/plan/index_match.h"
 #include "ebtree/common/status.h"
 
 namespace ebtree {
 namespace sql {
+
+class Catalog;
+
 namespace plan {
 
 enum class PlanStepKind {
@@ -29,6 +33,9 @@ struct PlanStep {
   std::string index_name;
   std::string index_column;
   std::string index_value;
+  std::string index_range_lo;
+  std::string index_range_hi;
+  IndexScanMode index_scan_mode{IndexScanMode::kNone};
   std::string join_table;
   JoinType join_type{JoinType::kInner};
   std::string join_left_col;
@@ -44,6 +51,10 @@ struct ExecPlan {
 };
 
 Status LowerQuery(const QueryStatement& in, ExecPlan* out);
+Status LowerQueryWithCatalog(const QueryStatement& in, const Catalog* catalog,
+                             ExecPlan* out);
+Status LowerSelectQuery(const SelectQuery& sq, const Catalog* catalog,
+                        ExecPlan* out);
 
 }  // namespace plan
 }  // namespace sql

@@ -22,9 +22,11 @@ void RegisterCoreSyncRules(SyncExecutor* exec) {
     e->mutable_stats()->wal_append_total++;
 
     if (req->is_delete) {
-      e->memtable()->DeleteKey(req->key, lsn);
+      e->memtable()->DeleteKey(req->key, lsn, req->txn_id, req->txn_id == 0);
     } else {
-      const Status mt = e->memtable()->Put(req->key, req->value, lsn);
+      const Status mt =
+          e->memtable()->Put(req->key, req->value, lsn, req->txn_id,
+                             req->txn_id == 0);
       if (!mt.ok()) return mt;
     }
 

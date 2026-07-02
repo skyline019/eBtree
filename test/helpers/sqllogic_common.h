@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -140,6 +141,13 @@ inline CaseResult RunCase(const SqllogicCase& c) {
   CaseResult out{};
   out.source = c.source;
   const std::string dir = TempDir("sqllogic_" + c.name);
+  struct TempDirCleanup {
+    std::string path;
+    ~TempDirCleanup() {
+      std::error_code ec;
+      std::filesystem::remove_all(path, ec);
+    }
+  } temp_cleanup{dir};
   sql::OpenOptions opts{};
   opts.path = dir;
   std::unique_ptr<sql::Database> db;

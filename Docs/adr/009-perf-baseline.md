@@ -1,6 +1,6 @@
 # ADR-009: Performance baseline (bench)
 
-## Targets (text.txt Phase 3)
+## Targets (Docs/archive/planning/text.txt Phase 3)
 
 - Write kBalanced (Production): **100k+ TPS** concurrent durable single shard
 - Write kSync (Enterprise): fsync-limited (~2k TPS this host)
@@ -29,7 +29,13 @@ Build with `-DEBTREE_BUILD_BENCH=ON`:
 
 ## CI policy
 
-Bench is **not** a hard gate (hardware-dependent). Release smoke tests in `perf_regression_test` provide soft budgets.
+Bench is **not** a hard gate (hardware-dependent). Release smoke tests in `perf_regression_test` provide soft budgets on **local NVMe** (P8-perf / P9-perf).
+
+GitHub Actions (`EBTEST_CI=1` via CMake when `GITHUB_ACTIONS` is set):
+
+- **P4-complete** excludes `EbPipelinePerf.*` (GHA virtual disk is fsync-limited; ADR-018).
+- **P11-real-sql** runs `RealSqliteOfficialPassRate` once via `run_sqllogictest.ps1`; baseline report is manual (`run_sqllogic_baseline.ps1`).
+- `EBTEST_CI` reduces powerfail/RTO trial counts; it does **not** relax perf budgets on GHA.
 
 ## Baseline matrix (kSync sustained perf plan)
 
@@ -73,7 +79,7 @@ read_bench / scan_bench / kSync / kGroup: see prior sections
 | kSync (Enterprise) | durable at return | ~1.7–1.8k/s |
 | kGroup | append only | ~405k/s |
 
-CI gate: `KBalancedWrite100kConcurrentBudget` ≥ **100k ops/s** (Release NDEBUG) / **85k** (`EBTEST_CI`); `fsync_merge_ratio` ≥ **8** (Release). Bench prints `target_100k=PASS|FAIL` as stretch label.
+CI gate: `KBalancedWrite100kConcurrentBudget` ≥ **100k ops/s** (Release NDEBUG, local only) / **85k** (`EBTEST_CI`, local reference; **not** enforced on GHA).
 
 Random powerfail: `EbFailureRandomPowerfail.*` — seed fuzz, concurrent destroy, mid-checkpoint hook.
 
@@ -88,6 +94,36 @@ Committed Scan fast path (`ScanCommittedDirect`): when `RecoveryState=kCommitted
 Lazy on-disk Scan uses `ReadResolver`/`ScanResolver` + `DataFileReader` batch resolve (no per-key `ReadVisible` on cold lazy reopen).
 
 kSync write uses `WalFsyncCoordinator` (ADR-020): Put releases `rw_mu_` during fsync; multi-thread bench reports `fsync_merge_ratio`.
+
+## P9 Q3 SLO supplement (2026-07-01)
+
+Local NVMe Release hard targets (not GHA gates):
+
+| Metric | Target | Gate |
+|--------|--------|------|
+| kBalanced 128-thread write | ≥100k ops/s | `KBalancedWrite100kConcurrentBudget` |
+| kSync 10k Put smoke | <500ms | `KSyncWrite10kSmokeBudget` |
+| kBalanced lazy scan 10k (cold reopen) | ≤45ms NDEBUG | `LazyScan10kBudget` |
+| kSync committed scan 10k P50 | ≤15ms | `KSyncScan10kSmokeBudget` |
+| FastOpen 10k | <80ms NDEBUG | `FastOpen10kReleaseBudget` |
+| BalancedCompress Put | ≤1.08× raw | `P10-compress-v2` soft |
+| BalancedCompress scan 10k | ≤1.10× raw | `P10-compress-v2` soft |
+
+Program gates: `P9-nofallback-hard`, `P9-perf-read`, `P9-perf-write`, `P9-audit-complete`, `P9-program-complete`.
+
+### P14 product default (ADR-039)
+
+| Metric | SKU | Target | Gate |
+|--------|-----|--------|------|
+| Standard kBalanced write 100k | `StandardDefaults` | ≥0.92× raw (`ProductionDefaults`) | `StandardWrite100kConcurrentBudget` |
+| Standard lazy scan 10k | `StandardDefaults` | ≤1.10× raw + 2ms | `StandardLazyScan10kBudget` |
+| Standard powerfail | `StandardDefaults` | unexpected_path=0 | `P14-powerfail-compress` |
+
+Raw bench remains `ProductionDefaults` for P9-perf gates.
+
+## Archived snapshots
+
+- [perf-baseline-2026-07-01](../archive/perf/perf-baseline-2026-07-01.md) — full gate + bench rollup (2026-07-01)
 
 ## Historical
 

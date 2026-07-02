@@ -19,6 +19,7 @@ TEST(BalancedDurabilityTest, PutReturnsWithStableLsn) {
   ASSERT_NE(engine, nullptr);
   ASSERT_TRUE(engine->Put("bk", "bv").ok());
   EXPECT_GE(engine->stable_lsn(), 1u);
+  EXPECT_TRUE(opts.compress_values);
   EXPECT_EQ(engine->stats().unexpected_path_total, 0u);
 }
 

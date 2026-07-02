@@ -63,6 +63,67 @@ AttestInferredPath WorstPath(AttestInferredPath a, AttestInferredPath b) {
   return rank(a) >= rank(b) ? a : b;
 }
 
+void FillRecoverySnapshot(Engine* engine, bool any_badwal,
+                          RecoverySnapshot* recovery,
+                          AttestInferredPath* aggregate_out) {
+  recovery->recovery_mode = engine->recovery_mode();
+  recovery->wal_replay_pending = engine->wal_replay_pending();
+  recovery->unexpected_path_total = engine->stats().unexpected_path_total;
+  recovery->stable_lsn = engine->stats().stable_lsn;
+  recovery->shards.clear();
+
+  const uint32_t n = engine->shard_count();
+  AttestInferredPath aggregate = AttestInferredPath::kUnknown;
+  for (uint32_t i = 0; i < n; ++i) {
+    RecoveryShardSnapshot snap{};
+    snap.shard_id = i;
+    const ShardEngine* shard = engine->shard(i);
+    if (!shard) {
+      snap.state = ShardRecoveryState::kCommittedHot;
+      snap.inferred_path =
+          InferPath(any_badwal, snap.state, recovery->wal_replay_pending);
+      aggregate = WorstPath(aggregate, snap.inferred_path);
+      recovery->shards.push_back(snap);
+      continue;
+    }
+    snap.state = shard->recovery_state();
+    snap.wal_corrupt = shard->wal_corrupt();
+    snap.lazy_root_corrupt = shard->lazy_root_corrupt();
+    snap.inferred_path =
+        InferPath(any_badwal || snap.wal_corrupt, snap.state,
+                  recovery->wal_replay_pending);
+    aggregate = WorstPath(aggregate, snap.inferred_path);
+    for (size_t t = 0; t < kReadTierCount; ++t) {
+      snap.read_tier_hits[t] = shard->stats().read_tier_hits[t];
+    }
+    recovery->shards.push_back(snap);
+  }
+  if (aggregate_out) *aggregate_out = aggregate;
+}
+
+void FillForbiddenViolations(const EngineStats& stats,
+                             std::vector<std::string>* out) {
+  out->clear();
+  if (stats.unexpected_path_total > 0) {
+    out->push_back("unexpected_path_total>0");
+  }
+  if (stats.fallback_read_total > 0) {
+    out->push_back("fallback_read_total>0");
+  }
+  if (stats.decompress_fail_total > 0) {
+    out->push_back("decompress_fail_total>0");
+  }
+}
+
+void FillCompressSnapshot(const EngineStats& stats, CompressStatsSnapshot* out) {
+  out->raw_total = stats.compress_bytes_in;
+  out->bytes_saved = 0;
+  if (stats.compress_bytes_in > stats.compress_bytes_out) {
+    out->bytes_saved = stats.compress_bytes_in - stats.compress_bytes_out;
+  }
+  out->decompress_fail = stats.decompress_fail_total;
+}
+
 }  // namespace
 
 std::string ReadTierToString(ReadTier tier) {
@@ -75,8 +136,12 @@ std::string ReadTierToString(ReadTier tier) {
       return "BTreeDisk";
     case ReadTier::kDataFileLsn:
       return "DataFileLsn";
+    case ReadTier::kVersionChain:
+      return "VersionChain";
     case ReadTier::kWalSingleKey:
       return "WalSingleKey";
+    case ReadTier::kWalSnapshotKey:
+      return "WalSnapshotKey";
     case ReadTier::kCommittedDirectScan:
       return "CommittedDirectScan";
     case ReadTier::kBTreeScanResolve:
@@ -143,38 +208,8 @@ Status AttestExport(Engine* engine, const AttestExportOptions& opts,
                     AttestExportReport* out) {
   if (!engine || !out) return Status::InvalidArgument("null argument");
 
-  out->recovery.recovery_mode = engine->recovery_mode();
-  out->recovery.wal_replay_pending = engine->wal_replay_pending();
-  out->recovery.unexpected_path_total = engine->stats().unexpected_path_total;
-  out->recovery.stable_lsn = engine->stats().stable_lsn;
-  out->recovery.shards.clear();
-
-  const uint32_t n = engine->shard_count();
   AttestInferredPath aggregate = AttestInferredPath::kUnknown;
-  for (uint32_t i = 0; i < n; ++i) {
-    RecoveryShardSnapshot snap{};
-    snap.shard_id = i;
-    const ShardEngine* shard = engine->shard(i);
-    if (!shard) {
-      snap.state = ShardRecoveryState::kCommittedHot;
-      snap.inferred_path =
-          InferPath(opts.any_badwal, snap.state, out->recovery.wal_replay_pending);
-      aggregate = WorstPath(aggregate, snap.inferred_path);
-      out->recovery.shards.push_back(snap);
-      continue;
-    }
-    snap.state = shard->recovery_state();
-    snap.wal_corrupt = shard->wal_corrupt();
-    snap.lazy_root_corrupt = shard->lazy_root_corrupt();
-    snap.inferred_path =
-        InferPath(opts.any_badwal || snap.wal_corrupt, snap.state,
-                  out->recovery.wal_replay_pending);
-    aggregate = WorstPath(aggregate, snap.inferred_path);
-    for (size_t t = 0; t < kReadTierCount; ++t) {
-      snap.read_tier_hits[t] = shard->stats().read_tier_hits[t];
-    }
-    out->recovery.shards.push_back(snap);
-  }
+  FillRecoverySnapshot(engine, opts.any_badwal, &out->recovery, &aggregate);
   out->inferred_path = aggregate;
 
   out->probes.clear();
@@ -208,6 +243,37 @@ Status AttestExport(Engine* engine, const AttestExportOptions& opts,
     out->probes.push_back(std::move(probe));
   }
 
+  return Status::Ok();
+}
+
+Status AttestExportV2(Engine* engine, const AttestExportOptions& opts,
+                      AttestExportReportV2* out) {
+  if (!engine || !out) return Status::InvalidArgument("null argument");
+  const Status base = AttestExport(engine, opts, &out->base);
+  if (!base.ok()) return base;
+
+  const EngineStats stats = engine->stats();
+  out->checkpoint_lsn = stats.stable_lsn;
+  out->pages_touched = stats.pages_touched;
+  FillCompressSnapshot(stats, &out->compress);
+  FillForbiddenViolations(stats, &out->forbidden_violations);
+  return Status::Ok();
+}
+
+Status AttestExportSnapshot(Engine* engine, uint64_t checkpoint_lsn,
+                            AttestExportReportV2* out) {
+  if (!engine || !out) return Status::InvalidArgument("null argument");
+  out->base.probes.clear();
+  AttestInferredPath aggregate = AttestInferredPath::kUnknown;
+  FillRecoverySnapshot(engine, false, &out->base.recovery, &aggregate);
+  out->base.inferred_path = aggregate;
+
+  const EngineStats stats = engine->stats();
+  out->checkpoint_lsn =
+      checkpoint_lsn > 0 ? checkpoint_lsn : stats.stable_lsn;
+  out->pages_touched = stats.pages_touched;
+  FillCompressSnapshot(stats, &out->compress);
+  FillForbiddenViolations(stats, &out->forbidden_violations);
   return Status::Ok();
 }
 

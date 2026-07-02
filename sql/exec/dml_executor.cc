@@ -3,6 +3,8 @@
 #include "sql/catalog/row_codec.h"
 #include "sql/eval/schema_context.h"
 #include "sql/exec/index_maintenance.h"
+#include "sql/exec/constraint_engine.h"
+#include "sql/exec/txn_read_policy.h"
 #include "ebtree/common/digest.h"
 
 namespace ebtree {
@@ -37,7 +39,7 @@ DmlExecutor::DmlExecutor(ebtree::Engine* engine, Catalog* catalog,
       op_log_(op_log),
       tier_(tier),
       txn_(txn),
-      scan_(engine, catalog) {}
+      scan_(engine, catalog, txn) {}
 
 Status DmlExecutor::SaveCatalog() const {
   if (!catalog_store_) return Status::Ok();
@@ -94,10 +96,17 @@ Status DmlExecutor::ExecUpdate(const QueryStatement& stmt) {
     }
   }
 
-  const bool use_scan = stmt.update.where_expr || !stmt.update.where_col.has_value() ||
-                        table->implicit_rowid ||
-                        (stmt.update.where_col.has_value() &&
-                         *stmt.update.where_col != table->key_column);
+  const bool use_point_pk =
+      stmt.update.where_col.has_value() &&
+      stmt.update.where_value.has_value() && !table->implicit_rowid &&
+      *stmt.update.where_col == table->key_column;
+
+  const bool use_scan =
+      !use_point_pk &&
+      (stmt.update.where_expr || !stmt.update.where_col.has_value() ||
+       table->implicit_rowid ||
+       (stmt.update.where_col.has_value() &&
+        *stmt.update.where_col != table->key_column));
 
   if (use_scan) {
     std::vector<std::pair<std::string, std::string>> encoded;
@@ -147,8 +156,16 @@ Status DmlExecutor::ExecUpdate(const QueryStatement& stmt) {
         }
         working[assign.col] = set_val;
       }
-      if (txn_) txn_->RecordBeforePut(engine_, kv.first);
-      const Status put_st = engine_->Put(kv.first, stored);
+      {
+        const Status cst = ValidateRowConstraintsWithEval(*table, working, &eval);
+        if (!cst.ok()) return cst;
+      }
+      if (txn_) {
+        txn_->RecordBeforePut(engine_, kv.first);
+        txn_->RecordWriteIntent(engine_, kv.first);
+      }
+      const Status put_st =
+          engine_->Put(kv.first, stored, txn_ && txn_->active() ? txn_->txn_id() : 0);
       if (!put_st.ok()) return put_st;
       std::unordered_map<std::string, std::string> index_fields;
       (void)DecodeRowFields(stored, &index_fields);
@@ -156,7 +173,8 @@ Status DmlExecutor::ExecUpdate(const QueryStatement& stmt) {
         index_fields = working;
       }
       const Status is =
-          SyncIndexEntries(engine_, catalog_, *table, user_key, index_fields, false);
+          SyncIndexEntries(engine_, catalog_, *table, user_key, index_fields,
+                           false, txn_ && txn_->active() ? txn_->txn_id() : 0);
       if (!is.ok()) return is;
       if (op_log_) {
         const bool durable = tier_ == DurabilityClass::kSync ||
@@ -178,9 +196,10 @@ Status DmlExecutor::ExecUpdate(const QueryStatement& stmt) {
   point_row[table->key_column] = *stmt.update.where_value;
   std::string stored;
   if (table->schema_version >= 2) {
-    const Status gs = engine_->Get(encoded, &stored);
+    const Status gs = TxnGet(engine_, txn_, encoded, &stored);
     if (!gs.ok() && gs.code() != StatusCode::kNotFound) return gs;
   }
+  if (txn_) txn_->RecordWriteIntent(engine_, encoded);
   RowMap working = point_row;
   for (const auto& assign : *assignments) {
     const std::string set_val =
@@ -205,8 +224,17 @@ Status DmlExecutor::ExecUpdate(const QueryStatement& stmt) {
     }
     working[assign.col] = set_val;
   }
+  {
+    ExprEval eval;
+    SchemaContext ctx;
+    ctx.table = &(*table);
+    eval.SetSchemaContext(ctx);
+    const Status cst = ValidateRowConstraintsWithEval(*table, working, &eval);
+    if (!cst.ok()) return cst;
+  }
   if (txn_) txn_->RecordBeforePut(engine_, encoded);
-  const Status put_st = engine_->Put(encoded, stored);
+  const Status put_st =
+      engine_->Put(encoded, stored, txn_ && txn_->active() ? txn_->txn_id() : 0);
   if (!put_st.ok()) return put_st;
   std::unordered_map<std::string, std::string> fields;
   if (table->schema_version >= 2) {
@@ -216,7 +244,8 @@ Status DmlExecutor::ExecUpdate(const QueryStatement& stmt) {
   }
   const Status is =
       SyncIndexEntries(engine_, catalog_, *table, *stmt.update.where_value,
-                       fields, false);
+                       fields, false,
+                       txn_ && txn_->active() ? txn_->txn_id() : 0);
   if (!is.ok()) return is;
   if (op_log_) {
     const bool durable = tier_ == DurabilityClass::kSync ||

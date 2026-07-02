@@ -1,4 +1,4 @@
-#pragma once
+#include "json_writer.h"
 
 #include <sstream>
 #include <string>
@@ -249,8 +249,86 @@ void WriteRarReportJson(const RarReport& report, std::ostream& out) {
       << (report.policy.allow_unexpected_keys ? "true" : "false") << ",\n";
   out << "    \"require_unexpected_path_zero\": "
       << (report.policy.require_unexpected_path_zero ? "true" : "false")
+      << ",\n";
+  out << "    \"require_tier_consistent\": "
+      << (report.policy.require_tier_consistent ? "true" : "false") << ",\n";
+  out << "    \"max_decompress_fail\": " << report.policy.max_decompress_fail
       << "\n";
   out << "  },\n";
+
+  if (report.rar_version >= "3.0" && report.kernel.checkpoint_lsn > 0) {
+    out << "  \"kernel\": {\n";
+    out << "    \"checkpoint_lsn\": " << report.kernel.checkpoint_lsn << ",\n";
+    out << "    \"pages_touched\": " << report.kernel.pages_touched << ",\n";
+    out << "    \"unexpected_path_total\": "
+        << report.kernel.unexpected_path_total << ",\n";
+    out << "    \"stable_lsn\": " << report.kernel.stable_lsn << ",\n";
+    out << "    \"recovery_mode\": ";
+    JsonEscape(out, report.kernel.recovery_mode);
+    out << ",\n";
+    out << "    \"inferred_path\": ";
+    JsonEscape(out, report.kernel.inferred_path);
+    out << ",\n";
+    out << "    \"compress\": {\n";
+    out << "      \"raw_total\": " << report.kernel.compress_raw_total << ",\n";
+    out << "      \"bytes_saved\": " << report.kernel.compress_bytes_saved
+        << ",\n";
+    out << "      \"decompress_fail\": " << report.kernel.decompress_fail
+        << "\n";
+    out << "    },\n";
+    out << "    \"forbidden_violations\": [";
+    for (size_t i = 0; i < report.kernel.forbidden_violations.size(); ++i) {
+      if (i > 0) out << ",";
+      out << "\n      ";
+      JsonEscape(out, report.kernel.forbidden_violations[i]);
+    }
+    if (!report.kernel.forbidden_violations.empty()) out << "\n    ";
+    out << "]\n";
+    out << "  },\n";
+
+    out << "  \"tier_contract\": {\n";
+    out << "    \"consistent\": "
+        << (report.tier_contract.consistent ? "true" : "false") << ",\n";
+    out << "    \"issues\": [\n";
+    for (size_t i = 0; i < report.tier_contract.issues.size(); ++i) {
+      const auto& issue = report.tier_contract.issues[i];
+      out << "      {\n";
+      out << "        \"shard\": " << issue.shard << ",\n";
+      out << "        \"recovery_state\": ";
+      JsonEscape(out, issue.recovery_state);
+      out << ",\n";
+      out << "        \"probe_key\": ";
+      JsonEscape(out, issue.probe_key);
+      out << ",\n";
+      out << "        \"expected_tier\": ";
+      JsonEscape(out, issue.expected_tier);
+      out << ",\n";
+      out << "        \"actual_tier\": ";
+      JsonEscape(out, issue.actual_tier);
+      out << "\n";
+      out << "      }";
+      if (i + 1 < report.tier_contract.issues.size()) out << ",";
+      out << "\n";
+    }
+    out << "    ]\n";
+    out << "  },\n";
+
+    if (report.sidecar_chain.sequence > 0 ||
+        !report.sidecar_chain.rar_sha256.empty()) {
+      out << "  \"sidecar_chain\": {\n";
+      out << "    \"sequence\": " << report.sidecar_chain.sequence << ",\n";
+      out << "    \"prev_rar_sha256\": ";
+      JsonEscape(out, report.sidecar_chain.prev_rar_sha256);
+      out << ",\n";
+      out << "    \"rar_sha256\": ";
+      JsonEscape(out, report.sidecar_chain.rar_sha256);
+      out << ",\n";
+      out << "    \"op_log_head_sha256\": ";
+      JsonEscape(out, report.sidecar_chain.op_log_head_sha256);
+      out << "\n";
+      out << "  },\n";
+    }
+  }
 
   if (!report.catalog.path.empty()) {
     out << "  \"catalog\": {\n";

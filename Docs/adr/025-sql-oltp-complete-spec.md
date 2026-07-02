@@ -6,7 +6,7 @@ Accepted — Phase 3d adds CTE/SET OP/WINDOW exec and session txn blocks (SQL la
 
 ## Context
 
-Phase 3b replaced legacy parsers with native token-registry stack. Phase 3c deepens OLTP exec and parse AST for advanced SQL. Phase 3d clears SQL-layer technical debt: hardened subqueries, CTE/SET OP/WINDOW execution, session-level txn journal (no engine MVCC). Legacy `thirdbackup/sql_parse` archived to `Docs/archive/thirdbackup-sql_parse`.
+Phase 3b replaced legacy parsers with native token-registry stack. Phase 3c deepens OLTP exec and parse AST for advanced SQL. Phase 3d clears SQL-layer technical debt: hardened subqueries, CTE/SET OP/WINDOW execution, session-level txn journal. **Read snapshot isolation (SI)** is provided by engine LSV (ADR-046); write path remains single-version commit. Legacy `thirdbackup/sql_parse` archived to `Docs/archive/thirdbackup-sql_parse`.
 
 ## Decision
 
@@ -45,6 +45,7 @@ Phase 3b replaced legacy parsers with native token-registry stack. Phase 3c deep
 - Catalog v2: N-column schema; row value = JSON object keyed by column name
 - Engine keys remain `{table_id}:{user_key}`
 - Session txn: undo journal in `Database` / `TransactionState` (not engine MVCC)
+- **Read SI**: `BEGIN` captures engine `SnapshotToken`; SELECT uses `GetAtSnapshot` / `ScanAtSnapshot` (ADR-046 LSV). Writes remain single-version until commit.
 
 ### Error taxonomy
 

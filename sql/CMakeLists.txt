@@ -9,7 +9,9 @@ add_library(ebtree_sql STATIC
   eval/agg_engine.cc
   eval/expr_eval.cc
   eval/type_affinity.cc
-  exec/constraint_check.cc
+  eval/like_match.cc
+  eval/function_registry.cc
+  exec/constraint_engine.cc
   exec/pragma_exec.cc
   exec/executor.cc
   exec/executor_v2.cc
@@ -35,6 +37,7 @@ add_library(ebtree_sql STATIC
   parse/native/native_parser.cc
   parse/registry/registry_parser.cc
   plan/lower.cc
+  plan/index_match.cc
   session/attestation.cc
   session/database.cc
   session/transaction_state.cc
@@ -67,5 +70,6 @@ target_include_directories(ebtree_sql_capi
   PRIVATE
     "${CMAKE_SOURCE_DIR}"
     "${CMAKE_SOURCE_DIR}/cpp/include"
+    "${CMAKE_SOURCE_DIR}/tools/ebtree_audit"
 )
 target_link_libraries(ebtree_sql_capi PUBLIC ebtree_sql)

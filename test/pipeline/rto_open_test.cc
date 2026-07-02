@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
 
 #include <chrono>
+#include <memory>
 #include <string>
 
 #include "ebtree/concept/datafile/datafile.h"
+#include "ebtree/engine/engine.h"
 #include "engine_test_util.h"
 
 TEST(EbPipelineRto, FastOpenUnderBudget) {
@@ -122,4 +124,35 @@ TEST(EbPipelineRto, FastOpenBadBlockFallback) {
 #else
   EXPECT_LT(elapsed.count(), 80);
 #endif
+}
+
+TEST(EbPipelineRto, MultiShardOpenBudget) {
+  const std::string dir = ebtree::test::TempDir("rto_multishard_open");
+  ebtree::EngineOptions opts = ebtree::EngineOptions::ProductionDefaults(dir);
+  opts.shard_count = 4;
+  opts.background_summary_validate = false;
+  opts.background_flush = false;
+  {
+    std::unique_ptr<ebtree::Engine> engine;
+    ASSERT_TRUE(ebtree::Engine::Open(opts, &engine).ok());
+    for (int s = 0; s < 4; ++s) {
+      for (int i = 0; i < 250; ++i) {
+        const std::string key = "ms" + std::to_string(s) + "_" + std::to_string(i);
+        ASSERT_TRUE(engine->Put(key, "v").ok());
+      }
+    }
+    ASSERT_TRUE(engine->Checkpoint().ok());
+  }
+  const auto start = std::chrono::steady_clock::now();
+  std::unique_ptr<ebtree::Engine> engine;
+  ASSERT_TRUE(ebtree::Engine::Open(opts, &engine).ok());
+  const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - start);
+  ASSERT_NE(engine, nullptr);
+#if defined(NDEBUG)
+  EXPECT_LT(elapsed.count(), 200);
+#endif
+  std::string value;
+  ASSERT_TRUE(engine->Get("ms0_0", &value).ok());
+  EXPECT_EQ(value, "v");
 }

@@ -4,6 +4,7 @@
 #include "ebtree/concept/page/page_format.h"
 #include "ebtree/engine/read_tier.h"
 #include "ebtree/engine/shard_engine.h"
+#include "ebtree/engine/tier_dispatch.h"
 
 namespace ebtree {
 
@@ -12,19 +13,18 @@ Status ScanResolver::Scan(ShardEngine& shard, const TypedPlan& plan,
   if (!rows) return Status::InvalidArgument("rows is null");
   if (shard.wal_replay_pending_ && !shard.wal_corrupt_ &&
       shard.recovery_mode_ != RecoveryMode::kLazy) {
-    std::unique_lock<std::shared_mutex> lock(shard.rw_mu_);
+    std::unique_lock<SnapshotFairRwLock> lock(shard.rw_mu_);
     const Status replay = shard.EnsureWalReplayed();
     if (!replay.ok()) return replay;
     shard.RefreshRecoveryState();
   }
-  std::shared_lock<std::shared_mutex> lock(shard.rw_mu_);
+  std::shared_lock<SnapshotFairRwLock> lock(shard.rw_mu_);
   const uint64_t snapshot_lsn =
       plan.snapshot_lsn > 0 ? plan.snapshot_lsn : shard.stats_.stable_lsn;
   const Status pst = shard.Prepare(plan);
   if (!pst.ok() && pst.code() != StatusCode::kStaleSummary) return pst;
 
-  if (shard.recovery_state_ == ShardRecoveryState::kCommittedCold &&
-      shard.CanScanCommittedDirect(plan)) {
+  if (shard.CanScanCommittedDirect(plan)) {
     shard.RecordTier(ReadTier::kCommittedDirectScan);
     const Status direct =
         shard.ScanCommittedDirect(plan, snapshot_lsn, rows);
@@ -36,7 +36,7 @@ Status ScanResolver::Scan(ShardEngine& shard, const TypedPlan& plan,
   Status st = shard.btree_.Scan(plan, &hits);
   if (st == StatusCode::kStaleSummary) {
     lock.unlock();
-    std::unique_lock<std::shared_mutex> unique(shard.rw_mu_);
+    std::unique_lock<SnapshotFairRwLock> unique(shard.rw_mu_);
     const Status repair = shard.RepairSummary();
     if (!repair.ok()) return repair;
     hits.clear();

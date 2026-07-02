@@ -33,6 +33,9 @@ class SqlExecutor {
   Status ExecCreateTable(const CreateTableStmt& stmt);
   Status ExecInsert(const InsertStmt& stmt);
   Status ExecSelect(const SelectStmt& stmt, ExecuteResult* out);
+  Status EngineGet(const std::string& key, std::string* value) const;
+  Status EngineScan(const TypedPlan& plan,
+                    std::vector<std::pair<std::string, std::string>>* rows) const;
   Status AppendOpLogPut(const std::string& encoded_key,
                         const std::string& value);
   bool DurableAtReturn() const;

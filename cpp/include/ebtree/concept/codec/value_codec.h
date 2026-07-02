@@ -10,8 +10,9 @@ namespace ebtree {
 enum class ValueCodec : uint8_t {
   kRaw = 0,
   kLegacyRle = 1,  // Phase 6 RLE — read-only compat
-  kReserved = 2,
-  kLzma7z = 3,     // 7-Zip LZMA (Phase 10 default write path)
+  kLz4Fast = 2,
+  kLzma7z = 3,     // 7-Zip LZMA (Phase 10 default dense path)
+  kZstdFast = 4,   // Balanced fast path (LZMA fast preset wire)
 };
 
 struct ValueCodecResult {

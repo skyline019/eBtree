@@ -1,5 +1,7 @@
 #include "ebtree/concept/codec/value_codec.h"
 
+#include "ebtree/concept/codec/codec_registry.h"
+#include "ebtree/concept/codec/lz4_fast_codec.h"
 #include "ebtree/concept/codec/lzma_codec.h"
 
 #include <algorithm>
@@ -47,7 +49,9 @@ ValueCodec WireCodec(uint8_t wire) {
   switch (wire) {
     case 0: return ValueCodec::kRaw;
     case 1: return ValueCodec::kLegacyRle;
+    case 2: return ValueCodec::kLz4Fast;
     case 3: return ValueCodec::kLzma7z;
+    case 4: return ValueCodec::kZstdFast;
     default: return ValueCodec::kRaw;
   }
 }
@@ -56,37 +60,18 @@ ValueCodec WireCodec(uint8_t wire) {
 
 Status CompressValue(const std::string& input, bool enable,
                      ValueCodecResult* out) {
-  if (!out) return Status::InvalidArgument("out is null");
-  out->codec = ValueCodec::kRaw;
-  out->payload = input;
-  out->uncompressed_size = static_cast<uint32_t>(input.size());
-  if (!enable || input.size() < 16) return Status::Ok();
-
-  LzmaCodecResult lz{};
-  const Status cs = LzmaCompressPreset(LzmaPreset::kFastValue, input, &lz);
-  if (!cs.ok()) return cs;
-  if (!lz.compressed) return Status::Ok();
-
-  out->codec = ValueCodec::kLzma7z;
-  out->payload = std::move(lz.payload);
-  out->uncompressed_size = lz.uncompressed_size;
-  return Status::Ok();
+  const CompressPolicy policy =
+      enable ? CompressPolicy::kBalanced : CompressPolicy::kOff;
+  return CodecRegistry::CompressValue(input, policy, enable, out);
 }
 
 Status DecompressValue(ValueCodec codec, const std::string& payload,
                        uint32_t uncompressed_size, std::string* out) {
   if (!out) return Status::InvalidArgument("out is null");
-  if (codec == ValueCodec::kRaw) {
-    *out = payload;
-    return Status::Ok();
-  }
   if (codec == ValueCodec::kLegacyRle) {
     return SimpleDecompress(payload, uncompressed_size, out);
   }
-  if (codec == ValueCodec::kLzma7z) {
-    return LzmaDecompressPayload(payload, uncompressed_size, out);
-  }
-  return Status::InvalidArgument("unknown value codec");
+  return CodecRegistry::DecompressValue(codec, payload, uncompressed_size, out);
 }
 
 }  // namespace ebtree

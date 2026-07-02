@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <atomic>
 #include <mutex>
 #include <shared_mutex>
 #include <string>
@@ -25,14 +26,20 @@
 #include "ebtree/concept/wal/wal_fsync_coordinator.h"
 #include "ebtree/concept/wal/wal_batch_pipeline.h"
 #include "ebtree/concept/datafile/datafile_reader.h"
+#include "ebtree/concept/vcs/version_chain_store.h"
+#include "ebtree/concept/wal/txidx.h"
 #include "ebtree/engine/flush_worker.h"
 #include "ebtree/engine/read_tier.h"
+#include "ebtree/engine/sfs_read_cache.h"
+#include "ebtree/engine/snapshot.h"
+#include "ebtree/engine/snapshot_fair_rw_lock.h"
 #include "ebtree/sync/sync_executor.h"
 
 namespace ebtree {
 
 class ReadResolver;
 class ScanResolver;
+class SnapshotResolver;
 class BackgroundSummaryValidator;
 
 class ShardEngine {
@@ -40,9 +47,19 @@ class ShardEngine {
   static Status Create(uint32_t shard_id, const EngineOptions& opts,
                        std::unique_ptr<ShardEngine>* out);
 
-  Status Put(const std::string& key, const std::string& value);
-  Status Delete(const std::string& key);
+  Status Put(const std::string& key, const std::string& value,
+             uint32_t txn_id = 0);
+  Status Delete(const std::string& key, uint32_t txn_id = 0);
   Status Get(const std::string& key, std::string* value);
+  Status GetAtSnapshot(const std::string& key, const SnapshotReadContext& ctx,
+                       std::string* value);
+  Status ResolveLsnAtSnapshot(const std::string& key,
+                              const SnapshotReadContext& ctx, uint64_t* lsn_out);
+  Status ResolveCurrentCommittedLsn(const std::string& key, uint64_t* lsn_out);
+  Status RefreshExternalWalIfPending();
+  Status ScanAtSnapshot(const TypedPlan& plan, const SnapshotReadContext& ctx,
+                        std::vector<std::pair<std::string, std::string>>* rows);
+  Status GetAsOfLsn(const std::string& key, uint64_t lsn, std::string* value);
   Status Scan(const TypedPlan& plan,
               std::vector<std::pair<std::string, std::string>>* rows);
   Status GetAsOf(const std::string& key, uint32_t timestamp_sec,
@@ -65,6 +82,7 @@ class ShardEngine {
   Status CorruptWalForTest();
   Status CorruptDataFileForTest(uint64_t record_offset);
   Status TruncateWalForTest();
+  void ClearVcsForTest();
 
   void SetCheckpointHookForTest(CheckpointHook hook);
 
@@ -78,6 +96,20 @@ class ShardEngine {
   const EngineStats& stats() const { return stats_; }
   EngineStats* mutable_stats() { return &stats_; }
   uint64_t stable_lsn() const { return stats_.stable_lsn; }
+  VersionChainStore* vcs() { return vcs_.get(); }
+  const VersionChainStore* vcs() const { return vcs_.get(); }
+  void PinSnapshot(uint64_t lsn);
+  void ReleaseSnapshot(uint64_t lsn);
+  uint64_t pinned_epoch_lsn() const { return pinned_epoch_lsn_; }
+  Status AppendTxnBegin(uint32_t txn_id, uint64_t snapshot_lsn);
+  Status AppendTxnCommit(uint32_t txn_id);
+  Status AppendTxnAbort(uint32_t txn_id);
+  Status SaveTxnSidecar() const;
+  Status LoadTxnSidecar();
+  uint32_t snapshot_pin_count() const {
+    return snapshot_pin_count_.load(std::memory_order_acquire);
+  }
+  uint64_t pinned_snapshot_lsn() const { return pinned_snapshot_lsn_; }
   SyncExecutor* sync() { return &sync_; }
   SyncContext* sync_context() { return &sync_ctx_; }
 
@@ -104,10 +136,15 @@ class ShardEngine {
   const EngineOptions& options() const { return opts_; }
 
   Status FlushInternal();
+  Status TryFlushBackground();
   Status CommitSuperBlockInternal();
   Status AppendTLogSnapshot();
+  Status FoldWalToVcs();
+  Status SaveVcsSidecar() const;
+  Status LoadVcsSidecar();
   Status RepairSummary();
   bool TryRepairSummaryIfDrifted();
+  bool TryRepairSummaryIfDriftedBackground();
   void RotateMemTableForFlush();
 
   GroupCommitState* group_commit_state() { return &group_commit_; }
@@ -121,6 +158,9 @@ class ShardEngine {
 
   friend class ReadResolver;
   friend class ScanResolver;
+  friend class SnapshotResolver;
+
+  std::unique_ptr<VersionChainStore> vcs_;
 
  private:
   ShardEngine(uint32_t shard_id, EngineOptions opts);
@@ -128,7 +168,13 @@ class ShardEngine {
   Status OpenInternal();
   Status ReadVisible(const std::string& key, std::string* value,
                      uint64_t snapshot_lsn);
+  Status ReadVisible(const std::string& key, std::string* value,
+                     const SnapshotReadContext& ctx);
   Status EnsureWalReplayed();
+  bool SnapshotReadNeedsUpgrade(uint64_t snapshot_lsn) const;
+  Status PrepareSnapshotReadLocked(uint64_t snapshot_lsn);
+  Status GetAtSnapshotCore(const std::string& key, const SnapshotReadContext& ctx,
+                           std::string* value);
   Status RestoreKeyFromWal(const std::string& key);
   Status MaybeGcSwap();
   Status BTreeScanWithHeal(const TypedPlan& plan,
@@ -138,6 +184,9 @@ class ShardEngine {
       std::vector<std::pair<std::string, uint64_t>>* hits) const;
   void OverlayCommittedHits(
       const TypedPlan& plan, uint64_t snapshot_lsn,
+      std::vector<std::pair<std::string, uint64_t>>* hits) const;
+  void OverlaySnapshotMemTableHits(
+      const TypedPlan& plan, const SnapshotReadContext& ctx,
       std::vector<std::pair<std::string, uint64_t>>* hits) const;
   Status LoadDatafileOnRecover(const SuperBlock& sb,
                                std::unordered_map<std::string,
@@ -154,13 +203,18 @@ class ShardEngine {
       const std::vector<std::pair<std::string, uint64_t>>& hits,
       uint64_t snapshot_lsn,
       std::vector<std::pair<std::string, std::string>>* rows);
+  Status ResolveScanValues(
+      const std::vector<std::pair<std::string, uint64_t>>& hits,
+      const SnapshotReadContext& ctx,
+      std::vector<std::pair<std::string, std::string>>* rows);
   bool MemTablesEmpty() const;
   bool CanScanCommittedDirect(const TypedPlan& plan) const;
   Status ScanCommittedDirect(const TypedPlan& plan, uint64_t snapshot_lsn,
                              std::vector<std::pair<std::string, std::string>>* rows) const;
   Status PutSyncFastAppend(const std::string& key, const std::string& value,
-                           uint64_t* lsn);
-  Status DeleteSyncFastAppend(const std::string& key, uint64_t* lsn);
+                           uint64_t* lsn, uint32_t txn_id = 0);
+  Status DeleteSyncFastAppend(const std::string& key, uint64_t* lsn,
+                              uint32_t txn_id = 0);
   Status PutSyncFast(const std::string& key, const std::string& value);
   Status DeleteSyncFast(const std::string& key);
   Status ApplyWalBatchLocked(const std::vector<WalBatchCommitItem>& items,
@@ -196,7 +250,12 @@ class ShardEngine {
   bool wal_replay_pending_{false};
   bool lazy_root_corrupt_{false};
   bool wal_corrupt_{false};
-  mutable std::shared_mutex rw_mu_;
+  mutable SnapshotFairRwLock rw_mu_;
+  std::atomic<uint32_t> snapshot_pin_count_{0};
+  uint64_t pinned_snapshot_lsn_{0};
+  uint64_t pinned_epoch_lsn_{0};
+  SfsReadCache sfs_cache_;
+  TxnSidecarStore txn_sidecar_;
   std::unique_ptr<BackgroundFlushWorker> flush_worker_;
   std::unique_ptr<BackgroundSummaryValidator> summary_validator_;
   std::unique_ptr<WalFsyncCoordinator> fsync_coordinator_;

@@ -82,5 +82,17 @@ rules:
     event: kRead
     file: cpp/src/engine/shard_engine.cc
     handler: ShardEngine read paths under shared_mutex + mmap Pin
+  - name: VcsFoldSync
+    event: kSuperBlockCommit
+    file: cpp/src/engine/shard_engine.cc
+    handler: FoldWalToVcs before WAL truncate on Checkpoint
+  - name: VcsPersistSync
+    event: kSuperBlockCommit
+    file: cpp/src/engine/shard_engine.cc
+    handler: Save .vidx sidecar after SuperBlock commit
+  - name: SnapshotReadSync
+    event: kRead
+    file: cpp/src/engine/snapshot_resolver.cc
+    handler: ResolveAtSnapshot via VCS floor + ReadValueByLsn
 
 documented_bypasses: []

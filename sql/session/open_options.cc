@@ -15,10 +15,16 @@ std::string OpenOptions::DefaultCatalogPath() const {
   return (std::filesystem::path(path) / "ebtree.catalog.json").string();
 }
 
+std::string OpenOptions::DefaultRarChainPath() const {
+  if (!rar_chain_path.empty()) return rar_chain_path;
+  return (std::filesystem::path(path) / "ebtree.rar.chain.jsonl").string();
+}
+
 EngineOptions OpenOptions::ToEngineOptions() const {
-  EngineOptions opts = EngineOptions::ProductionDefaults(path);
+  EngineOptions opts = EngineOptions::StandardDefaults(path);
   opts.path = path;
   opts.durability = durability;
+  opts.attestation_async = attestation_async;
   if (durability == DurabilityClass::kSync) {
     opts = EngineOptions::EnterpriseDefaults(path);
     opts.path = path;

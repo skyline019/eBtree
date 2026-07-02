@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "ebtree/common/config.h"
-#include "ebtree/common/status.h"
+#include "ebtree/concept/codec/codec_registry.h"
 #include "ebtree/concept/recovery/recovery_state.h"
 #include "ebtree/engine/read_tier.h"
 
@@ -60,7 +60,17 @@ struct AttestExportReport {
   std::vector<AttestKeyProbe> probes;
 };
 
+struct AttestExportReportV2 {
+  AttestExportReport base{};
+  uint64_t checkpoint_lsn{0};
+  uint64_t pages_touched{0};
+  CompressStatsSnapshot compress{};
+  std::vector<std::string> forbidden_violations;
+};
+
 using GroupCommitObserver = std::function<void(Engine* engine)>;
+using CheckpointObserver = std::function<void(Engine* engine, uint64_t checkpoint_lsn)>;
+using WriteGuard = std::function<Status()>;
 
 std::string ReadTierToString(ReadTier tier);
 std::string ShardRecoveryStateToString(ShardRecoveryState state);
@@ -69,5 +79,9 @@ std::string RecoveryModeToString(RecoveryMode mode);
 
 Status AttestExport(Engine* engine, const AttestExportOptions& opts,
                     AttestExportReport* out);
+Status AttestExportV2(Engine* engine, const AttestExportOptions& opts,
+                      AttestExportReportV2* out);
+Status AttestExportSnapshot(Engine* engine, uint64_t checkpoint_lsn,
+                            AttestExportReportV2* out);
 
 }  // namespace ebtree

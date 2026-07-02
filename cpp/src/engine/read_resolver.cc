@@ -4,6 +4,7 @@
 #include "ebtree/concept/wal/wal.h"
 #include "ebtree/engine/read_tier.h"
 #include "ebtree/engine/shard_engine.h"
+#include "ebtree/engine/tier_dispatch.h"
 #include "ebtree/engine/write_request.h"
 
 namespace ebtree {
@@ -55,7 +56,7 @@ Status ReadResolver::Get(ShardEngine& shard, const std::string& key,
   plan.op = PredicateOp::kEq;
   plan.key = key;
   {
-    std::shared_lock<std::shared_mutex> lock(shard.rw_mu_);
+    std::shared_lock<SnapshotFairRwLock> lock(shard.rw_mu_);
     plan.snapshot_lsn = shard.stats_.stable_lsn;
     const Status pst = shard.Prepare(plan);
     if (!pst.ok() && pst.code() != StatusCode::kStaleSummary) return pst;
@@ -82,7 +83,7 @@ Status ReadResolver::Get(ShardEngine& shard, const std::string& key,
     }
   }
 
-  std::unique_lock<std::shared_mutex> lock(shard.rw_mu_);
+  std::unique_lock<SnapshotFairRwLock> lock(shard.rw_mu_);
   plan.snapshot_lsn = shard.stats_.stable_lsn;
   if (plan.snapshot_lsn > 0 &&
       shard.btree_.summary().summary_lsn < plan.snapshot_lsn) {

@@ -35,7 +35,9 @@ void BackgroundSummaryValidator::WaitUntilIdle() {
 void BackgroundSummaryValidator::Run() {
   while (!stop_) {
     if (shard_) {
-      (void)shard_->TryRepairSummaryIfDrifted();
+      if (shard_->snapshot_pin_count() == 0) {
+        (void)shard_->TryRepairSummaryIfDriftedBackground();
+      }
     }
     {
       std::unique_lock<std::mutex> lock(mu_);
